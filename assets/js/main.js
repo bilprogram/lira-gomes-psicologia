@@ -116,6 +116,7 @@
     if (movimentoReduzido) {
       liberarEntradaHero();
       if (videoHero) videoHero.pause();
+      raiz.classList.remove('revelar-ativo');
     }
   });
 
@@ -307,5 +308,37 @@
       }
     });
   });
+
+  /* ── 5. Revelação ao Rolar (Scroll Animations & Choreography) ───────────────────────────── */
+
+  const reveladores = document.querySelectorAll('[data-revela]');
+  if ('IntersectionObserver' in window && reveladores.length && !movimentoReduzido) {
+    document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
+      grupo.querySelectorAll('[data-revela]').forEach((el, i) => {
+        el.style.setProperty('--atraso', `${Math.min(i * 0.08, 0.48)}s`);
+      });
+    });
+
+    raiz.classList.add('revelar-ativo');
+
+    // A máscara fechada (clip-path: inset) tem área visual inicial zero no Chromium;
+    // por isso, observamos o container pai quando for máscara.
+    const observados = new Map();
+    reveladores.forEach((el) => {
+      const observado = el.dataset.revela === 'mascara' && el.parentElement ? el.parentElement : el;
+      if (!observados.has(observado)) observados.set(observado, []);
+      observados.get(observado).push(el);
+    });
+
+    const observador = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (!entrada.isIntersecting) return;
+        (observados.get(entrada.target) || []).forEach((el) => el.classList.add('visivel'));
+        observador.unobserve(entrada.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+
+    observados.forEach((_, observado) => observador.observe(observado));
+  }
 })();
 

@@ -170,19 +170,20 @@
         <div class="servicos__cabeca">
           <div>
             <!-- Âncora #psicoterapia: destino do menu e do botão "Conheça nossos serviços" da hero -->
-            <p class="olho" id="psicoterapia">Nossos serviços</p>
-            <h2 class="servicos__titulo" id="servicos-titulo">
+            <p class="olho" id="psicoterapia" data-revela>Nossos serviços</p>
+            <h2 class="servicos__titulo" id="servicos-titulo" data-revela>
               Um cuidado psicológico que considera a sua singularidade
             </h2>
           </div>
-          <p class="servicos__apoio">
+          <p class="servicos__apoio" data-revela>
             A Lira Gomes Psicologia oferece psicoterapia para adultos e avaliação neuropsicológica presencial em São Paulo. Cada atendimento considera a demanda, a história e o momento de cada pessoa.
           </p>
         </div>
 
-        <div class="servicos__grade">
-          <article class="servico">
-            <figure class="servico__foto">
+        <div class="servicos__grade formatos" data-revela-grupo>
+          <!-- Card 1: Padrão Formato (fundo papel) -->
+          <article class="formato servico" data-revela>
+            <figure class="formato__foto servico__foto" data-revela="mascara">
               <img
                 src="assets/marca/img/otimizadas/card1.webp"
                 alt="Sala de atendimento com sofá cinza, mesa lateral com lenços e grande janela, no conjunto onde ocorrem os atendimentos"
@@ -192,22 +193,29 @@
                 decoding="async"
               >
             </figure>
-            <h3 class="servico__titulo">Psicoterapia para adultos</h3>
-            <p class="servico__texto">
+            <div class="formato__topo">
+              <div class="formato__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <span class="formato__sub">Presencial e Online</span>
+            </div>
+            <h3 class="formato__titulo servico__titulo">Psicoterapia para adultos</h3>
+            <p class="formato__texto servico__texto">
               Um espaço de escuta e reflexão para compreender experiências, emoções e relações, respeitando a história e o ritmo de cada pessoa.
             </p>
-            <p class="servico__info">
+            <p class="formato__info servico__info">
               Atendimento presencial na Vila Andrade e online, conforme a disponibilidade de cada profissional.
             </p>
             <!-- Destino configurável em CONFIG_LIRA_GOMES.rotas (main.js) quando a página existir -->
             <a class="link-seta" href="#psicoterapia" data-rota="psicoterapia">
-              Conheça a psicoterapia
+              <span>Conheça a psicoterapia</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </article>
 
-          <article class="servico" id="avaliacao-neuropsicologica">
-            <figure class="servico__foto">
+          <!-- Card 2: Formato Destaque (fundo areia conforme design system) -->
+          <article class="formato formato--destaque servico" id="avaliacao-neuropsicologica" data-revela>
+            <figure class="formato__foto servico__foto" data-revela="mascara">
               <img
                 src="assets/marca/img/otimizadas/card2.webp"
                 alt="Entrada do conjunto 14, com painel de madeira ripada, prateleira com plantas, orquídea e pequenas esculturas"
@@ -217,16 +225,22 @@
                 decoding="async"
               >
             </figure>
-            <h3 class="servico__titulo">Avaliação neuropsicológica</h3>
-            <p class="servico__texto">
+            <div class="formato__topo">
+              <div class="formato__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <span class="formato__sub">Presencial</span>
+            </div>
+            <h3 class="formato__titulo servico__titulo">Avaliação neuropsicológica</h3>
+            <p class="formato__texto servico__texto">
               Uma investigação do funcionamento cognitivo, emocional e comportamental, definida conforme a demanda e os objetivos apresentados.
             </p>
-            <p class="servico__info">
+            <p class="formato__info servico__info">
               Atendimento presencial para adolescentes e adultos.
             </p>
             <!-- Destino configurável em CONFIG_LIRA_GOMES.rotas (main.js) quando a página existir -->
             <a class="link-seta" href="#avaliacao-neuropsicologica" data-rota="avaliacaoNeuropsicologica">
-              Conheça a avaliação neuropsicológica
+              <span>Conheça a avaliação neuropsicológica</span>
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </article>
@@ -253,18 +267,18 @@
     <section class="equipe" id="profissionais" aria-labelledby="equipe-titulo">
       <div class="container">
         <div class="equipe__cabeca">
-          <p class="olho">Nossa equipe</p>
-          <h2 class="equipe__titulo" id="equipe-titulo">
+          <p class="olho" data-revela>Nossa equipe</p>
+          <h2 class="equipe__titulo" id="equipe-titulo" data-revela>
             Duas trajetórias, um compromisso com o cuidado individualizado
           </h2>
-          <p class="equipe__apoio">
+          <p class="equipe__apoio" data-revela>
             Lucas e Thais oferecem psicoterapia e avaliação neuropsicológica, respeitando a singularidade, a história e as necessidades de cada pessoa.
           </p>
         </div>
 
-        <div class="equipe__grade">
-          <article class="profissional">
-            <figure class="profissional__foto">
+        <div class="equipe__grade" data-revela-grupo>
+          <article class="profissional" data-revela>
+            <figure class="profissional__foto" data-revela="mascara">
               <img
                 src="assets/marca/profissionais/lucas-roberto-recorte.webp"
                 alt="Lucas Roberto Pereira Gomes, psicólogo, sorrindo, de braços cruzados"
@@ -290,8 +304,8 @@
             </div>
           </article>
 
-          <article class="profissional">
-            <figure class="profissional__foto">
+          <article class="profissional" data-revela>
+            <figure class="profissional__foto" data-revela="mascara">
               <img
                 src="assets/marca/profissionais/thais-lira-gomes-recorte.webp"
                 alt="Thais Lira Silva Gomes, psicóloga e neuropsicóloga, sorrindo, de camisa branca"
@@ -318,7 +332,7 @@
           </article>
         </div>
 
-        <p class="equipe__nota">
+        <p class="equipe__nota" data-revela>
           A disponibilidade e a modalidade de atendimento variam conforme o profissional. A psicoterapia pode ser presencial ou online; a avaliação neuropsicológica é presencial.
         </p>
       </div>
@@ -329,20 +343,20 @@
     <section class="local" id="contato" aria-labelledby="local-titulo">
       <div class="container local__grade">
         <div class="local__texto">
-          <p class="olho">Localização</p>
-          <h2 class="local__titulo" id="local-titulo">Atendimento na Vila Andrade, em São Paulo</h2>
-          <p class="local__apoio">
+          <p class="olho" data-revela>Localização</p>
+          <h2 class="local__titulo" id="local-titulo" data-revela>Atendimento na Vila Andrade, em São Paulo</h2>
+          <p class="local__apoio" data-revela>
             O espaço de atendimento fica na R. Dep. João Sussumu Hirata, 940, conjunto 14, sala 1, Vila Andrade. A atuação presencial prioriza pessoas da Vila Andrade, Morumbi, Panamby, Jardim Sul, Vila Sônia, Butantã e regiões próximas.
           </p>
           <!-- Destino configurável em CONFIG_LIRA_GOMES.rotas.contato (main.js) -->
-          <a class="botao botao--floresta" href="#contato" data-rota="contato">
+          <a class="botao botao--floresta" href="#contato" data-rota="contato" data-revela>
             <span>Ver endereço e informações de acesso</span>
             <span class="botao__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </span>
           </a>
         </div>
-        <figure class="local__foto">
+        <figure class="local__foto" data-revela="mascara">
           <img
             src="assets/marca/img/otimizadas/fachada-predio.webp"
             alt="Fachada do edifício na Vila Andrade, com torre de vidro e tijolos claros e jardim com palmeiras na entrada"
@@ -359,13 +373,13 @@
     <section class="duvidas" id="duvidas" aria-labelledby="duvidas-titulo">
       <div class="container duvidas__grade">
         <div class="duvidas__lado">
-          <p class="olho">Dúvidas frequentes</p>
-          <h2 class="duvidas__titulo" id="duvidas-titulo">
+          <p class="olho" data-revela>Dúvidas frequentes</p>
+          <h2 class="duvidas__titulo" id="duvidas-titulo" data-revela>
             Informações importantes antes de agendar
           </h2>
 
           <!-- CTA discreto de fechamento direcionando para a escolha transparente entre Lucas e Thais -->
-          <div class="duvidas__cta">
+          <div class="duvidas__cta" data-revela>
             <p class="duvidas__cta-texto">Ficou com alguma dúvida sobre o atendimento?</p>
             <button
               type="button"
@@ -382,9 +396,9 @@
           </div>
         </div>
 
-        <div class="perguntas" data-perguntas>
+        <div class="perguntas" data-perguntas data-revela-grupo>
           <!-- Pergunta 1 -->
-          <details class="pergunta">
+          <details class="pergunta" data-revela>
             <summary class="pergunta__gatilho" id="faq-pergunta-1" aria-controls="faq-resposta-1">
               <span class="pergunta__titulo">Vocês atendem por convênio?</span>
               <span class="pergunta__sinal" aria-hidden="true"></span>
@@ -397,7 +411,7 @@
           </details>
 
           <!-- Pergunta 2 -->
-          <details class="pergunta">
+          <details class="pergunta" data-revela>
             <summary class="pergunta__gatilho" id="faq-pergunta-2" aria-controls="faq-resposta-2">
               <span class="pergunta__titulo">Como funciona o agendamento?</span>
               <span class="pergunta__sinal" aria-hidden="true"></span>
@@ -410,7 +424,7 @@
           </details>
 
           <!-- Pergunta 3 -->
-          <details class="pergunta">
+          <details class="pergunta" data-revela>
             <summary class="pergunta__gatilho" id="faq-pergunta-3" aria-controls="faq-resposta-3">
               <span class="pergunta__titulo">Vocês oferecem atendimento presencial e online?</span>
               <span class="pergunta__sinal" aria-hidden="true"></span>
@@ -423,7 +437,7 @@
           </details>
 
           <!-- Pergunta 4 -->
-          <details class="pergunta">
+          <details class="pergunta" data-revela>
             <summary class="pergunta__gatilho" id="faq-pergunta-4" aria-controls="faq-resposta-4">
               <span class="pergunta__titulo">Quais serviços vocês oferecem?</span>
               <span class="pergunta__sinal" aria-hidden="true"></span>
@@ -436,7 +450,7 @@
           </details>
 
           <!-- Pergunta 5 -->
-          <details class="pergunta">
+          <details class="pergunta" data-revela>
             <summary class="pergunta__gatilho" id="faq-pergunta-5" aria-controls="faq-resposta-5">
               <span class="pergunta__titulo">Como saber qual profissional procurar?</span>
               <span class="pergunta__sinal" aria-hidden="true"></span>
