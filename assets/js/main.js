@@ -14,6 +14,8 @@
       psicoterapia: '#psicoterapia',
       avaliacaoNeuropsicologica: '#avaliacao-neuropsicologica',
       profissionais: '#profissionais',
+      lucas: '#profissionais',
+      thais: '#profissionais',
       contato: '#contato'
     },
     contatosWhatsapp: {

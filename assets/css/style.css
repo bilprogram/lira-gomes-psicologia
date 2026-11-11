@@ -1081,6 +1081,120 @@ svg[viewBox="0 0 24 24"] {
   }
 }
 
+/* ── Terceira Dobra: Profissionais ────────────────────────────────────────────────────────── */
+
+.equipe {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(80px, 10vw, 144px);
+  background: var(--areia);
+}
+
+.equipe__cabeca {
+  max-width: 46rem;
+  margin-bottom: clamp(44px, 6vw, 80px);
+}
+
+.equipe__titulo {
+  margin-bottom: 24px;
+  font-size: clamp(2.1rem, 4.2vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.032em;
+  text-wrap: balance;
+}
+
+.equipe__apoio {
+  max-width: 34em;
+  margin: 0;
+  color: var(--tinta-2);
+}
+
+.equipe__grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.profissional {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--raio);
+  background: var(--papel);
+  box-shadow: inset 0 0 0 1px var(--linha);
+}
+
+.profissional__foto {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3.4;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 100%, rgba(200, 174, 125, 0.28), transparent 70%),
+    var(--salvia-clara);
+}
+
+.profissional__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 24%;
+}
+
+.profissional__corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(24px, 3vw, 40px);
+}
+
+.profissional__nome {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+  line-height: 1.1;
+  letter-spacing: -0.028em;
+}
+
+.profissional__id {
+  margin: 0 0 18px;
+  color: var(--verde-oliva);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.profissional__texto {
+  max-width: 32em;
+  margin: 0 0 28px;
+  color: var(--tinta-2);
+}
+
+.profissional__corpo .botao {
+  margin-top: auto;
+}
+
+.equipe__nota {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 46em;
+  margin: clamp(32px, 4vw, 48px) 0 0;
+  color: var(--tinta-2);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.equipe__nota::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  margin-top: 0.6em;
+  border-radius: 50%;
+  background: var(--dourado-areia);
+}
+
 /* ── Responsividade (Tablet e Mobile) ─────────────────────────────────────────────────────── */
 
 @media (max-width: 1120px) {
@@ -1159,6 +1273,10 @@ svg[viewBox="0 0 24 24"] {
   }
 
   .servicos__grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .equipe__grade {
     grid-template-columns: minmax(0, 1fr);
   }
 }
