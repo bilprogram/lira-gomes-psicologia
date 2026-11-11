@@ -1,0 +1,38 @@
+# Lira Gomes Psicologia e Neuropsicologia
+
+> Um espaço de escuta, cuidado e compreensão, respeitando o tempo e a história de cada pessoa.
+
+A Lira Gomes Psicologia oferece psicoterapia para adultos e avaliação neuropsicológica presencial em São Paulo. Cada atendimento considera a demanda, a história e o momento de cada pessoa, pautado em rigor técnico, ética profissional e acolhimento humanista.
+
+## Informações Institucionais
+
+- **Nome Oficial:** Lira Gomes Psicologia • Neuropsicologia
+- **Endereço do Consultório:** R. Dep. João Sussumu Hirata, 940, conjunto 14, sala 1, Vila Andrade, São Paulo – SP, CEP 05715-010.
+- **Estrutura e Acesso:** Os atendimentos ocorrem na sala 1, localizada em conjunto comercial compartilhado com salas utilizadas por empresas com CNPJs distintos. O conjunto não comporta cadeirantes.
+- **Região de Atuação Presencial:** Vila Andrade, Morumbi, Panamby, Jardim Sul, Vila Sônia, Butantã e bairros vizinhos.
+- **Modalidades de Atendimento:**
+  - Psicoterapia para adultos: presencial (Vila Andrade) e online, conforme a disponibilidade de cada profissional.
+  - Avaliação neuropsicológica: exclusivamente presencial (adolescentes e adultos).
+- **Condições de Atendimento:** Atendimento particular mediante agendamento prévio (segunda a sexta-feira, preferencialmente das 9h às 18h). Emissão de nota fiscal para solicitação de reembolso junto a operadoras de planos de saúde, conforme regras de cada plano.
+
+## Profissionais e Contatos
+
+- **Lucas Roberto Pereira Gomes**
+  - Psicólogo • CRP 06/205736
+  - Formação: Graduado em Psicologia pela Universidade Nove de Julho (UNINOVE), com pós-graduação em Neuropsicologia pela Faculdade Venda Nova do Imigrante (FAVENI).
+  - Atuação: Psicoterapia para adultos (presencial e online) fundamentada na abordagem humanista, com temas em TDAH adulto, TEA nível 1, ansiedade, relacionamentos e autoconhecimento; realiza também avaliação neuropsicológica.
+  - WhatsApp profissional: +55 11 98467-7810 (https://wa.me/5511984677810)
+
+- **Thais Lira Silva Gomes**
+  - Psicóloga e Neuropsicóloga • CRP 06/180230
+  - Formação: Graduada em Psicologia pela Universidade de Santo Amaro (UNISA), com especialização em Neuropsicologia pela Faculdade Venda Nova do Imigrante (FAVENI).
+  - Atuação: Avaliação neuropsicológica presencial de adolescentes e adultos; psicoterapia com base humanista (Gestalt-terapia), conforme demanda clínica e disponibilidade de agenda.
+  - WhatsApp profissional: +55 11 95067-3415 (https://wa.me/5511950673415)
+
+## Páginas Públicas do Site
+
+- [Início](index.html): Apresentação institucional, serviços, profissionais, exercício de respiração guiado, localização e dúvidas frequentes.
+- [Psicoterapia para Adultos](psicoterapia.html): Detalhamento do atendimento psicoterápico presencial e online, temas abordados, modalidades e reembolso.
+- [Avaliação Neuropsicológica](avaliacao-neuropsicologica.html): Investigação cognitiva, emocional e comportamental presencial, etapas do processo e aspectos investigados.
+- [Perfil de Lucas Roberto Pereira Gomes](lucas.html): Trajetória profissional, abordagem humanista, atuação clínica e contatos.
+- [Perfil de Thais Lira Silva Gomes](thais.html): Trajetória profissional, atuação em neuropsicologia clínica, abordagem terapêutica e contatos.

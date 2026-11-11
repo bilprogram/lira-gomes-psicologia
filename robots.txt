@@ -1,0 +1,8 @@
+# robots.txt — Lira Gomes Psicologia e Neuropsicologia
+# https://github.com/bilprogram/lira-gomes-psicologia
+
+User-agent: *
+Allow: /
+
+# A diretiva Sitemap deve ser configurada com a URL canônica definitiva assim que o domínio de produção for confirmado.
+# Exemplo: Sitemap: https://<dominio-confirmado>/sitemap.xml

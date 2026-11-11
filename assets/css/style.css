@@ -2262,6 +2262,251 @@ svg[viewBox="0 0 24 24"] {
   clip-path: inset(0);
 }
 
+/* ── Rodapé Institucional ──────────────────────────────────────────────────── */
+
+.rodape {
+  padding: clamp(72px, 8vw, 104px) 0 36px;
+  background: var(--verde-profundo);
+  border-top: 1px solid rgba(245, 243, 237, 0.1);
+  color: rgba(245, 243, 237, 0.78);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.rodape__grade {
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr 1.2fr 1.4fr;
+  gap: clamp(32px, 4vw, 56px);
+  margin-bottom: clamp(48px, 6vw, 72px);
+}
+
+.rodape__marca {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.rodape__marca .marca {
+  margin-bottom: 20px;
+}
+
+.marca__logo--rodape {
+  height: clamp(52px, 6vw, 68px);
+  width: auto;
+  object-fit: contain;
+}
+
+.marca--clara:focus-visible {
+  outline: 2px solid var(--dourado-areia);
+  outline-offset: 4px;
+}
+
+.rodape__frase {
+  margin: 0;
+  max-width: 24em;
+  color: rgba(245, 243, 237, 0.74);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.rodape__coluna {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.rodape__titulo {
+  margin: 0 0 8px;
+  color: var(--dourado-areia);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rodape a {
+  color: rgba(245, 243, 237, 0.78);
+  text-decoration: none;
+  transition: color 0.25s var(--suave);
+}
+
+.rodape a:hover,
+.rodape a:focus-visible {
+  color: var(--off-white);
+}
+
+.rodape a:focus-visible {
+  outline: 2px solid var(--dourado-areia);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.rodape__profissional {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.rodape__profissional-nome {
+  color: var(--off-white);
+  font-size: 15px;
+}
+
+.rodape__profissional-crp {
+  color: rgba(245, 243, 237, 0.6);
+  font-size: 13.5px;
+}
+
+.rodape__link-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  color: var(--dourado-areia) !important;
+  font-size: 14.5px;
+  font-weight: 500;
+  transition: color 0.25s var(--suave), transform 0.25s var(--suave);
+}
+
+.rodape__link-whatsapp svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rodape__link-whatsapp:hover {
+  color: var(--off-white) !important;
+  transform: translateX(3px);
+}
+
+.rodape__endereco {
+  font-style: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0 0 12px;
+  color: rgba(245, 243, 237, 0.85);
+}
+
+.rodape__endereco strong {
+  color: var(--off-white);
+}
+
+.rodape__endereco p {
+  margin: 0;
+}
+
+.rodape__nota-sala {
+  margin-top: 6px !important;
+  color: rgba(245, 243, 237, 0.65) !important;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.rodape__mapa-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  color: var(--dourado-areia) !important;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.rodape__mapa-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.rodape__mapa-link:hover {
+  color: var(--off-white) !important;
+}
+
+.rodape__info-atendimento {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 13.5px;
+  color: rgba(245, 243, 237, 0.68);
+  line-height: 1.5;
+}
+
+.rodape__info-atendimento p {
+  margin: 0;
+}
+
+.rodape__aviso-acesso {
+  color: rgba(245, 243, 237, 0.55);
+}
+
+.rodape__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(245, 243, 237, 0.12);
+  font-size: 13.5px;
+  color: rgba(245, 243, 237, 0.6);
+}
+
+.rodape__base p {
+  margin: 0;
+}
+
+.rodape__topo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(245, 243, 237, 0.7);
+  font-size: 13.5px;
+  transition: color 0.25s var(--suave);
+}
+
+.rodape__topo-link svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rodape__topo-link:hover {
+  color: var(--dourado-areia);
+}
+
+@media (max-width: 1080px) {
+  .rodape__grade {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .rodape__grade {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .rodape__base {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
 /* ── Preferência de Movimento Reduzido (Acessibilidade) ───────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

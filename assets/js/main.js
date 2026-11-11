@@ -16,7 +16,7 @@
       profissionais: 'index.html#profissionais',
       lucas: 'lucas.html',
       thais: 'thais.html',
-      contato: 'index.html#contato'
+      contato: '#contato'
     },
     contatosWhatsapp: {
       lucas: {
@@ -41,6 +41,12 @@
     const destino = CONFIG_LIRA_GOMES.rotas[link.dataset.rota];
     if (destino) link.setAttribute('href', destino);
   });
+
+  /* Atualização automática do ano no rodapé */
+  const elementoAno = document.querySelector('[data-ano]');
+  if (elementoAno) {
+    elementoAno.textContent = new Date().getFullYear();
+  }
 
   const raiz = document.documentElement;
   const corpo = document.body;

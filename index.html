@@ -14,6 +14,53 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,SOFT,wght@0,9..144,50..60,300..700;1,9..144,50..60,300..700&family=Instrument+Sans:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="assets/css/style.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "name": "Lira Gomes Psicologia e Neuropsicologia",
+    "description": "Psicoterapia para adultos presencial e online e avaliação neuropsicológica presencial na Vila Andrade, em São Paulo.",
+    "image": "assets/marca/logos/logo-lira-gomes-sem-fundo.webp",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "R. Dep. João Sussumu Hirata, 940, conjunto 14, sala 1",
+      "addressLocality": "São Paulo",
+      "addressRegion": "SP",
+      "postalCode": "05715-010",
+      "addressCountry": "BR"
+    },
+    "medicalSpecialty": [
+      "Psychology",
+      "Neuropsychology"
+    ],
+    "availableService": [
+      {
+        "@type": "MedicalTherapy",
+        "name": "Psicoterapia para adultos"
+      },
+      {
+        "@type": "DiagnosticProcedure",
+        "name": "Avaliação neuropsicológica"
+      }
+    ],
+    "employee": [
+      {
+        "@type": "Person",
+        "name": "Lucas Roberto Pereira Gomes",
+        "jobTitle": "Psicólogo",
+        "identifier": "CRP 06/205736",
+        "telephone": "+55-11-98467-7810"
+      },
+      {
+        "@type": "Person",
+        "name": "Thais Lira Silva Gomes",
+        "jobTitle": "Psicóloga e Neuropsicóloga",
+        "identifier": "CRP 06/180230",
+        "telephone": "+55-11-95067-3415"
+      }
+    ]
+  }
+  </script>
   <script>
     (function () {
       var raiz = document.documentElement;
@@ -381,9 +428,8 @@
       </div>
     </section>
 
-    <!-- ═══════════════════════════════ QUARTA DOBRA (LOCALIZAÇÃO) ═══════════════════════════════
-         O id "contato" fica aqui enquanto a página de contato não existe (destino configurável em main.js). -->
-    <section class="local" id="contato" aria-labelledby="local-titulo">
+    <!-- ═══════════════════════════════ QUARTA DOBRA (LOCALIZAÇÃO) ═══════════════════════════════ -->
+    <section class="local" id="localizacao" aria-labelledby="local-titulo">
       <div class="container local__grade">
         <div class="local__texto">
           <p class="olho" data-revela>Localização</p>
@@ -391,7 +437,7 @@
           <p class="local__apoio" data-revela>
             O espaço de atendimento fica na R. Dep. João Sussumu Hirata, 940, conjunto 14, sala 1, Vila Andrade. A atuação presencial prioriza pessoas da Vila Andrade, Morumbi, Panamby, Jardim Sul, Vila Sônia, Butantã e regiões próximas.
           </p>
-          <!-- Destino configurável em CONFIG_LIRA_GOMES.rotas.contato (main.js) -->
+          <!-- Destino: área de contato e informações de acesso no rodapé -->
           <a class="botao botao--floresta" href="#contato" data-rota="contato" data-revela>
             <span>Ver endereço e informações de acesso</span>
             <span class="botao__icone" aria-hidden="true">
@@ -508,6 +554,121 @@
       </div>
     </section>
   </main>
+
+  <!-- ═══════════════════════════════ RODAPÉ INSTITUCIONAL ═══════════════════════════════ -->
+  <footer class="rodape" data-tema="escuro" aria-label="Rodapé institucional">
+    <div class="container">
+      <div class="rodape__grade">
+
+        <!-- 1. Identidade da marca -->
+        <div class="rodape__marca">
+          <a class="marca marca--clara" href="#inicio" aria-label="Lira Gomes Psicologia e Neuropsicologia — Voltar ao início">
+            <img
+              class="marca__logo marca__logo--rodape"
+              src="assets/marca/logos/logo-lira-gomes-dourada-sem-fundo.webp"
+              alt="Lira Gomes Psicologia • Neuropsicologia"
+              width="628"
+              height="592"
+              loading="lazy"
+              decoding="async"
+            >
+          </a>
+          <p class="rodape__frase">
+            Um espaço de escuta, cuidado e compreensão, respeitando o tempo e a história de cada pessoa.
+          </p>
+        </div>
+
+        <!-- 2. Navegação do site -->
+        <nav class="rodape__coluna" aria-label="Navegação do rodapé">
+          <p class="rodape__titulo">Navegação</p>
+          <a href="#inicio">Início</a>
+          <a href="#psicoterapia">Psicoterapia</a>
+          <a href="#avaliacao-neuropsicologica">Avaliação Neuropsicológica</a>
+          <a href="#profissionais">Profissionais</a>
+          <a href="#localizacao">Localização</a>
+          <a href="#duvidas">Dúvidas frequentes</a>
+        </nav>
+
+        <!-- 3. Profissionais e contatos -->
+        <div class="rodape__coluna rodape__contato" id="contato">
+          <p class="rodape__titulo">Profissionais e Contato</p>
+
+          <div class="rodape__profissional">
+            <strong class="rodape__profissional-nome">Lucas Roberto Pereira Gomes</strong>
+            <span class="rodape__profissional-crp">Psicólogo • CRP 06/205736</span>
+            <a
+              class="rodape__link-whatsapp"
+              href="https://wa.me/5511984677810"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Conversar com Lucas Roberto Pereira Gomes pelo WhatsApp: (11) 98467-7810"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              <span>WhatsApp: (11) 98467-7810</span>
+            </a>
+          </div>
+
+          <div class="rodape__profissional">
+            <strong class="rodape__profissional-nome">Thais Lira Silva Gomes</strong>
+            <span class="rodape__profissional-crp">Psicóloga e neuropsicóloga • CRP 06/180230</span>
+            <a
+              class="rodape__link-whatsapp"
+              href="https://wa.me/5511950673415"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Conversar com Thais Lira Silva Gomes pelo WhatsApp: (11) 95067-3415"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              <span>WhatsApp: (11) 95067-3415</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 4. Endereço, mapa e atendimento -->
+        <div class="rodape__coluna rodape__atendimento">
+          <p class="rodape__titulo">Endereço e Atendimento</p>
+
+          <address class="rodape__endereco">
+            <p><strong>R. Dep. João Sussumu Hirata, 940, conjunto 14, sala 1</strong></p>
+            <p>Vila Andrade, São Paulo – SP, CEP 05715-010.</p>
+            <p class="rodape__nota-sala">
+              Os atendimentos da Lira Gomes Psicologia são realizados na sala 1, dentro de um conjunto com salas utilizadas por empresas com CNPJs diferentes.
+            </p>
+            <a
+              class="rodape__mapa-link"
+              href="https://www.google.com/maps/search/?api=1&query=Rua+Deputado+Jo%C3%A3o+Sussumu+Hirata%2C+940+-+Vila+Andrade%2C+S%C3%A3o+Paulo+-+SP%2C+05715-010"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+              <span>Ver localização no mapa</span>
+            </a>
+          </address>
+
+          <div class="rodape__info-atendimento">
+            <p>• Atendimento particular.</p>
+            <p>• Psicoterapia para adultos presencial e online, conforme a disponibilidade de cada profissional.</p>
+            <p>• Avaliação neuropsicológica presencial.</p>
+            <p>• Emissão de nota fiscal para solicitação de reembolso, conforme cobertura e regras de cada operadora.</p>
+            <p>• Atendimentos de segunda a sexta-feira, preferencialmente das 9h às 18h, mediante agendamento prévio.</p>
+            <p class="rodape__aviso-acesso">• O conjunto não comporta cadeirantes.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 5. Fechamento e créditos -->
+      <div class="rodape__base">
+        <p class="rodape__copyright">
+          © <span data-ano>2026</span> Lira Gomes Psicologia • Neuropsicologia. Atendimento profissional ético e individualizado.
+        </p>
+        <a class="rodape__topo-link" href="#inicio" aria-label="Voltar ao início da página">
+          <span>Voltar ao topo</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
 
   <!-- ═══════════════════ ESCOLHA DE PROFISSIONAL PARA CONTATO (WHATSAPP) ═══════════════════ -->
   <dialog class="modal-whatsapp" id="escolha-whatsapp" aria-labelledby="modal-whatsapp-titulo">
