@@ -11,8 +11,8 @@
   const CONFIG_LIRA_GOMES = {
     rotas: {
       inicio: 'index.html#inicio',
-      psicoterapia: 'index.html#psicoterapia',
-      avaliacaoNeuropsicologica: 'index.html#avaliacao-neuropsicologica',
+      psicoterapia: 'psicoterapia.html',
+      avaliacaoNeuropsicologica: 'avaliacao-neuropsicologica.html',
       profissionais: 'index.html#profissionais',
       lucas: 'lucas.html',
       thais: 'thais.html',

@@ -1935,16 +1935,18 @@ svg[viewBox="0 0 24 24"] {
   }
 }
 
-/* ── Páginas de Perfil dos Profissionais (Lucas & Thais) ──────────────────── */
+/* ── Páginas de Perfil dos Profissionais e Detalhe de Serviços ────────────── */
 
-.pagina-perfil {
+.pagina-perfil,
+.pagina-servico {
   padding-top: calc(var(--topo) + clamp(28px, 4vw, 56px));
   padding-bottom: clamp(64px, 8vw, 120px);
   background: var(--off-white);
   min-height: 100vh;
 }
 
-.perfil-voltar {
+.perfil-voltar,
+.servico-voltar {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1956,18 +1958,21 @@ svg[viewBox="0 0 24 24"] {
   transition: color 0.3s var(--suave), transform 0.3s var(--suave);
 }
 
-.perfil-voltar svg {
+.perfil-voltar svg,
+.servico-voltar svg {
   width: 18px;
   height: 18px;
   transition: transform 0.3s var(--suave);
 }
 
-.perfil-voltar:hover {
+.perfil-voltar:hover,
+.servico-voltar:hover {
   color: var(--verde-profundo);
   transform: translateX(-4px);
 }
 
-.perfil-hero {
+.perfil-hero,
+.servico-hero {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   gap: clamp(36px, 5vw, 72px);
@@ -1975,7 +1980,8 @@ svg[viewBox="0 0 24 24"] {
   margin-bottom: clamp(48px, 6vw, 84px);
 }
 
-.perfil-hero__foto {
+.perfil-hero__foto,
+.servico-hero__foto {
   position: relative;
   margin: 0;
   aspect-ratio: 4 / 4.8;
@@ -1988,20 +1994,31 @@ svg[viewBox="0 0 24 24"] {
   transform: translateZ(0);
 }
 
-.perfil-hero__foto img {
+.servico-hero__foto {
+  aspect-ratio: 4 / 3.4;
+}
+
+.perfil-hero__foto img,
+.servico-hero__foto img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 20%;
 }
 
-.perfil-hero__conteudo {
+.servico-hero__foto img {
+  object-position: 50% 50%;
+}
+
+.perfil-hero__conteudo,
+.servico-hero__conteudo {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.perfil-hero__nome {
+.perfil-hero__nome,
+.servico-hero__nome {
   margin: 0 0 8px;
   font-size: clamp(2.2rem, 3.8vw, 3.4rem);
   line-height: 1.08;
@@ -2009,7 +2026,8 @@ svg[viewBox="0 0 24 24"] {
   color: var(--verde-profundo);
 }
 
-.perfil-hero__crp {
+.perfil-hero__crp,
+.servico-hero__sub {
   margin: 0 0 24px;
   color: var(--verde-oliva);
   font-size: 15px;
@@ -2017,25 +2035,29 @@ svg[viewBox="0 0 24 24"] {
   letter-spacing: 0.04em;
 }
 
-.perfil-hero__bio {
+.perfil-hero__bio,
+.servico-hero__bio {
   margin: 0 0 18px;
   color: var(--tinta-2);
   font-size: clamp(16px, 1.1vw, 17.5px);
   line-height: 1.65;
 }
 
-.perfil-hero__bio:last-of-type {
+.perfil-hero__bio:last-of-type,
+.servico-hero__bio:last-of-type {
   margin-bottom: 32px;
 }
 
-.perfil-detalhes {
+.perfil-detalhes,
+.servico-detalhes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(24px, 3vw, 36px);
   margin-bottom: clamp(48px, 6vw, 84px);
 }
 
-.perfil-card {
+.perfil-card,
+.servico-card {
   display: flex;
   flex-direction: column;
   padding: clamp(28px, 3.5vw, 44px);
@@ -2044,18 +2066,21 @@ svg[viewBox="0 0 24 24"] {
   box-shadow: inset 0 0 0 1px var(--linha);
 }
 
-.perfil-card--destaque {
+.perfil-card--destaque,
+.servico-card--destaque {
   background: var(--areia);
 }
 
-.perfil-card__topo {
+.perfil-card__topo,
+.servico-card__topo {
   display: flex;
   align-items: center;
   gap: 14px;
   margin-bottom: 20px;
 }
 
-.perfil-card__icone {
+.perfil-card__icone,
+.servico-card__icone {
   display: grid;
   place-items: center;
   width: 44px;
@@ -2066,17 +2091,20 @@ svg[viewBox="0 0 24 24"] {
   flex-shrink: 0;
 }
 
-.perfil-card--destaque .perfil-card__icone {
+.perfil-card--destaque .perfil-card__icone,
+.servico-card--destaque .servico-card__icone {
   background: var(--verde-oliva);
   color: var(--off-white);
 }
 
-.perfil-card__icone svg {
+.perfil-card__icone svg,
+.servico-card__icone svg {
   width: 22px;
   height: 22px;
 }
 
-.perfil-card__titulo {
+.perfil-card__titulo,
+.servico-card__titulo {
   margin: 0;
   font-size: clamp(1.4rem, 2vw, 1.75rem);
   line-height: 1.15;
@@ -2084,14 +2112,16 @@ svg[viewBox="0 0 24 24"] {
   color: var(--verde-profundo);
 }
 
-.perfil-card__texto {
+.perfil-card__texto,
+.servico-card__texto {
   margin: 0 0 16px;
   color: var(--tinta-2);
   font-size: 15.5px;
   line-height: 1.6;
 }
 
-.perfil-lista {
+.perfil-lista,
+.servico-lista {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -2099,7 +2129,8 @@ svg[viewBox="0 0 24 24"] {
   gap: 12px;
 }
 
-.perfil-lista li {
+.perfil-lista li,
+.servico-lista li {
   position: relative;
   padding-left: 20px;
   color: var(--tinta-2);
@@ -2107,7 +2138,8 @@ svg[viewBox="0 0 24 24"] {
   line-height: 1.55;
 }
 
-.perfil-lista li::before {
+.perfil-lista li::before,
+.servico-lista li::before {
   content: "";
   position: absolute;
   left: 0;
@@ -2118,7 +2150,8 @@ svg[viewBox="0 0 24 24"] {
   background: var(--verde-oliva);
 }
 
-.perfil-outro {
+.perfil-outro,
+.servico-outro {
   padding: clamp(32px, 4vw, 48px);
   border-radius: var(--raio);
   background: var(--papel);
@@ -2130,29 +2163,34 @@ svg[viewBox="0 0 24 24"] {
   flex-wrap: wrap;
 }
 
-.perfil-outro__info h3 {
+.perfil-outro__info h3,
+.servico-outro__info h3 {
   margin: 0 0 6px;
   font-size: clamp(1.3rem, 1.8vw, 1.6rem);
 }
 
-.perfil-outro__info p {
+.perfil-outro__info p,
+.servico-outro__info p {
   margin: 0;
   color: var(--tinta-2);
   font-size: 15px;
 }
 
 @media (max-width: 900px) {
-  .perfil-hero {
+  .perfil-hero,
+  .servico-hero {
     grid-template-columns: minmax(0, 1fr);
     gap: 32px;
   }
 
-  .perfil-hero__foto {
+  .perfil-hero__foto,
+  .servico-hero__foto {
     max-width: 380px;
     aspect-ratio: 4 / 3.6;
   }
 
-  .perfil-detalhes {
+  .perfil-detalhes,
+  .servico-detalhes {
     grid-template-columns: minmax(0, 1fr);
   }
 }
