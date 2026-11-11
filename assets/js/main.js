@@ -34,6 +34,12 @@
 
   window.CONFIG_LIRA_GOMES = CONFIG_LIRA_GOMES;
 
+  /* Links dos cards de serviços: destinos vêm de CONFIG_LIRA_GOMES.rotas (ajuste lá quando as páginas existirem) */
+  document.querySelectorAll('[data-rota]').forEach((link) => {
+    const destino = CONFIG_LIRA_GOMES.rotas[link.dataset.rota];
+    if (destino) link.setAttribute('href', destino);
+  });
+
   const raiz = document.documentElement;
   const corpo = document.body;
   const consultaMovimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)');

@@ -163,9 +163,93 @@
       </div>
     </section>
 
-    <!-- Âncoras semânticas configuráveis para as seções desta página -->
-    <div id="psicoterapia" hidden></div>
-    <div id="avaliacao-neuropsicologica" hidden></div>
+    <!-- ═══════════════════════════════ SEGUNDA DOBRA (SERVIÇOS) ═══════════════════════════════
+         Sobe como cortina sobre a hero (hero fixada via position: sticky no CSS). -->
+    <section class="servicos" id="servicos" aria-labelledby="servicos-titulo">
+      <div class="container">
+        <div class="servicos__cabeca">
+          <div>
+            <!-- Âncora #psicoterapia: destino do menu e do botão "Conheça nossos serviços" da hero -->
+            <p class="olho" id="psicoterapia">Nossos serviços</p>
+            <h2 class="servicos__titulo" id="servicos-titulo">
+              Um cuidado psicológico que considera a sua singularidade
+            </h2>
+          </div>
+          <p class="servicos__apoio">
+            A Lira Gomes Psicologia oferece psicoterapia para adultos e avaliação neuropsicológica presencial em São Paulo. Cada atendimento considera a demanda, a história e o momento de cada pessoa.
+          </p>
+        </div>
+
+        <div class="servicos__grade">
+          <article class="servico">
+            <figure class="servico__foto">
+              <img
+                src="assets/marca/img/otimizadas/card1.webp"
+                alt="Sala de atendimento com sofá cinza, mesa lateral com lenços e grande janela, no conjunto onde ocorrem os atendimentos"
+                width="1000"
+                height="1333"
+                loading="lazy"
+                decoding="async"
+              >
+            </figure>
+            <h3 class="servico__titulo">Psicoterapia para adultos</h3>
+            <p class="servico__texto">
+              Um espaço de escuta e reflexão para compreender experiências, emoções e relações, respeitando a história e o ritmo de cada pessoa.
+            </p>
+            <p class="servico__info">
+              Atendimento presencial na Vila Andrade e online, conforme a disponibilidade de cada profissional.
+            </p>
+            <!-- Destino configurável em CONFIG_LIRA_GOMES.rotas (main.js) quando a página existir -->
+            <a class="link-seta" href="#psicoterapia" data-rota="psicoterapia">
+              Conheça a psicoterapia
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </article>
+
+          <article class="servico" id="avaliacao-neuropsicologica">
+            <figure class="servico__foto">
+              <img
+                src="assets/marca/img/otimizadas/card2.webp"
+                alt="Entrada do conjunto 14, com painel de madeira ripada, prateleira com plantas, orquídea e pequenas esculturas"
+                width="1000"
+                height="1778"
+                loading="lazy"
+                decoding="async"
+              >
+            </figure>
+            <h3 class="servico__titulo">Avaliação neuropsicológica</h3>
+            <p class="servico__texto">
+              Uma investigação do funcionamento cognitivo, emocional e comportamental, definida conforme a demanda e os objetivos apresentados.
+            </p>
+            <p class="servico__info">
+              Atendimento presencial para adolescentes e adultos.
+            </p>
+            <!-- Destino configurável em CONFIG_LIRA_GOMES.rotas (main.js) quando a página existir -->
+            <a class="link-seta" href="#avaliacao-neuropsicologica" data-rota="avaliacaoNeuropsicologica">
+              Conheça a avaliação neuropsicológica
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Faixa em movimento contínuo (transição gráfica discreta) -->
+    <div class="faixa">
+      <p class="sr-only">Psicoterapia para adultos • Avaliação neuropsicológica • Vila Andrade, São Paulo</p>
+      <div class="faixa__trilho" aria-hidden="true">
+        <div class="faixa__grupo">
+          <span>Psicoterapia para adultos</span><i></i><span>Avaliação neuropsicológica</span><i></i><span>Vila Andrade, São Paulo</span><i></i>
+          <span>Psicoterapia para adultos</span><i></i><span>Avaliação neuropsicológica</span><i></i><span>Vila Andrade, São Paulo</span><i></i>
+        </div>
+        <div class="faixa__grupo">
+          <span>Psicoterapia para adultos</span><i></i><span>Avaliação neuropsicológica</span><i></i><span>Vila Andrade, São Paulo</span><i></i>
+          <span>Psicoterapia para adultos</span><i></i><span>Avaliação neuropsicológica</span><i></i><span>Vila Andrade, São Paulo</span><i></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Âncoras semânticas configuráveis para as seções ainda não implementadas -->
     <div id="profissionais" hidden></div>
     <div id="contato" hidden></div>
   </main>

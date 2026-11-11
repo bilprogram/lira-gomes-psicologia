@@ -882,6 +882,205 @@ svg[viewBox="0 0 24 24"] {
   height: 18px;
 }
 
+/* ── Segunda Dobra: Serviços ──────────────────────────────────────────────────────────────── */
+
+.servicos {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(80px, 10vw, 144px);
+  background: var(--off-white);
+}
+
+.olho {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--verde-oliva);
+}
+
+.olho::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--dourado-areia);
+}
+
+.servicos__cabeca {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(32px, 5vw, 72px);
+  margin-bottom: clamp(44px, 6vw, 80px);
+}
+
+.servicos__titulo {
+  max-width: 13em;
+  font-size: clamp(2.1rem, 4.2vw, 3.9rem);
+  line-height: 1.04;
+  letter-spacing: -0.032em;
+  text-wrap: balance;
+}
+
+.servicos__apoio {
+  flex: 0 1 28em;
+  margin: 0;
+  color: var(--tinta-2);
+}
+
+.servicos__grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+
+.servico {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 3vw, 44px);
+  border-radius: var(--raio);
+  background: var(--papel);
+  box-shadow: inset 0 0 0 1px var(--linha);
+}
+
+.servico__foto {
+  margin: 0 0 clamp(24px, 3vw, 36px);
+  aspect-ratio: 4 / 3;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--areia-2);
+}
+
+.servico__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.servico:nth-child(1) .servico__foto img { object-position: 50% 62%; }
+.servico:nth-child(2) .servico__foto img { object-position: 50% 52%; }
+
+.servico__titulo {
+  margin: 0 0 14px;
+  font-size: clamp(1.7rem, 2.7vw, 2.4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.servico__texto {
+  max-width: 30em;
+  color: var(--tinta-2);
+}
+
+.servico__info {
+  max-width: 30em;
+  margin: 0 0 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--linha);
+  color: var(--tinta-3);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.link-seta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  margin-top: auto;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: var(--verde-profundo);
+  text-decoration: none;
+  border-bottom: 1px solid var(--dourado-areia);
+  padding-bottom: 3px;
+}
+
+.link-seta svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.5s var(--suave);
+}
+
+.link-seta:hover svg,
+.link-seta:focus-visible svg {
+  transform: translateX(5px);
+}
+
+.link-seta:focus-visible {
+  outline: 2px solid var(--verde-profundo);
+  outline-offset: 4px;
+}
+
+/* ── Faixa de movimento contínuo ──────────────────────────────────────────────────────────── */
+
+.faixa {
+  position: relative;
+  z-index: 1;
+  overflow: clip;
+  padding: clamp(18px, 2vw, 26px) 0;
+  background: var(--verde-profundo);
+  color: var(--off-white);
+}
+
+.faixa__trilho {
+  display: flex;
+  width: max-content;
+  animation: faixa 60s linear infinite;
+}
+
+.faixa__grupo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 40px;
+  padding-right: 40px;
+}
+
+.faixa span {
+  font-family: "Fraunces", "Lora", Georgia, serif;
+  font-size: clamp(24px, 2.8vw, 38px);
+  font-style: italic;
+  font-weight: 340;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.faixa i {
+  flex-shrink: 0;
+  width: 11px;
+  height: 11px;
+  border-radius: 0 50% 0 50%;
+  background: var(--dourado-areia);
+}
+
+@keyframes faixa {
+  to { transform: translateX(-50%); }
+}
+
+/* ── Transição por rolagem: hero fixada (sticky) e serviços sobem como cortina ─────────────── */
+/* Só em telas amplas e com altura suficiente: em celular/tablet a hero rola normalmente, sem
+   conteúdo preso. A única mudança na hero é position: sticky (o conteúdo e a aparência seguem iguais). */
+
+@media (min-width: 981px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+  .hero {
+    position: sticky;
+    top: 0;
+    z-index: 0;
+  }
+
+  .servicos {
+    border-radius: var(--raio) var(--raio) 0 0;
+    box-shadow: 0 -24px 60px -30px rgba(14, 22, 14, 0.5);
+  }
+}
+
 /* ── Responsividade (Tablet e Mobile) ─────────────────────────────────────────────────────── */
 
 @media (max-width: 1120px) {
@@ -948,6 +1147,19 @@ svg[viewBox="0 0 24 24"] {
 
   .hero__conteudo {
     max-width: 600px;
+  }
+
+  .servicos__cabeca {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .servicos__apoio {
+    flex-basis: auto;
+  }
+
+  .servicos__grade {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -1048,5 +1260,27 @@ svg[viewBox="0 0 24 24"] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
+  }
+
+  /* Faixa estática: apenas uma ocorrência da frase, centralizada */
+  .faixa__trilho {
+    width: 100%;
+    justify-content: center;
+    animation: none !important;
+  }
+
+  .faixa__grupo:nth-child(2) {
+    display: none;
+  }
+
+  .faixa__grupo {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-inline: 20px;
+    row-gap: 6px;
+  }
+
+  .faixa__grupo > :nth-child(n+7) {
+    display: none;
   }
 }
