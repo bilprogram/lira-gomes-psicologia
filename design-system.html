@@ -1,0 +1,4108 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Design System v2 · Clara Vilela — Psicologia Clínica</title>
+  <meta name="description" content="Sistema de design vivo e biblioteca de padrões visuais, tipografia, cores, superfícies, componentes, layout e movimento do projeto Clara Vilela.">
+  <meta name="theme-color" content="#F4EEE6">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,SOFT,wght@0,9..144,50..60,300..700;1,9..144,50..60,300..700&family=Instrument+Sans:wght@400;500;600;700&display=swap">
+  <style>
+/* ============================================================================================
+   Clara Vilela · Psicologia — modelo de página da Biblioteca do Gravyx
+   Fontes: Fraunces (títulos) e Instrument Sans (texto), as duas da Google Fonts, aqui no arquivo com
+   nome próprio ("Fraunces Local"). Em cada font-family vem primeiro o nome do Google, escrito por
+   extenso (sem variável): a capa da Biblioteca é pintada sem acesso aos arquivos da página e acha a
+   fonte no Google por esse primeiro nome. No site, sem a fonte do Google, vale a do arquivo.
+   ============================================================================================ */
+
+@font-face {
+  font-family: "Fraunces Local";
+  src: url("assets/fonts/fraunces.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces Local";
+  src: url("assets/fonts/fraunces-italic.woff2") format("woff2");
+  font-weight: 300 700;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Sans Local";
+  src: url("assets/fonts/instrument-sans.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --marfim: #F4EEE6;
+  --areia: #EBE2D5;
+  --areia-2: #E1D4C2;
+  --papel: #FBF8F3;
+  --creme: #F7F1E8;
+  --tinta: #1E2420;
+  --tinta-2: #4B514B;
+  --tinta-3: #7A7D74;
+  --linha: rgba(30, 36, 32, .12);
+  --linha-forte: rgba(30, 36, 32, .24);
+  --terra: #B5603B;
+  --terra-escura: #96492A;
+  --terra-clara: #E4A27D;
+  --salvia: #8C9C84;
+  --salvia-clara: #D6DECF;
+  --floresta: #1F2B25;
+  --floresta-2: #2A3830;
+  --floresta-3: #18221D;
+  --ouro: #E6B877;
+  --raio: 28px;
+  --suave: cubic-bezier(.22, 1, .36, 1);
+  --suave-2: cubic-bezier(.65, 0, .35, 1);
+  --topo: 88px;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 96px;
+  background: var(--marfim);
+}
+html:not(.lenis) { scroll-behavior: smooth; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis [data-lenis-prevent] { overscroll-behavior: contain; }
+
+body {
+  margin: 0;
+  background: var(--marfim);
+  color: var(--tinta);
+  font-family: "Instrument Sans", "Instrument Sans Local", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Grão de filme sobre a página inteira: o acabamento de papel. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: .055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  transform: translateZ(0);
+}
+
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+p { margin: 0 0 1.1em; }
+button { font: inherit; color: inherit; }
+main { overflow-x: clip; }
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: "Fraunces", "Fraunces Local", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 50;
+  letter-spacing: -.02em;
+  line-height: 1.08;
+}
+em { font-style: italic; }
+
+/* Os ícones de linha (todos com viewBox 0 0 24 24). */
+svg[viewBox="0 0 24 24"] {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+::selection { background: var(--terra); color: var(--creme); }
+
+:focus-visible {
+  outline: 2px solid var(--terra);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 4.2vw, 64px);
+}
+
+.secao {
+  position: relative;
+  padding-block: clamp(96px, 11vw, 168px);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.pular {
+  position: fixed;
+  left: 16px; top: 16px;
+  z-index: 200;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--tinta);
+  color: var(--creme);
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform .3s var(--suave);
+}
+.pular:focus { transform: none; }
+
+/* ── Tipografia de seção ──────────────────────────────────────────────────────────────────── */
+
+.olho {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 22px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--terra);
+}
+.olho::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+}
+.olho--claro { color: var(--ouro); }
+
+.titulo-secao {
+  font-size: clamp(2.3rem, 4.6vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+}
+.titulo-secao em {
+  color: var(--terra);
+  font-weight: 350;
+}
+
+.cabeca-secao {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 48px;
+  margin-bottom: clamp(48px, 6vw, 88px);
+}
+.cabeca-secao__texto {
+  max-width: 27em;
+  margin: 0;
+  color: var(--tinta-2);
+}
+.cabeca-secao--centro {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.cabeca-secao--centro .titulo-secao { max-width: 14em; }
+
+.link-seta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: var(--terra);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.link-seta svg {
+  width: 18px;
+  height: 18px;
+  transition: transform .5s var(--suave);
+}
+.link-seta:hover svg { transform: translateX(5px); }
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--areia);
+  color: var(--tinta-2);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+/* ── Botões ───────────────────────────────────────────────────────────────────────────────── */
+
+.botao {
+  --fundo: var(--tinta);
+  --cor: var(--creme);
+  --fundo-ativo: #000;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: 58px;
+  padding: 0 28px;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--fundo);
+  color: var(--cor);
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform .6s var(--suave), box-shadow .5s var(--suave), color .4s;
+}
+.botao::before {
+  content: "";
+  position: absolute;
+  left: -15%;
+  right: -15%;
+  top: 100%;
+  height: 230%;
+  z-index: -1;
+  border-radius: 50%;
+  background: var(--fundo-ativo);
+  transition: top .7s var(--suave);
+}
+.botao:hover::before,
+.botao:focus-visible::before { top: -60%; }
+.botao:has(.botao__icone) { padding-right: 8px; }
+
+.botao__icone {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--cor);
+  color: var(--fundo);
+  overflow: hidden;
+  transition: background-color .4s;
+}
+.botao__icone svg {
+  width: 18px;
+  height: 18px;
+  transition: transform .6s var(--suave);
+}
+.botao:hover .botao__icone svg { transform: translateX(3px) rotate(-30deg); }
+
+.botao--terra { --fundo: var(--terra); --cor: var(--creme); --fundo-ativo: var(--terra-escura); }
+.botao--terra:hover { box-shadow: 0 18px 40px -18px rgba(150, 73, 42, .65); }
+.botao--escuro { --fundo: var(--tinta); --cor: var(--creme); --fundo-ativo: var(--floresta-2); }
+.botao--claro { --fundo: var(--creme); --cor: var(--floresta); --fundo-ativo: #fff; }
+.botao--contorno {
+  --fundo: transparent;
+  --cor: var(--tinta);
+  --fundo-ativo: var(--areia);
+  box-shadow: inset 0 0 0 1px var(--linha-forte);
+}
+.botao--claro-contorno {
+  --fundo: transparent;
+  --cor: var(--creme);
+  --fundo-ativo: rgba(247, 241, 232, .1);
+  box-shadow: inset 0 0 0 1px rgba(247, 241, 232, .3);
+}
+.botao--pequeno { height: 46px; padding: 0 22px; font-size: 14.5px; }
+.botao--largo { width: 100%; }
+.botao__marca { width: 22px; height: 22px; }
+
+/* O ponto que respira, dentro do botão "Respire por 1 minuto". */
+.ponto-respira {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--terra);
+}
+.ponto-respira::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid var(--terra);
+  animation: respira-ponto 4s var(--suave-2) infinite;
+}
+@keyframes respira-ponto {
+  0%, 100% { transform: scale(.55); opacity: .9; }
+  50% { transform: scale(1.25); opacity: .15; }
+}
+
+/* ── Topo ─────────────────────────────────────────────────────────────────────────────────── */
+
+.topo {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  transition: transform .6s var(--suave), background-color .5s, box-shadow .5s;
+}
+.topo.rolou {
+  background: rgba(244, 238, 230, .8);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+  box-shadow: 0 1px 0 var(--linha);
+}
+.topo.esconde { transform: translateY(-100%); }
+
+.topo__barra {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  height: var(--topo);
+  transition: height .5s var(--suave);
+}
+.topo.rolou .topo__barra { height: 72px; }
+
+.marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: auto;
+  color: var(--tinta);
+  text-decoration: none;
+}
+.marca__simbolo {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  color: var(--terra);
+  transition: transform .8s var(--suave);
+}
+.marca:hover .marca__simbolo { transform: rotate(-18deg); }
+.marca__texto { display: flex; flex-direction: column; line-height: 1.1; }
+.marca__nome {
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 21px;
+  letter-spacing: -.01em;
+  font-variation-settings: "SOFT" 50;
+}
+.marca__crp {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+.marca--clara { color: var(--creme); }
+.marca--clara .marca__simbolo { color: var(--ouro); }
+.marca--clara .marca__crp { color: rgba(247, 241, 232, .55); }
+
+.menu { display: flex; gap: 4px; }
+.menu a {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--tinta-2);
+  font-size: 15px;
+  text-decoration: none;
+  transition: color .3s, background-color .3s;
+}
+.menu a:hover { color: var(--tinta); background: rgba(30, 36, 32, .05); }
+.menu a.atual { color: var(--tinta); }
+.menu a.atual::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  border-radius: 50%;
+  background: var(--terra);
+}
+
+.menu-botao {
+  display: none;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--tinta);
+  cursor: pointer;
+}
+.menu-botao span {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  height: 1.5px;
+  background: var(--creme);
+  transition: transform .5s var(--suave), top .5s var(--suave);
+}
+.menu-botao span:first-child { top: 20px; }
+.menu-botao span:last-child { top: 27px; }
+.menu-aberto .menu-botao span:first-child { top: 23.5px; transform: rotate(45deg); }
+.menu-aberto .menu-botao span:last-child { top: 23.5px; transform: rotate(-45deg); }
+
+.menu-movel {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 120px clamp(20px, 6vw, 48px) 40px;
+  background: var(--marfim);
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  transition: clip-path .8s var(--suave-2), visibility 0s .8s;
+}
+.menu-aberto .menu-movel {
+  clip-path: inset(0);
+  visibility: visible;
+  transition: clip-path .8s var(--suave-2);
+}
+.menu-movel__lista { display: flex; flex-direction: column; }
+.menu-movel__lista a {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--linha);
+  color: var(--tinta);
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(38px, 10.5vw, 64px);
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .6s var(--suave), transform .8s var(--suave);
+}
+.menu-movel__lista a span {
+  font-family: "Instrument Sans", "Instrument Sans Local", system-ui, sans-serif;
+  font-size: 13px;
+  letter-spacing: .1em;
+  color: var(--terra);
+}
+.menu-aberto .menu-movel__lista a { opacity: 1; transform: none; }
+.menu-aberto .menu-movel__lista a:nth-child(1) { transition-delay: .2s; }
+.menu-aberto .menu-movel__lista a:nth-child(2) { transition-delay: .26s; }
+.menu-aberto .menu-movel__lista a:nth-child(3) { transition-delay: .32s; }
+.menu-aberto .menu-movel__lista a:nth-child(4) { transition-delay: .38s; }
+.menu-aberto .menu-movel__lista a:nth-child(5) { transition-delay: .44s; }
+.menu-movel__rodape { display: grid; gap: 16px; }
+.menu-movel__rodape p { margin: 0; color: var(--tinta-3); font-size: 15px; }
+
+/* ── Hero ─────────────────────────────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 118px 0 92px;
+  overflow: clip;
+}
+.hero__luz {
+  position: absolute;
+  top: -30%;
+  right: -12%;
+  width: 72vw;
+  height: 72vw;
+  max-width: 1100px;
+  max-height: 1100px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(230, 184, 119, .36), rgba(230, 184, 119, 0));
+  pointer-events: none;
+}
+/* O título cabe em 3 linhas também na capa da Biblioteca, que pinta a Fraunces do Google no corte
+   óptico de texto (cerca de 21% mais largo que o do site): por isso a coluna da imagem para em 420 px. */
+.hero__grade {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
+  align-items: center;
+  gap: clamp(40px, 4.4vw, 64px);
+}
+
+.selo-agenda {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 30px;
+  padding: 8px 16px 8px 12px;
+  border-radius: 999px;
+  background: rgba(251, 248, 243, .7);
+  box-shadow: inset 0 0 0 1px var(--linha);
+  color: var(--tinta-2);
+  font-size: 14px;
+  font-weight: 500;
+}
+.selo-agenda__ponto,
+.cartao__pulso {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #5E8F64;
+}
+.selo-agenda__ponto::after,
+.cartao__pulso::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #5E8F64;
+  animation: pulso 2.4s var(--suave) infinite;
+}
+@keyframes pulso {
+  0% { transform: scale(1); opacity: .6; }
+  80%, 100% { transform: scale(3.2); opacity: 0; }
+}
+
+.hero__titulo {
+  margin: 0 0 30px;
+  font-size: clamp(3rem, 6.3vw, 6.6rem);
+  line-height: .96;
+  letter-spacing: -.032em;
+  word-spacing: .03em;
+  font-weight: 380;
+  font-variation-settings: "SOFT" 60;
+}
+.hero__titulo em {
+  color: var(--terra);
+  font-weight: 340;
+}
+
+/* Cada linha do título sobe de dentro de uma máscara. O respiro de baixo guarda as descendentes. */
+.linha {
+  display: block;
+  overflow: hidden;
+  padding-bottom: .1em;
+  margin-bottom: -.1em;
+}
+.linha__in { display: inline-block; }
+
+.pilula {
+  display: inline-block;
+  position: relative;
+  top: -.04em;
+  width: 1.85em;
+  height: .78em;
+  margin-left: .06em;
+  border-radius: 999px;
+  overflow: hidden;
+  vertical-align: middle;
+  box-shadow: inset 0 0 0 1px rgba(30, 36, 32, .08);
+}
+.pilula img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 22%;
+}
+
+.hero__resumo {
+  max-width: 31em;
+  margin: 0 0 38px;
+  color: var(--tinta-2);
+  font-size: clamp(17px, 1.35vw, 19.5px);
+  line-height: 1.6;
+}
+.hero__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 44px;
+}
+.hero__garantias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--tinta-2);
+  font-size: 14.5px;
+}
+.hero__garantias li { display: inline-flex; align-items: center; gap: 9px; }
+.hero__garantias svg { width: 19px; height: 19px; color: var(--terra); }
+
+.hero__visual {
+  position: relative;
+  justify-self: end;
+  width: 100%;
+}
+/* O arco: semicírculo em cima (raio vertical = metade da largura, na proporção 11:14). */
+.arco {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 11 / 14;
+  border-radius: 50% 50% 26px 26px / 39.3% 39.3% 26px 26px;
+  overflow: hidden;
+  background: var(--areia-2);
+  transform: translateZ(0);
+}
+.arco__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* O contorno atrás do arco, deslocado: o desenho de arquiteto. */
+.hero__visual::before {
+  content: "";
+  position: absolute;
+  inset: -18px 18px 18px -18px;
+  border: 1px solid rgba(181, 96, 59, .45);
+  border-radius: 50% 50% 30px 30px / 39.3% 39.3% 30px 30px;
+  pointer-events: none;
+}
+
+.selo-giro {
+  position: absolute;
+  top: 2%;
+  left: -13%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: var(--terra);
+  color: var(--creme);
+  box-shadow: 0 20px 40px -20px rgba(150, 73, 42, .7);
+}
+.selo-giro > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: girar 26s linear infinite;
+}
+.selo-giro text {
+  fill: currentColor;
+  font-family: "Instrument Sans", "Instrument Sans Local", system-ui, sans-serif;
+  font-size: 9.6px;
+  font-weight: 600;
+}
+.selo-giro__centro svg {
+  width: 30px;
+  height: 30px;
+  stroke-width: 1.3;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+.cartao {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  background: rgba(251, 248, 243, .9);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 24px 48px -26px rgba(31, 43, 37, .5), inset 0 0 0 1px rgba(255, 255, 255, .7);
+  color: var(--tinta);
+  text-decoration: none;
+}
+.cartao--agenda { top: 15%; right: -9%; }
+.cartao--respiro {
+  bottom: 9%;
+  left: -15%;
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px 14px 14px;
+  transition: transform .6s var(--suave);
+}
+.cartao--respiro:hover { transform: translateY(-4px); }
+.cartao__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #4F7A55;
+}
+.cartao__titulo {
+  margin-top: 6px;
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 19px;
+  line-height: 1.2;
+}
+.cartao__linha { font-size: 13.5px; color: var(--tinta-3); }
+.cartao__textos { display: flex; flex-direction: column; }
+.cartao__rotulo { font-size: 12.5px; color: var(--tinta-3); }
+.cartao__alterna {
+  position: relative;
+  display: block;
+  height: 26px;
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-style: italic;
+  font-size: 21px;
+  line-height: 26px;
+}
+/* Cada palavra tem a sua animação e a do fim de cada uma é a de repouso: na capa (animações levadas ao
+   fim) fica só o "Inspire…". */
+.cartao__alterna span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  white-space: nowrap;
+  animation: alterna-1 8s var(--suave-2) infinite;
+}
+.cartao__alterna span + span {
+  opacity: 0;
+  animation-name: alterna-2;
+}
+@keyframes alterna-1 {
+  0%, 42% { opacity: 1; transform: none; }
+  50%, 92% { opacity: 0; transform: translateY(-6px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes alterna-2 {
+  0%, 42% { opacity: 0; transform: translateY(6px); }
+  50%, 92% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+
+.mini-orbe {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(181, 96, 59, .12);
+}
+.mini-orbe span {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #F3D3A0, #D98E5B 60%, var(--terra-escura));
+  animation: mini-orbe 8s var(--suave-2) infinite;
+}
+@keyframes mini-orbe {
+  0%, 100% { transform: scale(.8); }
+  45%, 55% { transform: scale(1.9); }
+}
+
+.rolar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  margin-inline: auto;
+  color: var(--tinta-3);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.rolar__linha {
+  position: relative;
+  width: 1px;
+  height: 46px;
+  overflow: hidden;
+  background: var(--linha);
+}
+.rolar__linha::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 50%;
+  background: var(--terra);
+  animation: rolar 2.6s var(--suave-2) infinite;
+}
+@keyframes rolar {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200%); }
+}
+
+/* A entrada do hero: escondido pelo .js (antes da primeira pintura) e solto pelo .carregou. */
+.js .hero .linha__in { transform: translateY(108%); }
+.js .hero [data-intro] { opacity: 0; transform: translateY(20px); }
+.js .hero .arco { clip-path: inset(100% 0 0 0); }
+.js .hero .arco__img { transform: scale(1.16); }
+.js .hero .pilula { width: 0; margin-left: 0; }
+.js .hero .selo-giro { opacity: 0; transform: scale(.5) rotate(-60deg); }
+.js .hero__visual::before { opacity: 0; transform: translate(14px, -14px); }
+.js .topo__barra { opacity: 0; transform: translateY(-14px); }
+
+.carregou .topo__barra {
+  opacity: 1;
+  transform: none;
+  transition: opacity .9s var(--suave), transform .9s var(--suave), height .5s var(--suave);
+}
+.carregou .hero .linha__in {
+  transform: none;
+  transition: transform 1.3s var(--suave);
+}
+.carregou .hero .linha:nth-child(2) .linha__in { transition-delay: .09s; }
+.carregou .hero .linha:nth-child(3) .linha__in { transition-delay: .18s; }
+.carregou .hero .pilula {
+  width: 1.85em;
+  margin-left: .06em;
+  transition: width 1.2s var(--suave) .75s, margin .9s var(--suave) .75s;
+}
+.carregou .hero [data-intro] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 1s var(--suave), transform 1.1s var(--suave);
+}
+.carregou .hero .selo-agenda { transition-delay: 0s; }
+.carregou .hero .hero__resumo { transition-delay: .35s; }
+.carregou .hero .hero__acoes { transition-delay: .45s; }
+.carregou .hero .hero__garantias { transition-delay: .55s; }
+.carregou .hero .cartao--agenda { transition-delay: 1s; }
+.carregou .hero .cartao--respiro { transition-delay: 1.15s; }
+.carregou .hero .rolar { transition-delay: 1.3s; }
+.carregou .hero .cartao--respiro:hover { transform: translateY(-4px); transition-delay: 0s; }
+.carregou .hero .arco {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 1.5s var(--suave-2) .1s;
+}
+.carregou .hero .arco__img {
+  transform: none;
+  transition: transform 2.2s var(--suave) .1s;
+}
+.carregou .hero .selo-giro {
+  opacity: 1;
+  transform: none;
+  transition: opacity .8s var(--suave) .8s, transform 1.4s var(--suave) .8s;
+}
+.carregou .hero__visual::before {
+  opacity: 1;
+  transform: none;
+  transition: opacity 1.2s var(--suave) .5s, transform 1.6s var(--suave) .5s;
+}
+
+/* ── Faixa ────────────────────────────────────────────────────────────────────────────────── */
+
+.faixa {
+  position: relative;
+  overflow: clip;
+  padding: 26px 0;
+  border-block: 1px solid var(--linha);
+}
+.faixa__trilho {
+  display: flex;
+  width: max-content;
+  animation: faixa 48s linear infinite;
+}
+.faixa__grupo {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 40px;
+  padding-right: 40px;
+}
+.faixa span {
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(28px, 3.3vw, 46px);
+  font-style: italic;
+  font-weight: 340;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.faixa i {
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  border-radius: 0 50% 0 50%;
+  background: var(--terra);
+}
+@keyframes faixa { to { transform: translateX(-50%); } }
+
+/* ── Sinais ───────────────────────────────────────────────────────────────────────────────── */
+
+.sinais__texto {
+  max-width: 21em;
+  margin: 0 0 clamp(48px, 6vw, 80px);
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(1.85rem, 3.5vw, 3.4rem);
+  font-weight: 370;
+  font-variation-settings: "SOFT" 50;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+}
+/* O texto se preenche com a rolagem (o main.js põe --p de 0 a 1). Uma faixa só atravessa as
+   linhas uma depois da outra: o fundo de um elemento em linha corre pelas linhas como uma tira. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .sinais__texto span {
+    background-image: linear-gradient(90deg, var(--tinta) calc(100% - 90px), rgba(30, 36, 32, .17)), linear-gradient(rgba(30, 36, 32, .17), rgba(30, 36, 32, .17));
+    background-size: calc(var(--p, 1) * 100%) 100%, 100% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
+
+.sinais__lista {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0 0 48px;
+  padding: 0;
+  list-style: none;
+}
+.sinal {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px;
+  border-radius: 20px;
+  background: var(--papel);
+  box-shadow: inset 0 0 0 1px var(--linha);
+  color: var(--tinta-2);
+  font-size: 16.5px;
+  line-height: 1.35;
+  transition: transform .6s var(--suave), box-shadow .5s, background-color .5s;
+}
+.sinal svg {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  color: var(--terra);
+}
+.sinal:hover {
+  transform: translateY(-4px);
+  background: #fff;
+  box-shadow: inset 0 0 0 1px rgba(181, 96, 59, .35), 0 20px 40px -28px rgba(31, 43, 37, .4);
+}
+.sinais__fecho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 22px;
+  margin: 0;
+  color: var(--tinta-2);
+}
+
+/* ── Temas ────────────────────────────────────────────────────────────────────────────────── */
+
+.temas { background: var(--areia); }
+.temas__grade {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.tema {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+  padding: 32px;
+  border-radius: var(--raio);
+  background: var(--papel);
+  overflow: hidden;
+  transition: color .5s;
+}
+.tema::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--floresta);
+  border-radius: inherit;
+  transform: translateY(101%);
+  transition: transform .8s var(--suave);
+}
+.tema::after {
+  content: "";
+  position: absolute;
+  right: -30%;
+  bottom: -30%;
+  z-index: -1;
+  width: 70%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(230, 184, 119, .35), transparent);
+  opacity: 0;
+  transition: opacity .8s;
+}
+.tema:hover, .tema:focus-within { color: var(--creme); }
+.tema:hover::before, .tema:focus-within::before { transform: none; }
+.tema:hover::after, .tema:focus-within::after { opacity: 1; }
+.tema__numero {
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 15px;
+  color: var(--tinta-3);
+  transition: color .5s;
+}
+.tema__icone {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin: 26px 0 0;
+  border-radius: 50%;
+  background: var(--areia);
+  color: var(--terra);
+  transition: background-color .5s, color .5s, transform .8s var(--suave);
+}
+.tema__icone svg { width: 26px; height: 26px; }
+.tema__titulo {
+  margin: auto 0 12px;
+  padding-top: 32px;
+  font-size: clamp(26px, 2.2vw, 31px);
+  line-height: 1.1;
+  letter-spacing: -.025em;
+}
+.tema__texto {
+  margin: 0 0 26px;
+  color: var(--tinta-2);
+  transition: color .5s;
+}
+.tema__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--terra);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color .5s;
+}
+.tema__link::after { content: ""; position: absolute; inset: 0; }
+.tema__link svg { width: 17px; height: 17px; transition: transform .6s var(--suave); }
+.tema:hover .tema__numero, .tema:focus-within .tema__numero { color: rgba(247, 241, 232, .5); }
+.tema:hover .tema__icone, .tema:focus-within .tema__icone { background: rgba(247, 241, 232, .08); color: var(--ouro); transform: rotate(-10deg) scale(1.06); }
+.tema:hover .tema__texto, .tema:focus-within .tema__texto { color: rgba(247, 241, 232, .74); }
+.tema:hover .tema__link, .tema:focus-within .tema__link { color: var(--ouro); }
+.tema:hover .tema__link svg { transform: translate(3px, -3px); }
+
+/* ── Sobre ────────────────────────────────────────────────────────────────────────────────── */
+
+.sobre__grade {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(48px, 8vw, 128px);
+}
+.sobre__visual { position: relative; }
+.arco--sobre {
+  aspect-ratio: 4 / 5;
+  border-radius: 50% 50% 26px 26px / 40% 40% 26px 26px;
+}
+.arco--sobre .arco__img { height: 112%; top: -6%; }
+.etiqueta--imagem {
+  position: absolute;
+  top: 46%;
+  left: -14px;
+  padding: 9px 16px;
+  background: var(--papel);
+  box-shadow: 0 16px 32px -20px rgba(31, 43, 37, .45);
+  color: var(--tinta-2);
+  font-size: 13px;
+}
+.cartao-nome {
+  position: absolute;
+  right: -6%;
+  bottom: 7%;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 24px 14px;
+  border-radius: 20px;
+  background: var(--papel);
+  box-shadow: 0 30px 60px -30px rgba(31, 43, 37, .5);
+}
+.cartao-nome__nome {
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 24px;
+  line-height: 1.1;
+}
+.cartao-nome__cargo { margin-top: 4px; color: var(--tinta-3); font-size: 13.5px; }
+.assinatura {
+  width: 150px;
+  height: 42px;
+  margin-top: 6px;
+  fill: none;
+  stroke: var(--terra);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 0;
+}
+.revelar-ativo .cartao-nome .assinatura { stroke-dashoffset: 600; }
+.revelar-ativo .cartao-nome.visivel .assinatura {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 2.4s var(--suave-2) .5s;
+}
+
+.sobre__texto > p { color: var(--tinta-2); }
+.sobre__texto .titulo-secao { margin-bottom: 28px; }
+.sobre__lead {
+  font-size: clamp(19px, 1.6vw, 22px);
+  line-height: 1.55;
+  color: var(--tinta) !important;
+}
+
+.formacao {
+  margin: 36px 0 44px;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--linha);
+}
+.formacao li {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--linha);
+  font-size: 16px;
+}
+.formacao span {
+  color: var(--tinta-3);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 2;
+}
+
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+}
+.numero dd { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.numero__valor {
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(44px, 4.6vw, 64px);
+  line-height: 1;
+  letter-spacing: -.04em;
+  font-variation-settings: "SOFT" 50;
+  color: var(--tinta);
+}
+.numero__valor small {
+  margin-left: 4px;
+  font-size: .4em;
+  letter-spacing: 0;
+  color: var(--tinta-3);
+}
+.numero__rotulo { color: var(--tinta-3); font-size: 14.5px; line-height: 1.4; }
+
+.citacao {
+  position: relative;
+  max-width: 940px;
+  margin: clamp(96px, 11vw, 160px) auto 0;
+  text-align: center;
+}
+.citacao::before {
+  content: "“";
+  display: block;
+  height: .55em;
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 140px;
+  line-height: 1;
+  color: var(--terra);
+}
+.citacao blockquote { margin: 0; }
+.citacao p {
+  margin: 0 0 26px;
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(30px, 3.6vw, 50px);
+  font-style: italic;
+  font-weight: 330;
+  line-height: 1.18;
+  letter-spacing: -.025em;
+}
+.citacao figcaption {
+  color: var(--tinta-3);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+/* ── Respiração ───────────────────────────────────────────────────────────────────────────── */
+
+.respiro {
+  overflow: clip;
+  background: var(--floresta);
+  color: var(--creme);
+}
+.respiro__brilho {
+  position: absolute;
+  top: 50%;
+  right: -12vw;
+  width: 72vw;
+  height: 72vw;
+  max-width: 1100px;
+  max-height: 1100px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(230, 184, 119, .2), rgba(230, 184, 119, 0));
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.respiro__grade {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(48px, 6vw, 96px);
+}
+.respiro .titulo-secao { margin-bottom: 26px; }
+.respiro .titulo-secao em { color: var(--ouro); }
+.respiro__texto > p { max-width: 30em; color: rgba(247, 241, 232, .72); }
+.ritmos {
+  display: inline-flex;
+  gap: 6px;
+  margin: 18px 0 30px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(247, 241, 232, .07);
+}
+.ritmo {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(247, 241, 232, .75);
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .4s, color .4s;
+}
+.ritmo span { margin-left: 6px; font-weight: 400; opacity: .65; }
+.ritmo[aria-pressed="true"] { background: var(--creme); color: var(--floresta); }
+.respiro__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 24px;
+  margin-bottom: 30px;
+}
+.respiro__ciclos { margin: 0; color: rgba(247, 241, 232, .6); font-size: 14.5px; }
+.respiro__icone-play {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 0 6px 10px;
+  border-color: transparent transparent transparent currentColor;
+}
+.respirando .respiro__icone-play {
+  width: 10px;
+  height: 12px;
+  border: 0;
+  border-left: 3px solid currentColor;
+  border-right: 3px solid currentColor;
+}
+.respiro__nota {
+  max-width: 30em;
+  margin: 0;
+  color: rgba(247, 241, 232, .45) !important;
+  font-size: 13.5px;
+}
+
+.orbe {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(460px, 82vw);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+.orbe__progresso {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.orbe__progresso circle {
+  fill: none;
+  stroke: rgba(247, 241, 232, .1);
+  stroke-width: 1;
+}
+.orbe__progresso .orbe__progresso-barra {
+  stroke: var(--ouro);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 603.2;
+  stroke-dashoffset: 603.2;
+}
+.orbe__anel {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(247, 241, 232, .14);
+}
+.orbe__anel--1 { inset: 21%; background: rgba(230, 184, 119, .05); }
+.orbe__anel--2 { inset: 12%; }
+.orbe__anel--3 { inset: 4%; border-style: dashed; border-color: rgba(247, 241, 232, .09); }
+.orbe__nucleo {
+  position: absolute;
+  inset: 27%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #F6DCAE, #E2A066 46%, #B5603B 78%, #8E4527);
+  box-shadow: 0 0 90px 10px rgba(230, 184, 119, .28), inset -14px -18px 40px rgba(110, 50, 25, .35);
+  transform: scale(.74);
+}
+.orbe__instrucao {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  color: var(--floresta-3);
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(21px, 1.9vw, 27px);
+  font-style: italic;
+  font-weight: 400;
+  text-align: center;
+  transition: opacity .5s;
+}
+
+/* ── Processo ─────────────────────────────────────────────────────────────────────────────── */
+
+.processo__grade {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: start;
+  gap: clamp(48px, 8vw, 140px);
+}
+.processo__fixo {
+  position: sticky;
+  top: 140px;
+}
+.processo__fixo > p { max-width: 24em; margin: 26px 0 34px; color: var(--tinta-2); }
+.passos { position: relative; }
+.passos__lista { margin: 0; padding: 0; list-style: none; }
+.passos__linha {
+  position: absolute;
+  top: 34px;
+  bottom: 120px;
+  left: 33px;
+  width: 1px;
+  background: var(--linha);
+}
+.passos__linha span {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 100%;
+  background: var(--terra);
+  transform-origin: 50% 0;
+  transform: scaleY(var(--progresso, 1));
+}
+.passo {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  gap: 28px;
+  padding-bottom: clamp(56px, 7vw, 92px);
+  transition: opacity .7s var(--suave);
+}
+.passo:last-child { padding-bottom: 0; }
+.passo__numero {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--marfim);
+  box-shadow: inset 0 0 0 1px var(--linha-forte);
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 21px;
+  transition: background-color .6s, color .6s, box-shadow .6s;
+}
+.passo__titulo {
+  margin: 14px 0 12px;
+  font-size: clamp(26px, 2.6vw, 36px);
+  letter-spacing: -.03em;
+}
+.passo p { max-width: 30em; margin: 0; color: var(--tinta-2); }
+.revelar-ativo .passo { opacity: .38; }
+.revelar-ativo .passo.ativo { opacity: 1; }
+.passo.ativo .passo__numero {
+  background: var(--terra);
+  color: var(--creme);
+  box-shadow: 0 0 0 8px rgba(181, 96, 59, .12);
+}
+
+/* ── Abordagem ────────────────────────────────────────────────────────────────────────────── */
+
+.abordagem { background: var(--areia); }
+.abas {
+  padding: clamp(20px, 3.4vw, 48px);
+  border-radius: 34px;
+  background: var(--papel);
+}
+.abas__lista {
+  position: relative;
+  display: inline-flex;
+  margin-bottom: clamp(32px, 4vw, 52px);
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--areia);
+}
+.aba {
+  position: relative;
+  z-index: 1;
+  padding: 12px 26px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--tinta-2);
+  font-size: 15.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color .5s;
+}
+.aba[aria-selected="true"] { color: var(--creme); }
+.abas:not(.pronta) .aba[aria-selected="true"] { background: var(--tinta); }
+.abas__marcador {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 0;
+  border-radius: 999px;
+  background: var(--tinta);
+  transition: transform .7s var(--suave), width .7s var(--suave);
+}
+.painel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 88px);
+}
+.painel[hidden] { display: none; }
+.painel.entra { animation: painel-entra .9s var(--suave); }
+@keyframes painel-entra {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+.painel__arte {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 14;
+  border-radius: 26px;
+  background: radial-gradient(circle at 70% 20%, rgba(230, 184, 119, .35), transparent 55%), var(--areia);
+  overflow: hidden;
+}
+.painel__sigla {
+  margin: 0 0 14px;
+  color: var(--terra);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.painel__titulo {
+  margin: 0 0 18px;
+  font-size: clamp(28px, 2.8vw, 40px);
+  line-height: 1.08;
+  letter-spacing: -.03em;
+}
+.painel__texto > p:not(.painel__sigla) { color: var(--tinta-2); }
+
+.lista-check {
+  display: grid;
+  gap: 12px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.lista-check li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.5;
+}
+.lista-check li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 50%;
+  background: var(--salvia-clara) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F2B25' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4L18.5 8'/%3E%3C/svg%3E") center / 12px no-repeat;
+}
+
+.ilustra { width: 82%; height: auto; overflow: visible; }
+.ilustra text {
+  fill: var(--tinta);
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 17px;
+  font-style: italic;
+  text-anchor: middle;
+}
+.ilustra__trilha {
+  fill: none;
+  stroke: var(--terra);
+  stroke-width: 1.4;
+  stroke-dasharray: 5 7;
+  animation: trilha 22s linear infinite;
+}
+@keyframes trilha { to { stroke-dashoffset: -480; } }
+.ilustra__no {
+  fill: var(--papel);
+  stroke: rgba(30, 36, 32, .14);
+  stroke-width: 1;
+}
+.ilustra__viajante { fill: var(--terra); }
+.ilustra__sol {
+  fill: var(--ouro);
+  opacity: .9;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sol 6s var(--suave-2) infinite;
+}
+@keyframes sol {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+.ilustra--act text { fill: var(--floresta); }
+.ilustra__passo { fill: var(--terra); }
+.ilustra__onda {
+  fill: none;
+  stroke: var(--terra);
+  stroke-width: 1.2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: onda 6s var(--suave) infinite;
+}
+.ilustra__onda--2 { animation-delay: -2s; }
+.ilustra__onda--3 { animation-delay: -4s; }
+@keyframes onda {
+  0% { transform: scale(.6); opacity: 0; }
+  20% { opacity: .9; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+.ilustra__centro { fill: var(--ouro); }
+.ilustra--mind text { font-size: 14px; }
+
+/* ── Atendimento ──────────────────────────────────────────────────────────────────────────── */
+
+.formatos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.formato {
+  padding: clamp(28px, 3.6vw, 52px);
+  border-radius: var(--raio);
+  background: var(--papel);
+  box-shadow: inset 0 0 0 1px var(--linha);
+  transition: transform .7s var(--suave), box-shadow .6s;
+}
+.formato:hover { transform: translateY(-6px); box-shadow: inset 0 0 0 1px var(--linha), 0 34px 60px -40px rgba(31, 43, 37, .45); }
+.formato--destaque { background: var(--areia); box-shadow: none; }
+.formato__foto {
+  margin: 0 0 32px;
+  aspect-ratio: 3 / 2;
+  max-width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--areia-2);
+  transform: translateZ(0);
+}
+.formato__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.4s var(--suave);
+}
+.formato:hover .formato__foto img { transform: scale(1.05); }
+.formato__topo { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.formato__icone {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--terra);
+  color: var(--creme);
+}
+.formato__icone svg { width: 26px; height: 26px; }
+.formato__sub {
+  color: var(--tinta-3);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.formato__titulo {
+  margin: 34px 0 14px;
+  font-size: clamp(42px, 4.6vw, 66px);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+.formato > p { max-width: 26em; color: var(--tinta-2); }
+
+.aviso-valores {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 12px;
+  max-width: 760px;
+  margin: 34px auto 0;
+  color: var(--tinta-2);
+  font-size: 15.5px;
+  text-align: left;
+}
+.aviso-valores svg { flex-shrink: 0; width: 20px; height: 20px; margin-top: 3px; color: var(--terra); }
+
+.agendar {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(36px, 5vw, 88px);
+  margin-top: clamp(64px, 8vw, 112px);
+  padding: clamp(28px, 4.4vw, 68px);
+  border-radius: 36px;
+  background: var(--floresta);
+  color: var(--creme);
+  scroll-margin-top: 110px;
+}
+.agendar .olho { color: var(--ouro); }
+.agendar__titulo {
+  margin: 0 0 18px;
+  font-size: clamp(34px, 3.5vw, 52px);
+  line-height: 1.04;
+  letter-spacing: -.035em;
+}
+.agendar__titulo em { color: var(--ouro); }
+.agendar__intro > p { color: rgba(247, 241, 232, .72); }
+.agendar__privacidade {
+  display: flex;
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(247, 241, 232, .12);
+  font-size: 14.5px;
+}
+.agendar__privacidade svg { flex-shrink: 0; width: 20px; height: 20px; margin-top: 2px; color: var(--ouro); }
+.escolha { margin-bottom: 24px; }
+.escolha__rotulo {
+  margin: 0 0 12px;
+  color: rgba(247, 241, 232, .58);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.escolha__rotulo span { text-transform: none; letter-spacing: 0; font-weight: 400; }
+.escolha__opcoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.opcao {
+  padding: 11px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px rgba(247, 241, 232, .22);
+  color: var(--creme);
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color .35s, color .35s, box-shadow .35s, transform .35s var(--suave);
+}
+.opcao:hover { box-shadow: inset 0 0 0 1px rgba(247, 241, 232, .55); }
+.opcao:active { transform: scale(.96); }
+.opcao[aria-pressed="true"] {
+  background: var(--creme);
+  box-shadow: inset 0 0 0 1px var(--creme);
+  color: var(--floresta);
+}
+.opcao--dia { min-width: 62px; }
+.mensagem { margin: 30px 0 22px; }
+.mensagem__rotulo {
+  margin: 0 0 10px;
+  color: rgba(247, 241, 232, .58);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.mensagem__balao {
+  position: relative;
+  margin: 0;
+  padding: 18px 22px;
+  border-radius: 20px 20px 20px 6px;
+  background: rgba(247, 241, 232, .08);
+  box-shadow: inset 0 0 0 1px rgba(247, 241, 232, .1);
+  color: var(--creme);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.mensagem__balao.atualizou { animation: balao .5s var(--suave); }
+@keyframes balao {
+  from { transform: scale(.985); background: rgba(230, 184, 119, .16); }
+  to { transform: none; }
+}
+
+/* ── Dúvidas ──────────────────────────────────────────────────────────────────────────────── */
+
+.duvidas__grade {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+  align-items: start;
+  gap: clamp(48px, 7vw, 120px);
+}
+.duvidas__lado { position: sticky; top: 140px; }
+.duvidas__lado > p { margin: 26px 0 22px; max-width: 22em; color: var(--tinta-2); }
+.perguntas { border-top: 1px solid var(--linha); }
+.pergunta { border-bottom: 1px solid var(--linha); }
+.pergunta summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 26px 0;
+  list-style: none;
+  cursor: pointer;
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(20px, 1.9vw, 26px);
+  line-height: 1.25;
+  letter-spacing: -.015em;
+  transition: color .4s;
+}
+.pergunta summary::-webkit-details-marker { display: none; }
+.pergunta summary:hover { color: var(--terra); }
+.pergunta__sinal {
+  position: relative;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--linha-forte);
+  color: var(--tinta);
+  transition: background-color .5s, color .5s, transform .7s var(--suave), box-shadow .5s;
+}
+.pergunta__sinal::before,
+.pergunta__sinal::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 1.5px;
+  margin: -.75px 0 0 -7px;
+  background: currentColor;
+  transition: transform .6s var(--suave);
+}
+.pergunta__sinal::after { transform: rotate(90deg); }
+.pergunta[open] .pergunta__sinal {
+  background: var(--terra);
+  box-shadow: none;
+  color: var(--creme);
+  transform: rotate(180deg);
+}
+.pergunta[open] .pergunta__sinal::after { transform: rotate(0deg); }
+.pergunta__resposta { overflow: hidden; }
+.pergunta__resposta p {
+  max-width: 38em;
+  margin: 0;
+  padding: 0 64px 28px 0;
+  color: var(--tinta-2);
+}
+
+/* ── Conteúdos ────────────────────────────────────────────────────────────────────────────── */
+
+.conteudos { padding-top: 0; }
+.artigos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2vw, 28px);
+}
+.artigo__link {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: inherit;
+  text-decoration: none;
+}
+.artigo__capa {
+  display: block;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 8px;
+  border-radius: 22px;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+.artigo__capa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.4s var(--suave);
+}
+.artigo__link:hover .artigo__capa img { transform: scale(1.07); }
+.artigo__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--tinta-3);
+  font-size: 14px;
+}
+.artigo__titulo {
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(22px, 2vw, 28px);
+  line-height: 1.16;
+  letter-spacing: -.02em;
+  font-variation-settings: "SOFT" 50;
+  transition: color .4s;
+}
+.artigo__link:hover .artigo__titulo { color: var(--terra); }
+.artigo__resumo { color: var(--tinta-2); font-size: 16px; line-height: 1.55; }
+
+/* ── Chamado final ────────────────────────────────────────────────────────────────────────── */
+
+.final {
+  position: relative;
+  padding-block: clamp(120px, 14vw, 220px);
+  overflow: clip;
+  background: var(--floresta-3);
+  color: var(--creme);
+}
+.final__imagem {
+  position: absolute;
+  inset: 0 0 0 36%;
+  overflow: hidden;
+}
+.final__imagem img {
+  position: absolute;
+  left: 0;
+  top: -10%;
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  object-position: 70% 50%;
+}
+.final__imagem::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--floresta-3) 0%, rgba(24, 34, 29, .78) 26%, rgba(24, 34, 29, .12) 66%, rgba(24, 34, 29, .25) 100%);
+}
+.final__conteudo { position: relative; }
+.final__titulo {
+  max-width: 10.5em;
+  margin: 0 0 30px;
+  font-size: clamp(2.8rem, 6.2vw, 6.2rem);
+  line-height: .98;
+  letter-spacing: -.045em;
+  font-weight: 370;
+}
+.final__titulo em { color: var(--ouro); font-weight: 340; }
+.final__texto { max-width: 28em; margin-bottom: 40px; color: rgba(247, 241, 232, .74); font-size: 18px; }
+.final__acoes { display: flex; flex-wrap: wrap; gap: 14px; }
+
+/* ── Rodapé ───────────────────────────────────────────────────────────────────────────────── */
+
+.rodape {
+  padding: clamp(72px, 8vw, 104px) 0 32px;
+  background: var(--floresta-3);
+  border-top: 1px solid rgba(247, 241, 232, .08);
+  color: rgba(247, 241, 232, .68);
+  font-size: 15.5px;
+}
+.rodape__grade {
+  display: grid;
+  grid-template-columns: 1.4fr .8fr 1.2fr 1.4fr;
+  gap: 48px;
+}
+.rodape__marca p { max-width: 20em; margin: 22px 0 0; }
+.rodape__coluna { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.rodape a { text-decoration: none; transition: color .3s; }
+.rodape a:hover { color: var(--creme); }
+.rodape__titulo {
+  margin: 0 0 8px;
+  color: var(--creme);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.crise {
+  align-self: start;
+  padding: 24px;
+  border-radius: 22px;
+  background: rgba(247, 241, 232, .04);
+  box-shadow: inset 0 0 0 1px rgba(247, 241, 232, .12);
+}
+.crise p { margin: 0; font-size: 14.5px; line-height: 1.6; }
+.crise a { color: var(--ouro); font-weight: 600; }
+.crise__titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px !important;
+  color: var(--creme);
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: 20px !important;
+}
+.crise__titulo svg { width: 22px; height: 22px; color: var(--ouro); }
+.rodape__assinatura {
+  margin: clamp(56px, 7vw, 96px) 0 18px;
+  font-family: "Fraunces", "Fraunces Local", Georgia, serif;
+  font-size: clamp(64px, 14.2vw, 214px);
+  font-weight: 330;
+  font-variation-settings: "SOFT" 60;
+  line-height: .9;
+  letter-spacing: -.055em;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(247, 241, 232, .16);
+  user-select: none;
+}
+.rodape__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(247, 241, 232, .1);
+  font-size: 13.5px;
+}
+.rodape__base p { margin: 0; }
+
+/* ── Botão flutuante, progresso e cursor ──────────────────────────────────────────────────── */
+
+.flutuante {
+  position: fixed;
+  right: clamp(16px, 2vw, 28px);
+  bottom: clamp(16px, 2vw, 28px);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 24px 0 18px;
+  border-radius: 999px;
+  background: var(--terra);
+  box-shadow: 0 18px 40px -16px rgba(150, 73, 42, .65);
+  color: var(--creme);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(150%);
+  transition: transform .7s var(--suave), background-color .4s;
+}
+.flutuante svg { width: 22px; height: 22px; }
+.flutuante:hover { background: var(--terra-escura); }
+.flutuante.visivel { transform: none; }
+
+.progresso {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 2px;
+  pointer-events: none;
+}
+.progresso__barra {
+  display: block;
+  height: 100%;
+  background: var(--terra);
+  transform-origin: 0 50%;
+  transform: scaleX(var(--rolagem, 0));
+}
+
+.cursor {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .4s;
+}
+.cursor.ativo { opacity: 1; }
+.cursor__ponto,
+.cursor__anel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  will-change: transform;
+}
+.cursor__ponto {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--terra);
+}
+.cursor__anel {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 1px solid rgba(181, 96, 59, .5);
+  transition: width .5s var(--suave), height .5s var(--suave), margin .5s var(--suave), background-color .4s, border-color .4s;
+}
+.cursor__texto {
+  color: var(--creme);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  opacity: 0;
+  transition: opacity .3s;
+}
+.cursor.sobre-link .cursor__anel {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  background: rgba(181, 96, 59, .1);
+  border-color: rgba(181, 96, 59, .25);
+}
+.cursor.com-texto .cursor__anel {
+  width: 86px;
+  height: 86px;
+  margin: -43px 0 0 -43px;
+  background: var(--terra);
+  border-color: var(--terra);
+}
+.cursor.com-texto .cursor__texto { opacity: 1; }
+.cursor.com-texto .cursor__ponto { opacity: 0; }
+.cursor.no-escuro .cursor__ponto { background: var(--ouro); }
+.cursor.no-escuro .cursor__anel { border-color: rgba(230, 184, 119, .55); }
+.cursor.no-escuro.sobre-link .cursor__anel { background: rgba(230, 184, 119, .12); }
+@media (hover: none), (pointer: coarse) {
+  .cursor { display: none; }
+}
+
+/* ── Revelar ao rolar (só com o main.js rodando: sem ele, tudo aparece) ────────────────────── */
+
+.revelar-ativo [data-revela] {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s var(--suave), transform 1.2s var(--suave), filter 1.2s var(--suave);
+  transition-delay: var(--atraso, 0s);
+}
+.revelar-ativo .titulo-secao[data-revela],
+.revelar-ativo .final__titulo[data-revela] { filter: blur(10px); }
+.revelar-ativo [data-revela="escala"] { transform: scale(.92); }
+.revelar-ativo [data-revela="mascara"] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.6s var(--suave-2);
+}
+.revelar-ativo [data-revela].visivel {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.revelar-ativo [data-revela="mascara"].visivel { clip-path: inset(0); }
+
+/* ── Telas menores ────────────────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1180px) {
+  .menu a { padding: 10px 10px; font-size: 14.5px; }
+  .cartao--agenda { right: -4%; }
+  .cartao--respiro { left: -8%; }
+  .selo-giro { left: -8%; }
+  .rodape__grade { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 1024px) {
+  .menu, .topo__cta { display: none; }
+  .menu-botao { display: block; }
+  .temas__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sinais__lista { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 900px) {
+  :root { --topo: 76px; }
+  .hero { min-height: auto; padding: 120px 0 72px; }
+  .hero__grade { grid-template-columns: 1fr; gap: 64px; }
+  .hero__visual { justify-self: center; max-width: 420px; margin-inline: auto; }
+  .rolar { display: none; }
+  .cabeca-secao { flex-direction: column; align-items: flex-start; gap: 22px; }
+  .sobre__grade,
+  .respiro__grade,
+  .processo__grade,
+  .painel,
+  .agendar,
+  .duvidas__grade { grid-template-columns: minmax(0, 1fr); }
+  .sobre__visual { max-width: 460px; }
+  .processo__fixo, .duvidas__lado { position: static; }
+  .formatos { grid-template-columns: minmax(0, 1fr); }
+  .artigos { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .final__imagem { inset: 45% 0 0 0; }
+  .final__imagem::after { background: linear-gradient(180deg, var(--floresta-3) 0%, rgba(24, 34, 29, .3) 50%, rgba(24, 34, 29, .55) 100%); }
+  .respiro__texto { text-align: left; }
+}
+
+@media (max-width: 600px) {
+  body { font-size: 16.5px; }
+  .topo.rolou .topo__barra { height: 66px; }
+  .marca__nome { font-size: 19px; }
+  .marca__crp { font-size: 10px; }
+  .hero__titulo { font-size: clamp(2.6rem, 11.6vw, 3.6rem); }
+  .selo-agenda__extra { display: none; }
+  .hero__acoes .botao { width: 100%; }
+  .hero__garantias { flex-direction: column; gap: 10px; }
+  .hero__visual { max-width: 330px; }
+  .hero__visual::before { inset: -12px 12px 12px -12px; }
+  .selo-giro { width: 96px; height: 96px; left: -6%; top: -2%; }
+  .selo-giro__centro svg { width: 24px; height: 24px; }
+  .cartao--agenda { right: -5%; top: 10%; padding: 12px 14px; }
+  .cartao__titulo { font-size: 16px; }
+  .cartao--respiro { left: -6%; bottom: 6%; }
+  .sinais__lista { grid-template-columns: minmax(0, 1fr); }
+  .temas__grade { grid-template-columns: minmax(0, 1fr); }
+  .tema { min-height: 0; padding: 26px; }
+  .tema__titulo { padding-top: 26px; }
+  .cartao-nome { right: -2%; padding: 16px 18px 10px; }
+  .cartao-nome__nome { font-size: 20px; }
+  .assinatura { width: 120px; }
+  .etiqueta--imagem { left: -6px; }
+  .formacao li { grid-template-columns: 1fr; gap: 2px; }
+  .numeros { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .numero__rotulo { font-size: 13px; }
+  .passo { grid-template-columns: 52px minmax(0, 1fr); gap: 18px; }
+  .passo__numero { width: 52px; height: 52px; font-size: 18px; }
+  .passos__linha { left: 25.5px; }
+  .abas__lista { display: flex; width: 100%; }
+  .aba { flex: 1; padding: 12px 10px; }
+  .pergunta__resposta p { padding-right: 0; }
+  .rodape__grade { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .flutuante span { display: none; }
+  .flutuante { width: 56px; padding: 0; justify-content: center; }
+}
+
+/* ── Movimento reduzido ───────────────────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .revelar-ativo [data-revela] { opacity: 1; transform: none; filter: none; clip-path: none; }
+  .faixa__trilho { animation: none; }
+}
+
+  </style>
+  <style>
+    /* Simulação estática dos estados nativos de style.css para exibição lado a lado na seção 3 (Componentes) */
+    .botao[data-estado="hover"]::before { top: -60%; }
+    .botao--terra[data-estado="hover"] { box-shadow: 0 18px 40px -18px rgba(150, 73, 42, .65); }
+    .botao[data-estado="hover"] .botao__icone svg { transform: translateX(3px) rotate(-30deg); }
+    .botao[data-estado="focus"],
+    .opcao[data-estado="focus"],
+    .link-seta[data-estado="focus"] { outline: 2px solid var(--terra); outline-offset: 3px; }
+    .botao[data-estado="active"],
+    .opcao[data-estado="active"] { transform: scale(.96); }
+    .botao[disabled],
+    .opcao[disabled] { opacity: .42; pointer-events: none; cursor: not-allowed; }
+    .sinal[data-estado="hover"] {
+      transform: translateY(-4px);
+      background: #fff;
+      box-shadow: inset 0 0 0 1px rgba(181, 96, 59, .35), 0 20px 40px -28px rgba(31, 43, 37, .4);
+    }
+    .tema[data-estado="hover"] { color: var(--creme); }
+    .tema[data-estado="hover"]::before { transform: none; }
+    .tema[data-estado="hover"]::after { opacity: 1; }
+    .tema[data-estado="hover"] .tema__numero { color: rgba(247, 241, 232, .5); }
+    .tema[data-estado="hover"] .tema__icone { background: rgba(247, 241, 232, .08); color: var(--ouro); transform: rotate(-10deg) scale(1.06); }
+    .tema[data-estado="hover"] .tema__texto { color: rgba(247, 241, 232, .74); }
+    .tema[data-estado="hover"] .tema__link { color: var(--ouro); }
+    .tema[data-estado="hover"] .tema__link svg { transform: translate(3px, -3px); }
+    .opcao[data-estado="hover"] { box-shadow: inset 0 0 0 1px rgba(247, 241, 232, .55); }
+  </style>
+  <script>
+    // Fallback automático de imagem caso o design-system.html seja aberto fora da pasta original sem assets/img/
+    document.addEventListener("error", function (e) {
+      var el = e.target;
+      if (!el || el.tagName !== "IMG" || el.dataset.fallbackApplied) return;
+      el.dataset.fallbackApplied = "1";
+      var w = el.getAttribute("width") || 800;
+      var h = el.getAttribute("height") || 600;
+      var label = (el.getAttribute("src") || "imagem").split("/").pop();
+      var svg = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 " + w + " " + h + "\" width=\"" + w + "\" height=\"" + h + "\">" +
+        "<defs><radialGradient id=\"g\" cx=\"70%\" cy=\"25%\" r=\"75%\"><stop offset=\"0%\" stop-color=\"#E6B877\" stop-opacity=\"0.55\"/><stop offset=\"55%\" stop-color=\"#E1D4C2\" stop-opacity=\"1\"/><stop offset=\"100%\" stop-color=\"#C9B8A3\" stop-opacity=\"1\"/></radialGradient></defs>" +
+        "<rect width=\"100%\" height=\"100%\" fill=\"url(#g)\"/>" +
+        "<circle cx=\"" + (w * 0.68) + "\" cy=\"" + (h * 0.28) + "\" r=\"" + (Math.min(w, h) * 0.22) + "\" fill=\"#B5603B\" fill-opacity=\"0.18\"/>" +
+        "<text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"#4B514B\" font-family=\"Georgia, serif\" font-style=\"italic\" font-size=\"" + Math.max(16, Math.round(Math.min(w, h) * 0.045)) + "\">" + label + "</text>" +
+        "</svg>";
+      el.src = "data:image/svg+xml;utf8," + encodeURIComponent(svg);
+    }, true);
+  </script>
+  <script>
+    (function () {
+      var raiz = document.documentElement;
+      raiz.classList.add('js');
+      setTimeout(function () { if (!raiz.classList.contains('carregou')) raiz.classList.add('carregou'); }, 2600);
+    })();
+  </script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <div class="progresso" aria-hidden="true"><span class="progresso__barra"></span></div>
+  <div class="cursor" aria-hidden="true"><span class="cursor__anel"><span class="cursor__texto"></span></span><span class="cursor__ponto"></span></div>
+
+  <!-- ═══════════════════════════════ TOPO (NAVEGAÇÃO DO DESIGN SYSTEM) ═══════════════════════════════ -->
+  <header class="topo" data-topo>
+    <div class="topo__barra container">
+      <a class="marca" href="#inicio" aria-label="Clara Vilela Design System: voltar ao início">
+        <svg class="marca__simbolo" viewBox="0 0 40 40" aria-hidden="true">
+          <circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M20 8.5c-5.6 3.8-8.3 8.6-8.3 13 0 4.7 3.4 8.6 8.3 9.9 4.9-1.3 8.3-5.2 8.3-9.9 0-4.4-2.7-9.2-8.3-13z" fill="currentColor"/>
+          <path d="M20 13.5v17" stroke="#F4EEE6" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <span class="marca__texto">
+          <span class="marca__nome">Clara Vilela</span>
+          <span class="marca__crp">Design System · v2</span>
+        </span>
+      </a>
+      <nav class="menu" aria-label="Seções do Design System">
+        <a href="#inicio">00 Hero</a>
+        <a href="#tipografia">01 Tipografia</a>
+        <a href="#cores">02 Cores</a>
+        <a href="#componentes">03 Componentes</a>
+        <a href="#layout">04 Layout</a>
+        <a href="#movimento">05 Movimento</a>
+        <a href="#icones">06 Ícones</a>
+      </nav>
+      <a class="botao botao--escuro botao--pequeno topo__cta" href="#componentes" data-magnetico>
+        <span>Ver padrões</span>
+      </a>
+      <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu-movel" aria-label="Abrir o menu">
+        <span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="menu-movel" id="menu-movel" data-lenis-prevent>
+    <nav class="menu-movel__lista" aria-label="Menu do Design System">
+      <a href="#tipografia"><span>01</span>Tipografia</a>
+      <a href="#cores"><span>02</span>Cores &amp; Superfícies</a>
+      <a href="#componentes"><span>03</span>Componentes</a>
+      <a href="#layout"><span>04</span>Layout &amp; Espaço</a>
+      <a href="#movimento"><span>05</span>Movimento</a>
+      <a href="#icones"><span>06</span>Ícones</a>
+    </nav>
+    <div class="menu-movel__rodape">
+      <a class="botao botao--terra" href="#componentes"><span>Explorar biblioteca viva</span></a>
+      <p>Sistema visual extraído fielmente de index.html e assets/css/style.css.</p>
+    </div>
+  </div>
+
+  <main id="conteudo">
+
+    <!-- ═══════════════════════════════ 0) HERO (CLONE EXATO, TEXTO ADAPTADO) ═══════════════════════════════ -->
+    <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+      <div class="hero__luz" aria-hidden="true"></div>
+      <div class="container hero__grade">
+        <div class="hero__texto">
+          <p class="selo-agenda" data-intro>
+            <span class="selo-agenda__ponto" aria-hidden="true"></span>
+            <span>Sistema vivo<span class="selo-agenda__extra"> · Biblioteca de padrões e tokens v2</span></span>
+          </p>
+          <h1 class="hero__titulo" id="hero-titulo">
+            <span class="linha"><span class="linha__in">A linguagem visual</span></span>
+            <span class="linha"><span class="linha__in">feita com <span class="pilula" aria-hidden="true"><img src="assets/img/luz-hero-a.webp" alt="" width="1100" height="1400" decoding="async"></span></span></span>
+            <span class="linha"><span class="linha__in"><em>calma e presença.</em></span></span>
+          </h1>
+          <p class="hero__resumo" data-intro>
+            Documentação viva da tipografia editorial, paleta orgânica, superfícies táteis, componentes interativos e coreografias de movimento do projeto Clara Vilela.
+          </p>
+          <div class="hero__acoes" data-intro>
+            <a class="botao botao--terra" href="#tipografia" data-magnetico>
+              <span>Explorar sistema visual</span>
+              <span class="botao__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+            <a class="botao botao--contorno" href="#movimento" data-magnetico>
+              <span class="ponto-respira" aria-hidden="true"></span>
+              <span>Ver galeria de movimento</span>
+            </a>
+          </div>
+          <ul class="hero__garantias" data-intro>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Curvas suaves e naturais
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+              Escala tipográfica fluida
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+              Fidelidade 1:1 ao código
+            </li>
+          </ul>
+        </div>
+
+        <div class="hero__visual">
+          <figure class="arco" data-parallax="0.06">
+            <img class="arco__img" src="assets/img/foto-clara.webp" alt="Clara Vilela, psicóloga, sorrindo no consultório com a luz da tarde atrás dela" width="512" height="652" fetchpriority="high" decoding="async">
+          </figure>
+          <div class="selo-giro" aria-hidden="true">
+            <svg viewBox="0 0 120 120">
+              <defs><path id="selo-giro-caminho" d="M60,60 m-45,0 a45,45 0 1,1 90,0 a45,45 0 1,1 -90,0"/></defs>
+              <text><textPath href="#selo-giro-caminho" textLength="278" lengthAdjust="spacing">ESCUTA · ACOLHIMENTO · PRESENÇA · CUIDADO ·</textPath></text>
+            </svg>
+            <span class="selo-giro__centro">
+              <svg viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l8-8"/></svg>
+            </span>
+          </div>
+          <div class="cartao cartao--agenda" data-intro>
+            <span class="cartao__status"><span class="cartao__pulso" aria-hidden="true"></span>Design System v2</span>
+            <span class="cartao__titulo">Fraunces &amp; Instrument Sans</span>
+            <span class="cartao__linha">Tokens · Componentes · Movimento</span>
+          </div>
+          <a class="cartao cartao--respiro" href="#movimento" data-intro>
+            <span class="mini-orbe" aria-hidden="true"><span></span></span>
+            <span class="cartao__textos">
+              <span class="cartao__rotulo">Pausa de 1 minuto</span>
+              <span class="cartao__alterna" aria-hidden="true"><span>Inspire…</span><span>Solte…</span></span>
+              <span class="sr-only">Ir para a seção de movimento e respiração</span>
+            </span>
+          </a>
+        </div>
+      </div>
+      <a class="rolar" href="#tipografia" data-intro>
+        <span class="rolar__linha" aria-hidden="true"></span>
+        Role com calma
+      </a>
+    </section>
+
+    <!-- Faixa contínua de transição -->
+    <div class="faixa" aria-hidden="true">
+      <div class="faixa__trilho" data-faixa>
+        <div class="faixa__grupo">
+          <span>Tipografia</span><i></i><span>Cores &amp; Superfícies</span><i></i><span>Componentes</span><i></i><span>Layout &amp; Espaço</span><i></i><span>Movimento</span><i></i><span>Ícones</span><i></i><span>Acessibilidade</span><i></i>
+        </div>
+        <div class="faixa__grupo">
+          <span>Tipografia</span><i></i><span>Cores &amp; Superfícies</span><i></i><span>Componentes</span><i></i><span>Layout &amp; Espaço</span><i></i><span>Movimento</span><i></i><span>Ícones</span><i></i><span>Acessibilidade</span><i></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ 1) TIPOGRAFIA ═══════════════════════════════ -->
+    <section class="sinais secao" id="tipografia" aria-labelledby="tipografia-titulo">
+      <div class="container">
+        <div class="cabeca-secao">
+          <div>
+            <p class="olho" data-revela>01 · Tipografia</p>
+            <h2 class="titulo-secao" id="tipografia-titulo" data-revela>Hierarquia, escala e <em>ritmo editorial</em></h2>
+          </div>
+          <p class="cabeca-secao__texto" data-revela>
+            Combinação entre a serifada variável <strong>Fraunces</strong> (títulos, citações e numerais com eixo óptico <code>SOFT 50–60</code>) e a sem-serifa humanista <strong>Instrument Sans</strong> (corpo de texto, botões e rótulos). Nenhum estilo possui <code>style</code> inline.
+          </p>
+        </div>
+
+        <div class="lista-check">
+
+          <!-- Heading 1 -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Heading 1 · h1.hero__titulo (Fraunces 380 · SOFT 60)</p>
+                <h1 class="hero__titulo">
+                  <span class="linha"><span class="linha__in">Um espaço seguro <em>se reencontrar.</em></span></span>
+                </h1>
+              </div>
+              <span class="etiqueta">106px / 101px</span>
+            </div>
+          </article>
+
+          <!-- Heading 2 (Section Title) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Heading 2 · h2.titulo-secao (Fraunces 400 + em 350)</p>
+                <h2 class="titulo-secao">Cuidado para diferentes <em>momentos da vida</em></h2>
+              </div>
+              <span class="etiqueta">70px / 72px</span>
+            </div>
+          </article>
+
+          <!-- Heading 3 (Formato Display) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Heading 3 (Display) · h3.formato__titulo (Fraunces 400)</p>
+                <h3 class="formato__titulo">Presencial</h3>
+              </div>
+              <span class="etiqueta">66px / 66px</span>
+            </div>
+          </article>
+
+          <!-- Heading 3 (Painel) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Heading 3 (Painel) · h3.painel__titulo (Fraunces 400)</p>
+                <h3 class="painel__titulo">Entender como pensamentos, emoções e ações se conectam.</h3>
+              </div>
+              <span class="etiqueta">40px / 43px</span>
+            </div>
+          </article>
+
+          <!-- Heading 3 (Passo) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Heading 3 (Passo) · h3.passo__titulo (Fraunces 400)</p>
+                <h3 class="passo__titulo">Sessão de acolhimento</h3>
+              </div>
+              <span class="etiqueta">36px / 39px</span>
+            </div>
+          </article>
+
+          <!-- Heading 3 (Tema Card) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Heading 3 (Card) · h3.tema__titulo (Fraunces 400)</p>
+                <h3 class="tema__titulo">Esgotamento e burnout</h3>
+              </div>
+              <span class="etiqueta">31px / 34px</span>
+            </div>
+          </article>
+
+          <!-- Bold L -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Bold L · a.link-seta (Instrument Sans 600)</p>
+                <a class="link-seta" href="#agendar">Agendar uma conversa <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              </div>
+              <span class="etiqueta">15.5px / 26px</span>
+            </div>
+          </article>
+
+          <!-- Bold M -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Bold M · p.olho / span.etiqueta (Instrument Sans 600 · Uppercase)</p>
+                <p class="olho">Como posso te ajudar</p>
+              </div>
+              <span class="etiqueta">12.5px / 20px</span>
+            </div>
+          </article>
+
+          <!-- Bold S -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Bold S · span.cartao__status / span.marca__crp (Instrument Sans 700 · Uppercase)</p>
+                <span class="cartao__status"><span class="cartao__pulso" aria-hidden="true"></span>Agenda aberta · CRP 06/000000</span>
+              </div>
+              <span class="etiqueta">12px / 20px</span>
+            </div>
+          </article>
+
+          <!-- Paragraph (Gradient Scroll Fill) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Paragraph (Gradient Text) · p.sinais__texto[data-preenche] (Fraunces 370 · background-clip: text)</p>
+                <p class="sinais__texto" data-preenche>
+                  <span>A terapia é um espaço para desacelerar, entender o que você sente e reconstruir, com calma, um jeito mais leve de viver.</span>
+                </p>
+              </div>
+              <span class="etiqueta">54px / 65px</span>
+            </div>
+          </article>
+
+          <!-- Paragraph (Editorial Quote) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Paragraph (Citação) · figure.citacao blockquote p (Fraunces Italic 330)</p>
+                <figure class="citacao">
+                  <blockquote>
+                    <p>O curioso paradoxo é que, quando me aceito como sou, então posso mudar.</p>
+                  </blockquote>
+                  <figcaption>Carl Rogers, psicólogo</figcaption>
+                </figure>
+              </div>
+              <span class="etiqueta">50px / 59px</span>
+            </div>
+          </article>
+
+          <!-- Paragraph (Lead) -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Paragraph (Lead) · p.sobre__lead / p.hero__resumo (Instrument Sans 400)</p>
+                <p class="sobre__lead">Sou psicóloga clínica há mais de dez anos e acompanho adultos em momentos de ansiedade, esgotamento e grandes mudanças.</p>
+              </div>
+              <span class="etiqueta">22px / 34px</span>
+            </div>
+          </article>
+
+          <!-- Regular L -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Regular L · body p / p.cabeca-secao__texto (Instrument Sans 400)</p>
+                <p class="cabeca-secao__texto">Cada história é única. Estes são alguns dos temas que mais acompanho no consultório, sempre a partir do seu ritmo e das suas necessidades.</p>
+              </div>
+              <span class="etiqueta">17px / 28px</span>
+            </div>
+          </article>
+
+          <!-- Regular M -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Regular M · span.artigo__resumo (Instrument Sans 400)</p>
+                <span class="artigo__resumo">A diferença entre a preocupação do dia a dia e um sofrimento que merece atenção.</span>
+              </div>
+              <span class="etiqueta">16px / 25px</span>
+            </div>
+          </article>
+
+          <!-- Regular S -->
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <div>
+                <p class="olho">Regular S · ul.hero__garantias / span.numero__rotulo / span.artigo__meta (Instrument Sans 400)</p>
+                <span class="artigo__meta"><span class="etiqueta">Ansiedade</span>5 min de leitura · Sessões de 50 minutos</span>
+              </div>
+              <span class="etiqueta">14px / 23px</span>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ 2) CORES & SUPERFÍCIES ═══════════════════════════════ -->
+    <section class="temas secao" id="cores" aria-labelledby="cores-titulo">
+      <div class="container">
+        <div class="cabeca-secao">
+          <div>
+            <p class="olho" data-revela>02 · Cores &amp; Superfícies</p>
+            <h2 class="titulo-secao" id="cores-titulo" data-revela>Paleta orgânica, <em>luz e textura</em></h2>
+          </div>
+          <p class="cabeca-secao__texto" data-revela>
+            Tons minerais aquecidos (marfim, papel, areia e terracota) combinados com verde-floresta profundo e ouro suave para seções de imersão, além de grão analógico em toda a página.
+          </p>
+        </div>
+
+        <!-- 2.1 Superfícies Claras e Fundos -->
+        <p class="olho" data-revela>Fundos &amp; Superfícies Claras</p>
+        <div class="formatos" data-revela-grupo>
+          <article class="formato" data-revela>
+            <div class="formato__topo">
+              <span class="etiqueta">--papel · #FBF8F3</span>
+              <span class="formato__sub">Superfície de Cartão</span>
+            </div>
+            <h3 class="passo__titulo">Papel &amp; Marfim</h3>
+            <p><code>--marfim: #F4EEE6</code> é o fundo base da página (<code>html</code>, <code>body</code>, <code>.passo__numero</code>). <code>--papel: #FBF8F3</code> veste os cartões <code>.sinal</code>, <code>.tema</code>, <code>.formato</code>, <code>.abas</code> e <code>.cartao-nome</code> com borda interna <code>var(--linha)</code>.</p>
+            <ul class="formacao">
+              <li><span>--marfim</span>#F4EEE6 · Fundo global da página</li>
+              <li><span>--papel</span>#FBF8F3 · Superfície elevada de cartões</li>
+              <li><span>--creme</span>#F7F1E8 · Texto claro e superfície de contraste</li>
+            </ul>
+          </article>
+
+          <article class="formato formato--destaque" data-revela>
+            <div class="formato__topo">
+              <span class="etiqueta">--areia · #EBE2D5</span>
+              <span class="formato__sub">Seção Alternada &amp; Destaque</span>
+            </div>
+            <h3 class="passo__titulo">Areia &amp; Areia 2</h3>
+            <p><code>--areia: #EBE2D5</code> cria ritmo entre seções (<code>.temas</code>, <code>.abordagem</code>), destaca o cartão presencial (<code>.formato--destaque</code>) e compõe pílulas (<code>.etiqueta</code>, <code>.abas__lista</code>, <code>.tema__icone</code>).</p>
+            <ul class="formacao">
+              <li><span>--areia</span>#EBE2D5 · Seções alternadas e etiquetas</li>
+              <li><span>--areia-2</span>#E1D4C2 · Base de molduras fotográficas (.arco)</li>
+              <li><span>--salvia-clara</span>#D6DECF · Fundo dos ícones de check (.lista-check)</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- 2.2 Cores de Tinta, Acento e Bordas -->
+        <div class="secao">
+          <p class="olho" data-revela>Tintas, Acentos, Bordas &amp; Vidro (Glassmorphism)</p>
+          <ul class="sinais__lista" data-revela-grupo>
+            <li class="sinal" data-revela>
+              <span class="passo__numero">Aa</span>
+              <div>
+                <strong>--tinta · #1E2420</strong>
+                <div class="cartao__linha">Texto primário, títulos e botões escuros (.botao--escuro)</div>
+              </div>
+            </li>
+            <li class="sinal" data-revela>
+              <span class="passo__numero">Aa</span>
+              <div>
+                <strong>--tinta-2 · #4B514B</strong>
+                <div class="cartao__linha">Parágrafos corridos, resumos e links do menu</div>
+              </div>
+            </li>
+            <li class="sinal" data-revela>
+              <span class="passo__numero">Aa</span>
+              <div>
+                <strong>--tinta-3 · #7A7D74</strong>
+                <div class="cartao__linha">Metadados, legendas, CRP e rótulos secundários</div>
+              </div>
+            </li>
+            <li class="sinal" data-revela>
+              <span class="formato__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+              <div>
+                <strong>--terra · #B5603B</strong>
+                <div class="cartao__linha">Acento principal, CTAs (.botao--terra), grifos <em>em</em> e ícones (hover: --terra-escura #96492A)</div>
+              </div>
+            </li>
+            <li class="sinal" data-revela>
+              <span class="tema__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l8-8"/></svg></span>
+              <div>
+                <strong>--linha &amp; --linha-forte</strong>
+                <div class="cartao__linha">rgba(30,36,32,.12) divisores · rgba(30,36,32,.24) contornos</div>
+              </div>
+            </li>
+            <li class="sinal" data-revela>
+              <span class="mini-orbe" aria-hidden="true"><span></span></span>
+              <div>
+                <strong>Superfície Glass / Blur</strong>
+                <div class="cartao__linha">.topo.rolou (blur 16px) e .cartao (rgba(251,248,243,.9) + blur 14px)</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 2.3 Superfícies Escuras e Gradientes -->
+        <div class="agendar" data-tema="escuro" data-revela>
+          <div class="agendar__intro">
+            <p class="olho olho--claro">Superfícies Escuras &amp; Gradientes</p>
+            <h3 class="agendar__titulo">Contraste noturno em <em>verde-floresta e ouro</em></h3>
+            <p>Usado nas seções <code>.respiro</code>, <code>.agendar</code>, <code>.final</code> e <code>.rodape</code> com atributo <code>data-tema="escuro"</code> (que também adapta o cursor personalizado para <code>--ouro</code>).</p>
+            <div class="crise">
+              <p class="crise__titulo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+                Superfície Translúcida (.crise)
+              </p>
+              <p>Fundo <code>rgba(247, 241, 232, .04)</code> com borda interna <code>rgba(247, 241, 232, .12)</code> e destaque em <a href="#cores">--ouro (#E6B877)</a>.</p>
+            </div>
+          </div>
+          <div class="agendar__form">
+            <div class="escolha">
+              <p class="escolha__rotulo">Tokens de Fundo Escuro e Luz</p>
+              <div class="escolha__opcoes">
+                <span class="opcao" aria-pressed="true">--creme · #F7F1E8</span>
+                <span class="opcao" aria-pressed="false">--floresta · #1F2B25</span>
+                <span class="opcao" aria-pressed="false">--floresta-2 · #2A3830</span>
+                <span class="opcao" aria-pressed="false">--floresta-3 · #18221D</span>
+                <span class="opcao" aria-pressed="false">--ouro · #E6B877</span>
+              </div>
+            </div>
+            <div class="mensagem">
+              <p class="mensagem__rotulo">Gradientes Originais (Swatches Viva)</p>
+              <div class="painel__arte">
+                <div class="mini-orbe" aria-hidden="true"><span></span></div>
+                <p class="painel__sigla">.painel__arte + .mini-orbe + .orbe__nucleo</p>
+              </div>
+            </div>
+            <p class="mensagem__balao">
+              <strong>1. Halo Solar (.hero__luz / .respiro__brilho):</strong> <code>radial-gradient(closest-side, rgba(230, 184, 119, .36), transparent)</code><br>
+              <strong>2. Esfera Respiratória (.orbe__nucleo):</strong> <code>radial-gradient(circle at 34% 30%, #F6DCAE, #E2A066 46%, #B5603B 78%, #8E4527)</code><br>
+              <strong>3. Painel Ilustrado (.painel__arte):</strong> <code>radial-gradient(circle at 70% 20%, rgba(230, 184, 119, .35), transparent 55%), var(--areia)</code><br>
+              <strong>4. Fusão Fotográfica (.final__imagem::after):</strong> <code>linear-gradient(90deg, var(--floresta-3) 0%, rgba(24, 34, 29, .78) 26%, rgba(24, 34, 29, .12) 66%, rgba(24, 34, 29, .25) 100%)</code>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ 3) COMPONENTES DE UI ═══════════════════════════════ -->
+    <section class="sobre secao" id="componentes" aria-labelledby="componentes-titulo">
+      <div class="container">
+        <div class="cabeca-secao">
+          <div>
+            <p class="olho" data-revela>03 · UI Components</p>
+            <h2 class="titulo-secao" id="componentes-titulo" data-revela>Componentes reais e <em>estados lado a lado</em></h2>
+          </div>
+          <p class="cabeca-secao__texto" data-revela>
+            Todos os componentes interativos existentes na referência — botões, seletores de agendamento, cartões, abas e acordeões — exibidos em seus estados Default, Hover, Active, Focus e Disabled.
+          </p>
+        </div>
+
+        <!-- 3.1 Variantes de Botão -->
+        <article class="formato" data-revela>
+          <div class="formato__topo">
+            <p class="olho">3.1 · Variantes de Botão (.botao)</p>
+            <span class="etiqueta">Altura 58px (padrão) · 46px (--pequeno)</span>
+          </div>
+          <div class="hero__acoes">
+            <a class="botao botao--terra" href="#componentes" data-magnetico>
+              <span>Primário Terra (.botao--terra)</span>
+              <span class="botao__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+            <a class="botao botao--escuro" href="#componentes" data-magnetico>
+              <span>Escuro (.botao--escuro)</span>
+              <span class="botao__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </a>
+            <a class="botao botao--contorno" href="#componentes" data-magnetico>
+              <span class="ponto-respira" aria-hidden="true"></span>
+              <span>Contorno (.botao--contorno)</span>
+            </a>
+            <a class="botao botao--escuro botao--pequeno" href="#componentes" data-magnetico>
+              <span>Pequeno (.botao--pequeno)</span>
+            </a>
+          </div>
+
+          <p class="olho">Estados Lado a Lado · Default / Hover / Active / Focus / Disabled</p>
+          <div class="hero__acoes">
+            <button class="botao botao--terra" type="button">
+              <span>Default</span>
+              <span class="botao__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </button>
+            <button class="botao botao--terra" type="button" data-estado="hover">
+              <span>Hover</span>
+              <span class="botao__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </button>
+            <button class="botao botao--terra" type="button" data-estado="active">
+              <span>Active</span>
+              <span class="botao__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </button>
+            <button class="botao botao--terra" type="button" data-estado="focus">
+              <span>Focus-Visible</span>
+              <span class="botao__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </button>
+            <button class="botao botao--terra" type="button" disabled>
+              <span>Disabled</span>
+              <span class="botao__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </button>
+          </div>
+
+          <p class="olho">Selos, Etiquetas e Links com Seta (.selo-agenda, .etiqueta, .link-seta)</p>
+          <div class="hero__acoes">
+            <p class="selo-agenda">
+              <span class="selo-agenda__ponto" aria-hidden="true"></span>
+              <span>Agenda aberta<span class="selo-agenda__extra"> · Online e presencial</span></span>
+            </p>
+            <span class="etiqueta">Ansiedade · .etiqueta</span>
+            <a class="link-seta" href="#componentes">Link padrão <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="link-seta" href="#componentes" data-estado="focus">Link em foco <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </article>
+
+        <!-- 3.2 Controles de Formulário / Seletores Interativos e Botões em Superfície Escura -->
+        <div class="agendar" id="agendar" data-agendar data-nome="Clara" data-tema="escuro" data-revela>
+          <div class="agendar__intro">
+            <p class="olho">3.2 · Controles de Agendamento &amp; Tema Escuro</p>
+            <h3 class="agendar__titulo">Seletores em pílula e <em>gerador de mensagem</em></h3>
+            <p>A referência não utiliza campos de texto digitáveis; a entrada do usuário é feita por pílulas de seleção única (<code>data-unico</code>) e múltipla (<code>.opcao</code>, <code>.opcao--dia</code>, <code>.ritmo</code>) com estados <code>aria-pressed</code>.</p>
+            <div class="respiro__acoes">
+              <button class="botao botao--claro" type="button">
+                <span class="respiro__icone-play" aria-hidden="true"></span>
+                <span>.botao--claro</span>
+              </button>
+              <a class="botao botao--claro-contorno" href="#componentes"><span>.botao--claro-contorno</span></a>
+            </div>
+            <p class="escolha__rotulo">Estados de .opcao · Default / Hover / Selected / Active / Focus / Disabled</p>
+            <div class="escolha__opcoes">
+              <button class="opcao" type="button" aria-pressed="false">Default</button>
+              <button class="opcao" type="button" aria-pressed="false" data-estado="hover">Hover</button>
+              <button class="opcao" type="button" aria-pressed="true">Selected (aria-pressed="true")</button>
+              <button class="opcao" type="button" aria-pressed="false" data-estado="active">Active</button>
+              <button class="opcao" type="button" aria-pressed="false" data-estado="focus">Focus</button>
+              <button class="opcao" type="button" aria-pressed="false" disabled>Disabled</button>
+            </div>
+            <p class="agendar__privacidade">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+              Experimente clicar nas opções ao lado para testar a atualização ao vivo do balão.
+            </p>
+          </div>
+
+          <div class="agendar__form">
+            <div class="escolha" role="group" aria-labelledby="ds-escolha-formato">
+              <p class="escolha__rotulo" id="ds-escolha-formato">Formato (Seleção única · data-unico)</p>
+              <div class="escolha__opcoes" data-grupo="formato" data-unico>
+                <button class="opcao" type="button" aria-pressed="true" data-valor="online">Online</button>
+                <button class="opcao" type="button" aria-pressed="false" data-valor="presencial">Presencial</button>
+              </div>
+            </div>
+            <div class="escolha" role="group" aria-labelledby="ds-escolha-periodo">
+              <p class="escolha__rotulo" id="ds-escolha-periodo">Melhor período (Seleção única)</p>
+              <div class="escolha__opcoes" data-grupo="periodo" data-unico>
+                <button class="opcao" type="button" aria-pressed="false" data-valor="de manhã">Manhã</button>
+                <button class="opcao" type="button" aria-pressed="false" data-valor="à tarde">Tarde</button>
+                <button class="opcao" type="button" aria-pressed="true" data-valor="à noite">Noite</button>
+              </div>
+            </div>
+            <div class="escolha" role="group" aria-labelledby="ds-escolha-dias">
+              <p class="escolha__rotulo" id="ds-escolha-dias">Dias de preferência (.opcao--dia · Múltipla)</p>
+              <div class="escolha__opcoes" data-grupo="dias">
+                <button class="opcao opcao--dia" type="button" aria-pressed="false" data-valor="segundas">Seg</button>
+                <button class="opcao opcao--dia" type="button" aria-pressed="true" data-valor="terças">Ter</button>
+                <button class="opcao opcao--dia" type="button" aria-pressed="false" data-valor="quartas">Qua</button>
+                <button class="opcao opcao--dia" type="button" aria-pressed="true" data-valor="quintas">Qui</button>
+                <button class="opcao opcao--dia" type="button" aria-pressed="false" data-valor="sextas">Sex</button>
+              </div>
+            </div>
+            <div class="escolha" role="group" aria-labelledby="ds-escolha-assunto">
+              <p class="escolha__rotulo" id="ds-escolha-assunto">Assunto <span>(opcional)</span></p>
+              <div class="escolha__opcoes" data-grupo="assunto">
+                <button class="opcao" type="button" aria-pressed="false" data-valor="ansiedade">Ansiedade</button>
+                <button class="opcao" type="button" aria-pressed="false" data-valor="esgotamento">Esgotamento</button>
+                <button class="opcao" type="button" aria-pressed="false" data-valor="autoestima">Autoestima</button>
+              </div>
+            </div>
+            <div class="mensagem">
+              <p class="mensagem__rotulo">Balão de Mensagem (.mensagem__balao)</p>
+              <p class="mensagem__balao" data-mensagem>Olá, Clara! Gostaria de agendar uma primeira conversa online, de preferência à noite, às terças e quintas.</p>
+            </div>
+            <a class="botao botao--terra botao--largo" href="https://wa.me/5511900000000" target="_blank" rel="noopener" data-whatsapp data-magnetico>
+              <svg class="botao__marca" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8.4 8.4 0 0 1-12.5 7.3L3.5 20l1.2-3.8A8.4 8.4 0 1 1 20 11.6z"/><path d="M9.1 8.4c.3-.3.7-.3.9 0l.9 1.3c.2.3.2.6-.1.9l-.5.5c.5 1 1.3 1.8 2.3 2.3l.5-.5c.3-.3.6-.3.9-.1l1.3.9c.3.2.3.6 0 .9-.6.7-1.6 1-2.5.6a8 8 0 0 1-4.4-4.4c-.4-.9-.1-1.8.7-2.4z"/></svg>
+              <span>Botão Largo (.botao--terra.botao--largo)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3.3 Cartões (.sinal e .tema) em Estados Default vs Hover -->
+        <div class="secao">
+          <p class="olho" data-revela>3.3 · Cartões de Sinal (.sinal) e Cartões de Tema (.tema) — Default vs Hover</p>
+          <ul class="sinais__lista" data-revela-grupo>
+            <li class="sinal" data-revela>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>
+              .sinal (Estado Default)
+            </li>
+            <li class="sinal" data-estado="hover" data-revela>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="16" height="10" rx="2.5"/><path d="M21 11v2M6.5 10v4"/></svg>
+              .sinal (Estado Hover · Elevação -4px e borda terracota)
+            </li>
+            <li class="sinal" data-revela>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
+              .sinal (Interativo — passe o cursor)
+            </li>
+          </ul>
+
+          <div class="temas__grade" data-revela-grupo>
+            <article class="tema" data-revela>
+              <span class="tema__numero">01 · Default</span>
+              <span class="tema__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg></span>
+              <h3 class="tema__titulo">Estado Repouso</h3>
+              <p class="tema__texto">Superfície em <code>var(--papel)</code>, ícone sobre círculo <code>var(--areia)</code> e link em <code>var(--terra)</code>.</p>
+              <a class="tema__link" href="#agendar" data-assunto="Ansiedade">Conversar sobre isso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+            </article>
+
+            <article class="tema" data-estado="hover" data-revela>
+              <span class="tema__numero">02 · Hover / Focus-Within</span>
+              <span class="tema__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="16" height="10" rx="2.5"/><path d="M21 11v2M6.5 10v4"/></svg></span>
+              <h3 class="tema__titulo">Estado Hover Fixo</h3>
+              <p class="tema__texto">A cortina <code>::before</code> sobe em <code>var(--floresta)</code>, o brilho radial dourado <code>::after</code> acende e o ícone gira <code>-10deg</code>.</p>
+              <a class="tema__link" href="#agendar" data-assunto="Esgotamento">Conversar sobre isso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+            </article>
+
+            <article class="tema" data-revela>
+              <span class="tema__numero">03 · Interativo</span>
+              <span class="tema__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.6 3.8-5.5 7-5.5s5.8 1.9 7 5.5"/></svg></span>
+              <h3 class="tema__titulo">Experimente ao Vivo</h3>
+              <p class="tema__texto">Passe o mouse ou navegue via teclado (Tab) para acionar a transição completa de <code>.8s var(--suave)</code>.</p>
+              <a class="tema__link" href="#agendar" data-assunto="Autoestima">Conversar sobre isso <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
+            </article>
+          </div>
+        </div>
+
+        <!-- 3.4 Componente de Abas (.abas) e Acordeão (.perguntas) -->
+        <div class="abas" data-abas data-revela>
+          <div class="abas__lista" role="tablist" aria-label="Demonstração do componente de abas">
+            <button class="aba" type="button" role="tab" id="aba-tcc" aria-controls="painel-tcc" aria-selected="true">TCC (Ativa)</button>
+            <button class="aba" type="button" role="tab" id="aba-act" aria-controls="painel-act" aria-selected="false" tabindex="-1">ACT</button>
+            <button class="aba" type="button" role="tab" id="aba-mind" aria-controls="painel-mind" aria-selected="false" tabindex="-1">Mindfulness</button>
+            <span class="abas__marcador" aria-hidden="true"></span>
+          </div>
+
+          <div class="painel" role="tabpanel" id="painel-tcc" aria-labelledby="aba-tcc">
+            <div class="painel__arte" aria-hidden="true">
+              <svg class="ilustra ilustra--tcc" viewBox="0 0 320 300">
+                <path class="ilustra__trilha" d="M160 58 L262 228 L58 228 Z"/>
+                <circle class="ilustra__no" cx="160" cy="58" r="44"/>
+                <circle class="ilustra__no ilustra__no--2" cx="262" cy="228" r="44"/>
+                <circle class="ilustra__no ilustra__no--3" cx="58" cy="228" r="44"/>
+                <circle class="ilustra__viajante" r="6">
+                  <animateMotion dur="9s" repeatCount="indefinite" path="M160 58 L262 228 L58 228 Z"/>
+                </circle>
+                <text x="160" y="63">pensar</text>
+                <text x="262" y="233">sentir</text>
+                <text x="58" y="233">agir</text>
+              </svg>
+            </div>
+            <div class="painel__texto">
+              <p class="painel__sigla">Componente .abas + .painel + .lista-check</p>
+              <h3 class="painel__titulo">Navegação por clique ou setas do teclado com marcador deslizante.</h3>
+              <p>O marcador <code>.abas__marcador</code> calcula largura e posição da aba selecionada via <code>main.js</code>, animando com <code>.7s var(--suave)</code>.</p>
+              <ul class="lista-check">
+                <li>Suporte completo a <code>ArrowLeft</code>, <code>ArrowRight</code>, <code>Home</code> e <code>End</code></li>
+                <li>Animação de entrada <code>@keyframes painel-entra</code> ao alternar painéis</li>
+                <li>Lista com marcadores circulares em <code>var(--salvia-clara)</code></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="painel" role="tabpanel" id="painel-act" aria-labelledby="aba-act" hidden>
+            <div class="painel__arte" aria-hidden="true">
+              <svg class="ilustra ilustra--act" viewBox="0 0 320 300">
+                <circle class="ilustra__sol" cx="236" cy="78" r="34"/>
+                <path class="ilustra__trilha" d="M40 268 C 120 250, 70 190, 150 176 S 230 150, 236 112"/>
+                <circle class="ilustra__passo" cx="40" cy="268" r="7"/>
+                <circle class="ilustra__passo" cx="104" cy="226" r="6"/>
+                <circle class="ilustra__passo" cx="150" cy="176" r="6"/>
+                <circle class="ilustra__passo" cx="206" cy="150" r="6"/>
+                <text x="236" y="83">valores</text>
+              </svg>
+            </div>
+            <div class="painel__texto">
+              <p class="painel__sigla">Terapia de Aceitação e Compromisso</p>
+              <h3 class="painel__titulo">Abrir espaço para o que dói e seguir na direção do que importa.</h3>
+              <p>Ilustração vetorial animada com <code>@keyframes sol</code> e trilha tracejada contínua.</p>
+              <ul class="lista-check">
+                <li>Clareza sobre o que é importante para você</li>
+                <li>Mais flexibilidade diante do desconforto</li>
+                <li>Escolhas alinhadas aos seus valores</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="painel" role="tabpanel" id="painel-mind" aria-labelledby="aba-mind" hidden>
+            <div class="painel__arte" aria-hidden="true">
+              <svg class="ilustra ilustra--mind" viewBox="0 0 320 300">
+                <circle class="ilustra__onda" cx="160" cy="150" r="40"/>
+                <circle class="ilustra__onda ilustra__onda--2" cx="160" cy="150" r="40"/>
+                <circle class="ilustra__onda ilustra__onda--3" cx="160" cy="150" r="40"/>
+                <circle class="ilustra__centro" cx="160" cy="150" r="22"/>
+                <text x="160" y="155">agora</text>
+              </svg>
+            </div>
+            <div class="painel__texto">
+              <p class="painel__sigla">Atenção plena</p>
+              <h3 class="painel__titulo">Sair do piloto automático e voltar para o momento presente.</h3>
+              <p>Ondas concêntricas defasadas em <code>-2s</code> e <code>-4s</code> com <code>@keyframes onda</code>.</p>
+              <ul class="lista-check">
+                <li>Exercícios guiados para praticar entre as sessões</li>
+                <li>Mais presença no corpo e nas emoções</li>
+                <li>Pausas possíveis em meio à rotina</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ 4) LAYOUT & ESPAÇAMENTO ═══════════════════════════════ -->
+    <section class="atendimento secao" id="layout" aria-labelledby="layout-titulo">
+      <div class="container">
+        <div class="cabeca-secao">
+          <div>
+            <p class="olho" data-revela>04 · Layout &amp; Spacing</p>
+            <h2 class="titulo-secao" id="layout-titulo" data-revela>Containers, grades e <em>padrões reais</em></h2>
+          </div>
+          <p class="cabeca-secao__texto" data-revela>
+            Container central de <code>1360px</code> com respiro lateral fluido <code>clamp(20px, 4.2vw, 64px)</code>, espaçamento vertical de seção <code>clamp(96px, 11vw, 168px)</code> e raio padrão <code>--raio: 28px</code>.
+          </p>
+        </div>
+
+        <!-- Padrão 1: Split 2 Colunas (1fr / 1fr) — Formatos -->
+        <p class="olho" data-revela>Padrão de Layout 1 · Grade Dupla Simétrica (.formatos · repeat(2, minmax(0, 1fr)) · gap 18px)</p>
+        <div class="formatos" data-revela-grupo>
+          <article class="formato" data-revela>
+            <figure class="formato__foto">
+              <img src="assets/img/foto-online-sessao.webp" alt="Notebook numa mesa de madeira com uma sessão por videochamada aberta" width="512" height="341" loading="lazy" decoding="async">
+            </figure>
+            <div class="formato__topo">
+              <span class="formato__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10.5l5-3v9l-5-3"/></svg></span>
+              <span class="formato__sub">Coluna 1 · .formato (--papel)</span>
+            </div>
+            <h3 class="formato__titulo">Online</h3>
+            <p>Padding interno fluido <code>clamp(28px, 3.6vw, 52px)</code>, foto em proporção <code>3 / 2</code> com zoom suave no hover.</p>
+            <ul class="lista-check">
+              <li>Container máximo: 1360px</li>
+              <li>Padding lateral: clamp(20px, 4.2vw, 64px)</li>
+              <li>Raio de borda: 28px (--raio)</li>
+            </ul>
+          </article>
+
+          <article class="formato formato--destaque" data-revela>
+            <figure class="formato__foto">
+              <img src="assets/img/foto-presencial.webp" alt="Mesa do consultório com jarra de água, copos, lenços e um vaso com ramo de oliveira" width="512" height="341" loading="lazy" decoding="async">
+            </figure>
+            <div class="formato__topo">
+              <span class="formato__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 20V9.5L12 4l8 5.5V20"/><path d="M10 20v-6h4v6"/></svg></span>
+              <span class="formato__sub">Coluna 2 · .formato--destaque (--areia)</span>
+            </div>
+            <h3 class="formato__titulo">Presencial</h3>
+            <p>Empilha automaticamente em 1 coluna única em telas <code>&lt;= 900px</code>.</p>
+            <ul class="lista-check">
+              <li>Padding vertical (.secao): clamp(96px, 11vw, 168px)</li>
+              <li>Altura do topo (--topo): 88px desktop / 76px mobile</li>
+              <li>Gap entre cartões: 18px</li>
+            </ul>
+          </article>
+        </div>
+
+        <!-- Padrão 2: Split Assimétrico (5fr / 6fr) com Coluna Sticky e Linha do Tempo -->
+        <div class="secao">
+          <p class="olho" data-revela>Padrão de Layout 2 · Split Assimétrico Sticky (.processo__grade · 5fr / 6fr · gap clamp(48px, 8vw, 140px))</p>
+          <div class="processo__grade">
+            <div class="processo__fixo">
+              <p class="olho" data-revela>Coluna Fixa (5fr · position: sticky; top: 140px)</p>
+              <h2 class="titulo-secao" data-revela>Seu processo, <em>passo a passo</em></h2>
+              <p data-revela>Usado em <code>.sobre__grade</code> (5fr / 6fr), <code>.processo__grade</code> (5fr / 6fr) e <code>.duvidas__grade</code> (4fr / 7fr).</p>
+              <dl class="numeros" data-revela-grupo>
+                <div class="numero" data-revela>
+                  <dt class="sr-only">Colunas</dt>
+                  <dd><span class="numero__valor"><span data-conta="12">12</span></span><span class="numero__rotulo">proporções flexíveis (5fr/6fr e 4fr/7fr)</span></dd>
+                </div>
+                <div class="numero" data-revela>
+                  <dt class="sr-only">Largura máxima</dt>
+                  <dd><span class="numero__valor"><span data-conta="1360">1360</span><small>px</small></span><span class="numero__rotulo">largura máxima do .container</span></dd>
+                </div>
+                <div class="numero" data-revela>
+                  <dt class="sr-only">Raio</dt>
+                  <dd><span class="numero__valor"><span data-conta="28">28</span><small>px</small></span><span class="numero__rotulo">raio padrão de cartões (--raio)</span></dd>
+                </div>
+              </dl>
+            </div>
+            <div class="passos" data-passos>
+              <span class="passos__linha" aria-hidden="true"><span></span></span>
+              <ol class="passos__lista">
+                <li class="passo" data-passo>
+                  <span class="passo__numero">01</span>
+                  <div>
+                    <h3 class="passo__titulo">Hero Split (1fr / 420px)</h3>
+                    <p><code>.hero__grade</code> combina coluna fluida de texto com coluna visual de <code>minmax(300px, 420px)</code> para preservar o corte de 3 linhas do título.</p>
+                  </div>
+                </li>
+                <li class="passo" data-passo>
+                  <span class="passo__numero">02</span>
+                  <div>
+                    <h3 class="passo__titulo">Split Editorial (5fr / 6fr)</h3>
+                    <p><code>.sobre__grade</code> e <code>.processo__grade</code> criam contraponto entre imagem em arco ou cabeçalho fixo à esquerda e narrativa à direita.</p>
+                  </div>
+                </li>
+                <li class="passo" data-passo>
+                  <span class="passo__numero">03</span>
+                  <div>
+                    <h3 class="passo__titulo">Acordeão Lateral (4fr / 7fr)</h3>
+                    <p><code>.duvidas__grade</code> mantém a chamada de apoio fixa enquanto a lista <code>.perguntas</code> se expande verticalmente.</p>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <!-- Padrão 3: Grade Editorial de 3 Colunas (.artigos) + FAQ Split (4fr / 7fr) -->
+        <p class="olho" data-revela>Padrão de Layout 3 · Grade Editorial de 3 Colunas (.artigos · repeat(3, minmax(0, 1fr)))</p>
+        <div class="artigos" data-revela-grupo>
+          <article class="artigo" data-revela>
+            <a class="artigo__link" href="#layout" data-cursor="Ler">
+              <span class="artigo__capa"><img src="assets/img/foto-ansiedade.webp" alt="Mãos segurando uma caneca de chá quente perto da janela" width="512" height="384" loading="lazy" decoding="async"></span>
+              <span class="artigo__meta"><span class="etiqueta">Proporção 4:3</span>Passe o mouse (data-cursor="Ler")</span>
+              <span class="artigo__titulo">Ansiedade: quando é hora de procurar ajuda?</span>
+              <span class="artigo__resumo">A diferença entre a preocupação do dia a dia e um sofrimento que merece atenção.</span>
+            </a>
+          </article>
+          <article class="artigo" data-revela>
+            <a class="artigo__link" href="#layout" data-cursor="Ler">
+              <span class="artigo__capa"><img src="assets/img/foto-esgotamento.webp" alt="Mulher cansada à mesa de trabalho, com a mão na testa e os olhos fechados" width="512" height="384" loading="lazy" decoding="async"></span>
+              <span class="artigo__meta"><span class="etiqueta">Esgotamento</span>7 min de leitura</span>
+              <span class="artigo__titulo">Burnout não é preguiça: sinais de que você está no limite</span>
+              <span class="artigo__resumo">Como reconhecer o esgotamento e quais primeiros passos podem ajudar.</span>
+            </a>
+          </article>
+          <article class="artigo" data-revela>
+            <a class="artigo__link" href="#layout" data-cursor="Ler">
+              <span class="artigo__capa"><img src="assets/img/foto-online.webp" alt="Mulher de fones de ouvido no sofá, em uma sessão de terapia online pelo notebook" width="512" height="384" loading="lazy" decoding="async"></span>
+              <span class="artigo__meta"><span class="etiqueta">Terapia online</span>4 min de leitura</span>
+              <span class="artigo__titulo">Terapia online funciona? O que você precisa saber</span>
+              <span class="artigo__resumo">Como são as sessões, como se preparar e por que tantas pessoas escolhem esse formato.</span>
+            </a>
+          </article>
+        </div>
+
+        <div class="secao">
+          <div class="duvidas__grade">
+            <div class="duvidas__lado">
+              <p class="olho" data-revela>Acordeão &amp; Split 4fr / 7fr</p>
+              <h2 class="titulo-secao" data-revela>Perguntas que <em>costumo ouvir</em></h2>
+              <p data-revela>Demonstração real do padrão <code>.duvidas__grade</code> com itens <code>details.pergunta</code> abertos e fechados.</p>
+              <a class="link-seta" href="#agendar" data-revela>Tirar uma dúvida <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            </div>
+            <div class="perguntas" data-perguntas data-revela-grupo>
+              <details class="pergunta" data-revela open>
+                <summary>Estado Aberto ([open]) — Ícone gira 180° em fundo terracota<span class="pergunta__sinal" aria-hidden="true"></span></summary>
+                <div class="pergunta__resposta"><p>Ao abrir uma pergunta em <code>[data-perguntas]</code>, as demais se fecham suavemente com Web Animations API (<code>550ms cubic-bezier(.22,1,.36,1)</code>).</p></div>
+              </details>
+              <details class="pergunta" data-revela>
+                <summary>Estado Fechado (Default) — Ícone circular com sinal de soma<span class="pergunta__sinal" aria-hidden="true"></span></summary>
+                <div class="pergunta__resposta"><p>O resumo muda para <code>var(--terra)</code> no hover e mantém área de toque ampla com padding vertical de <code>26px</code>.</p></div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ 5) MOVIMENTO & INTERAÇÃO ═══════════════════════════════ -->
+    <section class="respiro secao" id="movimento" data-tema="escuro" aria-labelledby="movimento-titulo">
+      <div class="respiro__brilho" aria-hidden="true"></div>
+      <div class="container respiro__grade">
+        <div class="respiro__texto">
+          <p class="olho olho--claro" data-revela>05 · Motion &amp; Interaction</p>
+          <h2 class="titulo-secao" id="movimento-titulo" data-revela>Respire comigo por <em>um minuto.</em></h2>
+          <p data-revela>
+            Todo o movimento do sistema nasce de duas curvas: <code>--suave: cubic-bezier(.22, 1, .36, 1)</code> para entradas, revelações e botões, e <code>--suave-2: cubic-bezier(.65, 0, .35, 1)</code> para máscaras e ciclos de respiração. Teste o exercício interativo ao lado:
+          </p>
+          <div class="ritmos" role="group" aria-label="Ritmo da respiração" data-revela>
+            <button class="ritmo" type="button" aria-pressed="true" data-ritmo="4,2,6,0">Calma <span>4 · 2 · 6</span></button>
+            <button class="ritmo" type="button" aria-pressed="false" data-ritmo="4,4,4,4">Quadrada <span>4 · 4 · 4 · 4</span></button>
+          </div>
+          <div class="respiro__acoes" data-revela>
+            <button class="botao botao--claro" type="button" data-respiro-iniciar>
+              <span class="respiro__icone-play" aria-hidden="true"></span>
+              <span data-respiro-rotulo>Começar</span>
+            </button>
+            <p class="respiro__ciclos" data-respiro-ciclos>5 ciclos · cerca de 1 minuto</p>
+          </div>
+          <p class="respiro__nota" data-revela>
+            Respeita integralmente <code>prefers-reduced-motion: reduce</code>, trocando escalas por opacidade suave e desativando paralaxe e Lenis.
+          </p>
+        </div>
+        <div class="respiro__palco" data-revela="escala">
+          <div class="orbe" data-orbe>
+            <svg class="orbe__progresso" viewBox="0 0 200 200" aria-hidden="true">
+              <circle cx="100" cy="100" r="96"/>
+              <circle class="orbe__progresso-barra" cx="100" cy="100" r="96" data-orbe-progresso/>
+            </svg>
+            <span class="orbe__anel orbe__anel--3" aria-hidden="true"></span>
+            <span class="orbe__anel orbe__anel--2" aria-hidden="true"></span>
+            <span class="orbe__anel orbe__anel--1" aria-hidden="true"></span>
+            <span class="orbe__nucleo" aria-hidden="true"></span>
+            <p class="orbe__instrucao" aria-live="polite" data-orbe-instrucao>Respire</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galeria de Movimento (Motion Gallery) -->
+    <section class="sobre secao" aria-labelledby="galeria-movimento-titulo">
+      <div class="container">
+        <div class="cabeca-secao">
+          <div>
+            <p class="olho" data-revela>Motion Gallery</p>
+            <h2 class="titulo-secao" id="galeria-movimento-titulo" data-revela>Coreografias, máscaras e <em>keyframes</em></h2>
+          </div>
+          <p class="cabeca-secao__texto" data-revela>
+            Demonstração ao vivo de cada classe e atributo de animação presente em <code>style.css</code> e <code>main.js</code>.
+          </p>
+        </div>
+
+        <div class="sobre__grade">
+          <div class="sobre__visual">
+            <figure class="arco arco--sobre" data-revela="mascara">
+              <img class="arco__img" src="assets/img/foto-consultorio.webp" alt="Consultório com poltronas claras, uma oliveira no vaso e a luz da tarde na parede" width="512" height="640" loading="lazy" decoding="async" data-parallax-img="0.08">
+            </figure>
+            <span class="etiqueta etiqueta--imagem" data-revela>data-revela="mascara" + data-parallax-img="0.08"</span>
+            <div class="cartao-nome" data-revela>
+              <span class="cartao-nome__nome">Clara Vilela</span>
+              <span class="cartao-nome__cargo">Traço SVG animado · .assinatura (2.4s var(--suave-2))</span>
+              <svg class="assinatura" viewBox="0 0 220 60" aria-hidden="true">
+                <path d="M8 40c10-18 22-30 30-26 7 4-6 26-2 30 5 4 14-16 22-15 6 1-3 15 3 15 7 0 12-12 18-12 5 0 0 11 6 11 8 0 14-14 22-14 6 0 2 12 8 12 9 0 16-10 24-10 6 0 4 9 10 9 10 0 22-6 34-8 10-2 16-1 22 1"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="sobre__texto">
+            <p class="olho" data-revela>Catálogo de Comportamentos</p>
+            <ul class="formacao" data-revela-grupo>
+              <li data-revela><span>[data-intro]</span>Entrada escalonada da primeira dobra (.js → .carregou) com máscara por linha (.linha__in) e expansão da .pilula</li>
+              <li data-revela><span>[data-revela]</span>Subida suave de 30px (1.2s var(--suave)) e nitidez de blur(10px) nos títulos (.titulo-secao)</li>
+              <li data-revela><span>[data-revela="mascara"]</span>Revelação em cortina vertical clip-path: inset(0 0 100% 0) → inset(0) em 1.6s var(--suave-2)</li>
+              <li data-revela><span>[data-revela="escala"]</span>Entrada com escala de 0.92 para 1 no palco do orbe de respiração</li>
+              <li data-revela><span>[data-preenche]</span>Preenchimento progressivo de texto linha a linha acoplado à rolagem (--p de 0 a 1)</li>
+              <li data-revela><span>[data-magnetico]</span>Atração magnética do ponteiro em botões (dx * 0.22, dy * 0.3) + cursor seguidor (.cursor)</li>
+            </ul>
+
+            <ul class="sinais__lista" data-revela-grupo>
+              <li class="sinal" data-revela>
+                <span class="selo-agenda__ponto" aria-hidden="true"></span>
+                <div>
+                  <strong>@keyframes pulso</strong>
+                  <div class="cartao__linha">2.4s var(--suave) infinite · .selo-agenda__ponto</div>
+                </div>
+              </li>
+              <li class="sinal" data-revela>
+                <span class="ponto-respira" aria-hidden="true"></span>
+                <div>
+                  <strong>@keyframes respira-ponto</strong>
+                  <div class="cartao__linha">4s var(--suave-2) infinite · .ponto-respira</div>
+                </div>
+              </li>
+              <li class="sinal" data-revela>
+                <span class="mini-orbe" aria-hidden="true"><span></span></span>
+                <div>
+                  <strong>@keyframes mini-orbe</strong>
+                  <div class="cartao__linha">8s var(--suave-2) infinite · .mini-orbe + .cartao__alterna</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ 6) ÍCONES ═══════════════════════════════ -->
+    <section class="temas secao" id="icones" aria-labelledby="icones-titulo">
+      <div class="container">
+        <div class="cabeca-secao">
+          <div>
+            <p class="olho" data-revela>06 · Icons</p>
+            <h2 class="titulo-secao" id="icones-titulo" data-revela> Traço contínuo e <em>herança de cor</em></h2>
+          </div>
+          <p class="cabeca-secao__texto" data-revela>
+            Todos os ícones de interface utilizam <code>svg[viewBox="0 0 24 24"]</code> com <code>fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round</code>, herdando a cor do elemento pai.
+          </p>
+        </div>
+
+        <!-- 6.1 Variantes de Tamanho e Containers -->
+        <p class="olho" data-revela>Variantes de Tamanho e Containers de Ícone</p>
+        <ul class="sinais__lista" data-revela-grupo>
+          <li class="sinal" data-revela>
+            <svg class="marca__simbolo" viewBox="0 0 40 40" aria-hidden="true">
+              <circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M20 8.5c-5.6 3.8-8.3 8.6-8.3 13 0 4.7 3.4 8.6 8.3 9.9 4.9-1.3 8.3-5.2 8.3-9.9 0-4.4-2.7-9.2-8.3-13z" fill="currentColor"/>
+              <path d="M20 13.5v17" stroke="#F4EEE6" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <div>
+              <strong>38px · .marca__simbolo</strong>
+              <div class="cartao__linha">viewBox 0 0 40 40 · Cor herdada (--terra / --ouro)</div>
+            </div>
+          </li>
+          <li class="sinal" data-revela>
+            <span class="tema__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg></span>
+            <div>
+              <strong>26px em círculo 58px · .tema__icone</strong>
+              <div class="cartao__linha">Fundo --areia e traço --terra (muda para --ouro no hover)</div>
+            </div>
+          </li>
+          <li class="sinal" data-revela>
+            <span class="formato__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10.5l5-3v9l-5-3"/></svg></span>
+            <div>
+              <strong>26px em círculo 56px · .formato__icone</strong>
+              <div class="cartao__linha">Fundo --terra e traço --creme</div>
+            </div>
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
+            <div>
+              <strong>26px direto · .sinal svg</strong>
+              <div class="cartao__linha">Traço direto em var(--terra)</div>
+            </div>
+          </li>
+          <li class="sinal" data-revela>
+            <span class="botao botao--terra"><span class="botao__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></span>
+            <div>
+              <strong>18px em círculo 42px · .botao__icone</strong>
+              <div class="cartao__linha">Gira -30° e avança 3px no hover do botão</div>
+            </div>
+          </li>
+          <li class="sinal" data-revela>
+            <ul class="hero__garantias">
+              <li>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                19px · .hero__garantias svg
+              </li>
+            </ul>
+          </li>
+        </ul>
+
+        <!-- 6.2 Biblioteca Completa de Ícones da Referência -->
+        <p class="olho" data-revela>Conjunto Completo de Ícones Utilizados no Projeto (viewBox="0 0 24 24")</p>
+        <ul class="sinais__lista" data-revela-grupo>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            Seta Horizontal (.botao__icone / .link-seta)
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>
+            Seta Diagonal (.tema__link)
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            Relógio · Sessões de 50 minutos
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/></svg>
+            Globo · Online para todo o Brasil
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>
+            Escudo · Sigilo profissional
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z"/><path d="M5 19l8-8"/></svg>
+            Folha · Selo giratório (.selo-giro__centro)
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9c2-2 4-2 6 0s4 2 6 0 4-2 6 0M3 15c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>
+            Ondas · Ansiedade / Pensamentos
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="16" height="10" rx="2.5"/><path d="M21 11v2M6.5 10v4"/></svg>
+            Bateria · Esgotamento e cansaço
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 15.5c1-1 2.2-1.5 3.5-1.5s2.5.5 3.5 1.5M9 9.5h.01M15 9.5h.01"/></svg>
+            Expressão · Dificuldade de dizer não
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.7-5.6L20 9M20 4v5h-5M20 12a8 8 0 0 1-13.7 5.6L4 15M4 20v-5h5"/></svg>
+            Ciclo · Viver no automático
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.6 3.8-5.5 7-5.5s5.8 1.9 7 5.5"/></svg>
+            Pessoa · Autoestima
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="5"/><circle cx="15" cy="12" r="5"/></svg>
+            Vínculos · Relacionamentos
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>
+            Gota · Luto e perdas
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17h6l4-10h6"/><path d="M17 4l3 3-3 3"/></svg>
+            Trilha · Transições de vida
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="M16 10.5l5-3v9l-5-3"/></svg>
+            Vídeo · Atendimento online
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V9.5L12 4l8 5.5V20"/><path d="M10 20v-6h4v6"/></svg>
+            Consultório · Atendimento presencial
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
+            Informação · Aviso de reembolso
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            Cadeado · Privacidade no agendamento
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8.4 8.4 0 0 1-12.5 7.3L3.5 20l1.2-3.8A8.4 8.4 0 1 1 20 11.6z"/><path d="M9.1 8.4c.3-.3.7-.3.9 0l.9 1.3c.2.3.2.6-.1.9l-.5.5c.5 1 1.3 1.8 2.3 2.3l.5-.5c.3-.3.6-.3.9-.1l1.3.9c.3.2.3.6 0 .9-.6.7-1.6 1-2.5.6a8 8 0 0 1-4.4-4.4c-.4-.9-.1-1.8.7-2.4z"/></svg>
+            WhatsApp (.botao__marca)
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8.4 8.4 0 0 1-12.5 7.3L3.5 20l1.2-3.8A8.4 8.4 0 1 1 20 11.6z"/><path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01"/></svg>
+            Balão Flutuante (.flutuante)
+          </li>
+          <li class="sinal" data-revela>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+            Coração · Card de crise (.crise__titulo)
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ ENCERRAMENTO (PADRÃO .final) ═══════════════════════════════ -->
+    <section class="final" id="contato" data-tema="escuro" aria-labelledby="final-titulo">
+      <div class="final__imagem" aria-hidden="true">
+        <img src="assets/img/luz-final.webp" alt="" width="2200" height="1100" loading="lazy" decoding="async" data-parallax-img="0.1">
+      </div>
+      <div class="container final__conteudo">
+        <p class="olho olho--claro" data-revela>Padrão de Encerramento (.final)</p>
+        <h2 class="final__titulo" id="final-titulo" data-revela>Dar o primeiro passo também é um <em>ato de cuidado.</em></h2>
+        <p class="final__texto" data-revela>Seção final com imagem em paralaxe (<code>data-parallax-img="0.1"</code>), sobreposição em gradiente linear sobre <code>--floresta-3</code> e botões de ação.</p>
+        <div class="final__acoes" data-revela>
+          <a class="botao botao--terra" href="#inicio" data-magnetico>
+            <span>Voltar ao topo</span>
+            <span class="botao__icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+          <a class="botao botao--claro-contorno" href="index.html" data-magnetico><span>Abrir página de referência</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════ RODAPÉ ═══════════════════════════════ -->
+  <footer class="rodape" data-tema="escuro">
+    <div class="container">
+      <div class="rodape__grade">
+        <div class="rodape__marca">
+          <a class="marca marca--clara" href="#inicio" aria-label="Clara Vilela: voltar ao início">
+            <svg class="marca__simbolo" viewBox="0 0 40 40" aria-hidden="true">
+              <circle cx="20" cy="20" r="18.5" fill="none" stroke="currentColor" stroke-width="1.3"/>
+              <path d="M20 8.5c-5.6 3.8-8.3 8.6-8.3 13 0 4.7 3.4 8.6 8.3 9.9 4.9-1.3 8.3-5.2 8.3-9.9 0-4.4-2.7-9.2-8.3-13z" fill="currentColor"/>
+              <path d="M20 13.5v17" stroke="#18221D" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <span class="marca__texto">
+              <span class="marca__nome">Clara Vilela</span>
+              <span class="marca__crp">Design System · v2</span>
+            </span>
+          </a>
+          <p>Biblioteca viva de padrões extraída sem alterações de estilo a partir de index.html.</p>
+        </div>
+        <nav class="rodape__coluna" aria-label="Seções do Design System">
+          <p class="rodape__titulo">Seções</p>
+          <a href="#inicio">00 Hero</a>
+          <a href="#tipografia">01 Tipografia</a>
+          <a href="#cores">02 Cores &amp; Superfícies</a>
+          <a href="#componentes">03 Componentes</a>
+          <a href="#layout">04 Layout &amp; Espaço</a>
+          <a href="#movimento">05 Movimento</a>
+          <a href="#icones">06 Ícones</a>
+        </nav>
+        <div class="rodape__coluna">
+          <p class="rodape__titulo">Arquivos Fonte</p>
+          <a href="index.html">index.html</a>
+          <a href="assets/css/style.css">assets/css/style.css</a>
+          <a href="assets/js/main.js">assets/js/main.js</a>
+          <span>Fraunces &amp; Instrument Sans</span>
+        </div>
+        <div class="crise">
+          <p class="crise__titulo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+            Componente .crise no Rodapé
+          </p>
+          <p>Em momentos de crise, ligue <a href="tel:188">188 (CVV)</a>: gratuito, 24 horas por dia. Em emergências, ligue <a href="tel:192">192 (SAMU)</a>.</p>
+        </div>
+      </div>
+      <p class="rodape__assinatura" aria-hidden="true">Clara Vilela</p>
+      <div class="rodape__base">
+        <p>© 2026 Clara Vilela · Design System &amp; Pattern Library v2</p>
+        <p>Preserva 100% das classes, tokens, animações e ativos originais.</p>
+        <a href="index.html">Ver site original</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="flutuante" href="#componentes" aria-label="Ver componentes">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.6a8.4 8.4 0 0 1-12.5 7.3L3.5 20l1.2-3.8A8.4 8.4 0 1 1 20 11.6z"/><path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01"/></svg>
+    <span>Componentes</span>
+  </a>
+
+  <script src="https://unpkg.com/lenis@1.1.20/dist/lenis.min.js" defer></script>
+  <script>
+/* ============================================================================================
+   Clara Vilela · Psicologia — as interações da página.
+   Sem dependência além do Lenis (rolagem suave), e a página funciona sem ele.
+   Os textos da página ficam como estão no HTML: este arquivo só escreve no que é dele (a
+   instrução da respiração, a mensagem do agendamento e os números contando), para o editor de
+   textos do Gravyx continuar achando cada texto no arquivo.
+   ============================================================================================ */
+(function () {
+  'use strict';
+
+  const raiz = document.documentElement;
+  const movimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const toque = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+  const $ = (seletor, contexto) => (contexto || document).querySelector(seletor);
+  const $$ = (seletor, contexto) => Array.from((contexto || document).querySelectorAll(seletor));
+  const limitar = (v, min, max) => Math.min(max, Math.max(min, v));
+
+  /* ── 1. A entrada da primeira dobra ─────────────────────────────────────────────────────── */
+
+  function soltarEntrada() {
+    if (!raiz.classList.contains('carregou')) raiz.classList.add('carregou');
+  }
+  if (document.fonts && document.fonts.ready) {
+    Promise.race([document.fonts.ready, new Promise((ok) => setTimeout(ok, 700))]).then(soltarEntrada, soltarEntrada);
+  } else {
+    setTimeout(soltarEntrada, 200);
+  }
+
+  /* ── 2. Rolagem suave ───────────────────────────────────────────────────────────────────── */
+
+  let lenis = null;
+  if (!movimentoReduzido && typeof window.Lenis === 'function') {
+    try {
+      lenis = new window.Lenis({
+        duration: 1.15,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+        wheelMultiplier: 0.95,
+        touchMultiplier: 1.4,
+      });
+      const quadro = (tempo) => { lenis.raf(tempo); requestAnimationFrame(quadro); };
+      requestAnimationFrame(quadro);
+    } catch (e) {
+      lenis = null;
+    }
+  }
+
+  const alturaDoTopo = () => {
+    const topo = $('[data-topo]');
+    return topo ? topo.offsetHeight + 12 : 90;
+  };
+
+  function rolarAte(alvo) {
+    if (!alvo) return;
+    if (lenis) {
+      lenis.scrollTo(alvo, { offset: -alturaDoTopo(), duration: 1.6 });
+    } else {
+      const y = alvo.getBoundingClientRect().top + window.scrollY - alturaDoTopo();
+      window.scrollTo({ top: y, behavior: movimentoReduzido ? 'auto' : 'smooth' });
+    }
+  }
+
+  /* ── 3. Menu do celular ─────────────────────────────────────────────────────────────────── */
+
+  const botaoDoMenu = $('.menu-botao');
+  function abrirMenu(abrir) {
+    raiz.classList.toggle('menu-aberto', abrir);
+    if (botaoDoMenu) {
+      botaoDoMenu.setAttribute('aria-expanded', String(abrir));
+      botaoDoMenu.setAttribute('aria-label', abrir ? 'Fechar o menu' : 'Abrir o menu');
+    }
+    if (lenis) { if (abrir) lenis.stop(); else lenis.start(); }
+  }
+  if (botaoDoMenu) {
+    botaoDoMenu.addEventListener('click', () => abrirMenu(!raiz.classList.contains('menu-aberto')));
+  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && raiz.classList.contains('menu-aberto')) {
+      abrirMenu(false);
+      if (botaoDoMenu) botaoDoMenu.focus();
+    }
+  });
+
+  /* ── 4. Links internos ──────────────────────────────────────────────────────────────────── */
+
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (href === '#') { e.preventDefault(); return; }
+    let alvo = null;
+    try { alvo = document.getElementById(decodeURIComponent(href.slice(1))); } catch (erro) { alvo = null; }
+    if (!alvo) return;
+    e.preventDefault();
+    if (link.dataset.assunto) escolherAssunto(link.dataset.assunto);
+    const estavaAberto = raiz.classList.contains('menu-aberto');
+    if (estavaAberto) abrirMenu(false);
+    setTimeout(() => rolarAte(alvo), estavaAberto ? 350 : 0);
+    if (alvo.id === 'conteudo') alvo.setAttribute('tabindex', '-1');
+  });
+
+  /* ── 5. Revelar ao rolar ────────────────────────────────────────────────────────────────── */
+
+  const reveladores = $$('[data-revela]');
+  if ('IntersectionObserver' in window && reveladores.length) {
+    $$('[data-revela-grupo]').forEach((grupo) => {
+      $$('[data-revela]', grupo).forEach((el, i) => el.style.setProperty('--atraso', `${Math.min(i * 0.08, 0.48)}s`));
+    });
+    raiz.classList.add('revelar-ativo');
+    // A máscara fechada (clip-path) tem área zero, e o Chromium conta o clip-path do próprio alvo:
+    // ela nunca "entraria" na tela. Nesse caso quem é observado é o pai.
+    const observados = new Map();
+    reveladores.forEach((el) => {
+      const observado = el.dataset.revela === 'mascara' && el.parentElement ? el.parentElement : el;
+      if (!observados.has(observado)) observados.set(observado, []);
+      observados.get(observado).push(el);
+    });
+    const observador = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (!entrada.isIntersecting) return;
+        (observados.get(entrada.target) || []).forEach((el) => el.classList.add('visivel'));
+        observador.unobserve(entrada.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    observados.forEach((_, observado) => observador.observe(observado));
+  }
+
+  /* ── 6. Os números que contam ───────────────────────────────────────────────────────────── */
+
+  const contadores = $$('[data-conta]');
+  if (contadores.length && 'IntersectionObserver' in window && !movimentoReduzido) {
+    const contar = (el) => {
+      const final = el.textContent;
+      const alvo = parseInt(el.dataset.conta, 10);
+      if (!Number.isFinite(alvo)) return;
+      const inicio = performance.now();
+      const duracao = 1600;
+      const passo = (agora) => {
+        const t = limitar((agora - inicio) / duracao, 0, 1);
+        const valor = Math.round(alvo * (1 - Math.pow(1 - t, 3)));
+        el.textContent = t < 1 ? String(valor) : final;
+        if (t < 1) requestAnimationFrame(passo);
+      };
+      requestAnimationFrame(passo);
+    };
+    const observadorDeNumeros = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (!entrada.isIntersecting) return;
+        contar(entrada.target);
+        observadorDeNumeros.unobserve(entrada.target);
+      });
+    }, { threshold: 0.6 });
+    contadores.forEach((el) => observadorDeNumeros.observe(el));
+  }
+
+  /* ── 7. Tudo o que depende da rolagem, numa leitura por quadro ──────────────────────────── */
+
+  const topo = $('[data-topo]');
+  const progresso = $('.progresso');
+  const flutuante = $('.flutuante');
+  const textoQuePreenche = $('[data-preenche]');
+  const passos = $('[data-passos]');
+  const listaDePassos = passos ? $$('[data-passo]', passos) : [];
+  const linhaDosPassos = passos ? $('.passos__linha', passos) : null;
+  const comParalaxe = movimentoReduzido ? [] : $$('[data-parallax], [data-parallax-img]');
+  const trilhoDaFaixa = $('[data-faixa]');
+  const animacaoDaFaixa = trilhoDaFaixa && trilhoDaFaixa.getAnimations ? trilhoDaFaixa.getAnimations()[0] : null;
+
+  let ultimoY = window.scrollY;
+  let velocidade = 0;
+  let agendado = false;
+  let finalVisivel = false;
+  let agendarVisivel = false;
+
+  function aoRolar() {
+    if (agendado) return;
+    agendado = true;
+    requestAnimationFrame(atualizar);
+  }
+
+  function atualizar() {
+    agendado = false;
+    const y = window.scrollY;
+    const vh = window.innerHeight;
+    const delta = y - ultimoY;
+    ultimoY = y;
+
+    // Topo: fundo depois de rolar um pouco, some descendo e volta subindo.
+    if (topo) {
+      topo.classList.toggle('rolou', y > 24);
+      if (!raiz.classList.contains('menu-aberto')) {
+        if (delta > 4 && y > 640) topo.classList.add('esconde');
+        else if (delta < -4 || y < 640) topo.classList.remove('esconde');
+      }
+    }
+
+    if (progresso) {
+      const total = document.documentElement.scrollHeight - vh;
+      progresso.style.setProperty('--rolagem', total > 0 ? (y / total).toFixed(4) : '0');
+    }
+
+    if (flutuante) flutuante.classList.toggle('visivel', y > vh * 0.9 && !finalVisivel && !agendarVisivel);
+
+    // O texto que se preenche: de quando entra por baixo até passar do meio da tela.
+    if (textoQuePreenche) {
+      const r = textoQuePreenche.getBoundingClientRect();
+      const p = limitar((vh * 0.85 - r.top) / (r.height + vh * 0.3), 0, 1);
+      textoQuePreenche.style.setProperty('--p', p.toFixed(3));
+    }
+
+    // O passo a passo: a linha cresce e o passo da vez acende.
+    if (linhaDosPassos) {
+      const r = linhaDosPassos.getBoundingClientRect();
+      const p = limitar((vh * 0.6 - r.top) / Math.max(1, r.height), 0, 1);
+      linhaDosPassos.style.setProperty('--progresso', p.toFixed(4));
+      listaDePassos.forEach((passo) => passo.classList.toggle('ativo', passo.getBoundingClientRect().top < vh * 0.62));
+    }
+
+    // Paralaxe: a figura (ou a foto dentro da moldura) anda mais devagar que a página.
+    comParalaxe.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      const fator = parseFloat(el.dataset.parallax || el.dataset.parallaxImg) || 0.06;
+      const deslocamento = (vh / 2 - (r.top + r.height / 2)) * fator;
+      el.style.transform = `translate3d(0, ${deslocamento.toFixed(1)}px, 0)`;
+    });
+
+    // A faixa acelera com a rolagem e volta ao ritmo de sempre.
+    velocidade += (delta - velocidade) * 0.2;
+  }
+
+  window.addEventListener('scroll', aoRolar, { passive: true });
+  window.addEventListener('resize', aoRolar, { passive: true });
+  atualizar();
+
+  if (animacaoDaFaixa && !movimentoReduzido) {
+    let ritmoAtual = 1;
+    const embalar = () => {
+      const alvo = (velocidade < -0.5 ? -1 : 1) * (1 + Math.min(Math.abs(velocidade) * 0.12, 5));
+      ritmoAtual += (alvo - ritmoAtual) * 0.08;
+      velocidade *= 0.92;
+      if (Math.abs(ritmoAtual - animacaoDaFaixa.playbackRate) > 0.01) animacaoDaFaixa.playbackRate = ritmoAtual;
+      requestAnimationFrame(embalar);
+    };
+    requestAnimationFrame(embalar);
+  }
+
+  if ('IntersectionObserver' in window) {
+    const final = $('.final');
+    const agendar = $('#agendar');
+    const vigia = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (entrada.target === final) finalVisivel = entrada.isIntersecting;
+        if (entrada.target === agendar) agendarVisivel = entrada.isIntersecting;
+      });
+      aoRolar();
+    }, { threshold: 0.05 });
+    if (final) vigia.observe(final);
+    if (agendar) vigia.observe(agendar);
+
+    // O item do menu da seção em que a pessoa está.
+    const linksDoMenu = $$('.menu a');
+    const secoes = linksDoMenu.map((a) => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+    const marcarSecao = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (!entrada.isIntersecting) return;
+        linksDoMenu.forEach((a) => a.classList.toggle('atual', a.getAttribute('href') === `#${entrada.target.id}`));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+    secoes.forEach((s) => marcarSecao.observe(s));
+  }
+
+  /* ── 8. Cursor e botões magnéticos (só com mouse) ───────────────────────────────────────── */
+
+  if (!toque && !movimentoReduzido) {
+    const cursor = $('.cursor');
+    const ponto = $('.cursor__ponto');
+    const anel = $('.cursor__anel');
+    const texto = $('.cursor__texto');
+    if (cursor && ponto && anel) {
+      let mx = -100, my = -100, ax = -100, ay = -100, seguindo = false;
+      const seguir = () => {
+        ax += (mx - ax) * 0.17;
+        ay += (my - ay) * 0.17;
+        anel.style.transform = `translate3d(${ax.toFixed(2)}px, ${ay.toFixed(2)}px, 0)`;
+        if (Math.abs(mx - ax) + Math.abs(my - ay) > 0.15) requestAnimationFrame(seguir);
+        else seguindo = false;
+      };
+      window.addEventListener('pointermove', (e) => {
+        if (e.pointerType && e.pointerType !== 'mouse') return;
+        mx = e.clientX;
+        my = e.clientY;
+        ponto.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+        if (!cursor.classList.contains('ativo')) {
+          ax = mx; ay = my;
+          cursor.classList.add('ativo');
+        }
+        if (!seguindo) { seguindo = true; requestAnimationFrame(seguir); }
+      }, { passive: true });
+      document.addEventListener('mouseleave', () => cursor.classList.remove('ativo'));
+      document.addEventListener('mouseover', (e) => {
+        const comTexto = e.target.closest('[data-cursor]');
+        const clicavel = e.target.closest('a, button, summary, [role="tab"]');
+        cursor.classList.toggle('com-texto', !!comTexto);
+        cursor.classList.toggle('sobre-link', !comTexto && !!clicavel);
+        cursor.classList.toggle('no-escuro', !!e.target.closest('[data-tema="escuro"]'));
+        if (texto && comTexto) texto.textContent = comTexto.dataset.cursor;
+      });
+    }
+
+    $$('[data-magnetico]').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        el.style.transform = `translate(${(dx * 0.22).toFixed(1)}px, ${(dy * 0.3).toFixed(1)}px)`;
+      });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+    });
+  }
+
+  /* ── 9. Abas da abordagem ──────────────────────────────────────────────────────────────── */
+
+  $$('[data-abas]').forEach((caixa) => {
+    const abas = $$('[role="tab"]', caixa);
+    const marcador = $('.abas__marcador', caixa);
+    const lista = $('[role="tablist"]', caixa);
+    const posicionar = () => {
+      const ativa = abas.find((a) => a.getAttribute('aria-selected') === 'true');
+      if (!ativa || !marcador || !lista) return;
+      marcador.style.width = `${ativa.offsetWidth}px`;
+      marcador.style.transform = `translateX(${ativa.offsetLeft}px)`;
+    };
+    const ativar = (aba, focar) => {
+      abas.forEach((a) => {
+        const sim = a === aba;
+        a.setAttribute('aria-selected', String(sim));
+        a.tabIndex = sim ? 0 : -1;
+        const painel = document.getElementById(a.getAttribute('aria-controls'));
+        if (!painel) return;
+        if (sim) {
+          painel.hidden = false;
+          painel.classList.remove('entra');
+          void painel.offsetWidth;
+          painel.classList.add('entra');
+        } else {
+          painel.hidden = true;
+        }
+      });
+      if (focar) aba.focus();
+      posicionar();
+    };
+    abas.forEach((aba, i) => {
+      aba.addEventListener('click', () => ativar(aba, false));
+      aba.addEventListener('keydown', (e) => {
+        let novo = null;
+        if (e.key === 'ArrowRight') novo = abas[(i + 1) % abas.length];
+        if (e.key === 'ArrowLeft') novo = abas[(i - 1 + abas.length) % abas.length];
+        if (e.key === 'Home') novo = abas[0];
+        if (e.key === 'End') novo = abas[abas.length - 1];
+        if (novo) { e.preventDefault(); ativar(novo, true); }
+      });
+    });
+    caixa.classList.add('pronta');
+    posicionar();
+    window.addEventListener('resize', posicionar, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(posicionar);
+  });
+
+  /* ── 10. Perguntas frequentes (abrem e fecham com altura animada, uma por vez) ───────────── */
+
+  const perguntas = $$('[data-perguntas] details');
+  perguntas.forEach((det) => {
+    const resumo = $('summary', det);
+    const resposta = $('.pergunta__resposta', det);
+    if (!resumo || !resposta) return;
+    resumo.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (det.dataset.animando) return;
+      if (det.open) fechar(det); else abrir(det);
+    });
+  });
+  function abrir(det) {
+    perguntas.forEach((outra) => { if (outra !== det && outra.open) fechar(outra); });
+    det.open = true;
+    const resposta = $('.pergunta__resposta', det);
+    if (movimentoReduzido || !resposta.animate) return;
+    det.dataset.animando = '1';
+    const altura = resposta.scrollHeight;
+    const anim = resposta.animate([{ height: '0px', opacity: 0 }, { height: `${altura}px`, opacity: 1 }], { duration: 550, easing: 'cubic-bezier(.22,1,.36,1)' });
+    anim.onfinish = anim.oncancel = () => { delete det.dataset.animando; };
+  }
+  function fechar(det) {
+    const resposta = $('.pergunta__resposta', det);
+    if (movimentoReduzido || !resposta.animate) { det.open = false; return; }
+    det.dataset.animando = '1';
+    const anim = resposta.animate([{ height: `${resposta.scrollHeight}px`, opacity: 1 }, { height: '0px', opacity: 0 }], { duration: 420, easing: 'cubic-bezier(.65,0,.35,1)' });
+    anim.onfinish = anim.oncancel = () => { det.open = false; delete det.dataset.animando; };
+  }
+
+  /* ── 11. O pedido de agendamento pelo WhatsApp ──────────────────────────────────────────── */
+
+  // O nome de quem atende vem do data-nome e o número do href do botão: os dois se trocam no HTML.
+  const agendar = $('[data-agendar]');
+  const nomeNaMensagem = (agendar && agendar.dataset.nome) || 'Clara';
+  const balao = agendar ? $('[data-mensagem]', agendar) : null;
+  const linkDoWhatsapp = agendar ? $('[data-whatsapp]', agendar) : null;
+  const enderecoDoWhatsapp = linkDoWhatsapp ? linkDoWhatsapp.getAttribute('href').split('?')[0] : '';
+
+  const juntar = (itens) => (itens.length < 2 ? itens.join('') : `${itens.slice(0, -1).join(', ')} e ${itens[itens.length - 1]}`);
+  const escolhidos = (grupo) => (agendar ? $$(`[data-grupo="${grupo}"] [aria-pressed="true"]`, agendar).map((b) => b.dataset.valor) : []);
+
+  function montarMensagem() {
+    const formato = escolhidos('formato')[0] || 'online';
+    const periodo = escolhidos('periodo')[0];
+    const dias = escolhidos('dias');
+    const assuntos = escolhidos('assunto');
+    let texto = `Olá, ${nomeNaMensagem}! Gostaria de agendar uma primeira conversa ${formato}`;
+    if (periodo) texto += `, de preferência ${periodo}`;
+    if (dias.length) texto += `${periodo ? ',' : ', de preferência'} às ${juntar(dias)}`;
+    texto += '.';
+    if (assuntos.length) texto += ` Quero conversar sobre ${juntar(assuntos)}.`;
+    return texto;
+  }
+
+  function atualizarMensagem(animar) {
+    if (!balao || !linkDoWhatsapp) return;
+    const texto = montarMensagem();
+    if (balao.textContent.trim() !== texto) {
+      balao.textContent = texto;
+      if (animar) {
+        balao.classList.remove('atualizou');
+        void balao.offsetWidth;
+        balao.classList.add('atualizou');
+      }
+    }
+    linkDoWhatsapp.setAttribute('href', `${enderecoDoWhatsapp}?text=${encodeURIComponent(texto)}`);
+  }
+
+  if (agendar) {
+    $$('.escolha__opcoes', agendar).forEach((grupo) => {
+      const unico = grupo.hasAttribute('data-unico');
+      $$('.opcao', grupo).forEach((botao) => {
+        botao.addEventListener('click', () => {
+          const marcado = botao.getAttribute('aria-pressed') === 'true';
+          if (unico) {
+            $$('.opcao', grupo).forEach((b) => b.setAttribute('aria-pressed', String(b === botao)));
+          } else {
+            botao.setAttribute('aria-pressed', String(!marcado));
+          }
+          atualizarMensagem(true);
+        });
+      });
+    });
+    atualizarMensagem(false);
+  }
+
+  // "Conversar sobre isso" nos temas: o assunto já vem marcado no pedido.
+  function escolherAssunto(nome) {
+    if (!agendar) return;
+    const alvo = nome.toLowerCase();
+    $$('[data-grupo="assunto"] .opcao', agendar).forEach((b) => {
+      if (b.dataset.valor.indexOf(alvo) === 0) b.setAttribute('aria-pressed', 'true');
+    });
+    atualizarMensagem(true);
+  }
+
+  /* ── 12. Respire comigo ─────────────────────────────────────────────────────────────────── */
+
+  const orbe = $('[data-orbe]');
+  if (orbe) {
+    const secao = orbe.closest('.respiro');
+    const nucleo = $('.orbe__nucleo', orbe);
+    const aneis = $$('.orbe__anel', orbe);
+    const instrucao = $('[data-orbe-instrucao]', orbe);
+    const barra = $('[data-orbe-progresso]', orbe);
+    const botao = $('[data-respiro-iniciar]');
+    const rotulo = $('[data-respiro-rotulo]');
+    const ciclosTexto = $('[data-respiro-ciclos]');
+    const botoesDeRitmo = $$('[data-ritmo]');
+    const CICLOS = 5;
+    const CIRCUNFERENCIA = 603.2;
+    const PEQUENO = 0.74;
+    const GRANDE = 1.06;
+    const textoInicial = ciclosTexto ? ciclosTexto.textContent : '';
+    let ritmo = [4, 2, 6, 0];
+    let rodando = false;
+    let ciclo = 0;
+    let relogio = 0;
+    let animacoes = [];
+
+    const fases = () => [
+      { nome: 'Inspire', de: PEQUENO, para: GRANDE, duracao: ritmo[0] },
+      { nome: 'Segure', de: GRANDE, para: GRANDE, duracao: ritmo[1] },
+      { nome: 'Solte', de: GRANDE, para: PEQUENO, duracao: ritmo[2] },
+      { nome: 'Segure', de: PEQUENO, para: PEQUENO, duracao: ritmo[3] },
+    ].filter((f) => f.duracao > 0);
+
+    const dizer = (texto) => {
+      if (!instrucao) return;
+      instrucao.style.opacity = '0';
+      setTimeout(() => { instrucao.textContent = texto; instrucao.style.opacity = '1'; }, 220);
+    };
+
+    const animar = (el, quadros, opcoes) => {
+      if (!el || !el.animate) return;
+      animacoes.push(el.animate(quadros, Object.assign({ fill: 'forwards' }, opcoes)));
+    };
+
+    function fase(indice) {
+      if (!rodando) return;
+      const lista = fases();
+      if (indice >= lista.length) {
+        if (ciclo >= CICLOS) { concluir(); return; }
+        ciclo += 1;
+        indice = 0;
+        comecarCiclo();
+      }
+      const f = lista[indice];
+      const ms = f.duracao * 1000;
+      dizer(f.nome);
+      const curva = 'cubic-bezier(.45,0,.55,1)';
+      if (movimentoReduzido) {
+        animar(nucleo, [{ opacity: f.de === PEQUENO ? 0.55 : 1 }, { opacity: f.para === PEQUENO ? 0.55 : 1 }], { duration: ms, easing: curva });
+      } else {
+        animar(nucleo, [{ transform: `scale(${f.de})` }, { transform: `scale(${f.para})` }], { duration: ms, easing: curva });
+        aneis.forEach((anel, i) => {
+          const de = 1 + (f.de - PEQUENO) * (0.16 - i * 0.04);
+          const para = 1 + (f.para - PEQUENO) * (0.16 - i * 0.04);
+          animar(anel, [{ transform: `scale(${de})` }, { transform: `scale(${para})` }], { duration: ms, easing: curva, delay: i * 90 });
+        });
+      }
+      relogio = setTimeout(() => fase(indice + 1), ms);
+    }
+
+    function comecarCiclo() {
+      const total = fases().reduce((s, f) => s + f.duracao, 0) * 1000;
+      animar(barra, [{ strokeDashoffset: CIRCUNFERENCIA }, { strokeDashoffset: 0 }], { duration: total, easing: 'linear' });
+      if (ciclosTexto) ciclosTexto.textContent = `Ciclo ${ciclo} de ${CICLOS}`;
+    }
+
+    function limpar() {
+      clearTimeout(relogio);
+      animacoes.forEach((a) => { try { a.cancel(); } catch (e) { /* já acabou */ } });
+      animacoes = [];
+    }
+
+    function iniciar() {
+      limpar();
+      rodando = true;
+      ciclo = 1;
+      if (secao) secao.classList.add('respirando');
+      if (rotulo) rotulo.textContent = 'Parar';
+      comecarCiclo();
+      fase(0);
+    }
+
+    function parar(textoDoFim) {
+      limpar();
+      rodando = false;
+      if (secao) secao.classList.remove('respirando');
+      if (rotulo) rotulo.textContent = 'Começar';
+      if (ciclosTexto) ciclosTexto.textContent = textoInicial;
+      dizer(textoDoFim || 'Respire');
+    }
+
+    function concluir() {
+      parar('Muito bem');
+      if (ciclosTexto) ciclosTexto.textContent = 'Você completou 5 ciclos. Como se sente agora?';
+      if (rotulo) rotulo.textContent = 'Respirar de novo';
+    }
+
+    if (botao) botao.addEventListener('click', () => (rodando ? parar() : iniciar()));
+    botoesDeRitmo.forEach((b) => {
+      b.addEventListener('click', () => {
+        botoesDeRitmo.forEach((outro) => outro.setAttribute('aria-pressed', String(outro === b)));
+        ritmo = b.dataset.ritmo.split(',').map(Number);
+        if (rodando) iniciar();
+      });
+    });
+  }
+})();
+
+  </script>
+</body>
+</html>
+

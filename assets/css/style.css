@@ -1,0 +1,1052 @@
+/* ============================================================================================
+   Lira Gomes Psicologia · Neuropsicologia
+   Sistema visual baseado no Design System v2 e no Manual da Marca oficial Lira Gomes.
+   Paleta oficial:
+   - Verde profundo:   #263324
+   - Verde oliva:      #59614B
+   - Dourado areia:    #C8AE7D
+   - Off-white quente: #F5F3ED
+   - Grafite suave:    #343631
+   ============================================================================================ */
+
+:root {
+  /* Paleta Oficial Lira Gomes */
+  --verde-profundo: #263324;
+  --verde-oliva: #59614B;
+  --dourado-areia: #C8AE7D;
+  --off-white: #F5F3ED;
+  --grafite-suave: #343631;
+
+  /* Mapeamento semântico de tokens do Design System */
+  --marfim: #F5F3ED;
+  --areia: #EAE6DC;
+  --areia-2: #DDD7C8;
+  --papel: #FAF9F5;
+  --creme: #F5F3ED;
+  --tinta: #263324;
+  --tinta-2: #343631;
+  --tinta-3: #59614B;
+  --linha: rgba(38, 51, 36, 0.12);
+  --linha-forte: rgba(38, 51, 36, 0.24);
+  --linha-clara: rgba(245, 243, 237, 0.24);
+  --floresta: #263324;
+  --floresta-2: #32422F;
+  --floresta-3: #1B251A;
+  --salvia: #59614B;
+  --salvia-clara: #DCE0D6;
+  --ouro: #C8AE7D;
+  --ouro-escuro: #B39660;
+
+  /* Geometria, movimento e layout */
+  --raio: 28px;
+  --suave: cubic-bezier(.22, 1, .36, 1);
+  --suave-2: cubic-bezier(.65, 0, .35, 1);
+  --topo: 88px;
+}
+
+/* ── Base ─────────────────────────────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--topo);
+  background: var(--marfim);
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--marfim);
+  color: var(--tinta-2);
+  font-family: "Instrument Sans", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+body.travado {
+  overflow: hidden;
+}
+
+/* Textura discreta de papel fosco (conforme Design System e Manual da Marca) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  transform: translateZ(0);
+}
+
+img, video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+p {
+  margin: 0 0 1.1em;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+main {
+  overflow-x: clip;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-family: "Fraunces", "Lora", Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 50;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: var(--tinta);
+}
+
+em {
+  font-style: italic;
+}
+
+svg[viewBox="0 0 24 24"] {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+::selection {
+  background: var(--verde-profundo);
+  color: var(--off-white);
+}
+
+:focus-visible {
+  outline: 2px solid var(--dourado-areia);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1360px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 4.2vw, 64px);
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pular {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  z-index: 200;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: var(--verde-profundo);
+  color: var(--off-white);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform 0.3s var(--suave);
+}
+
+.pular:focus {
+  transform: none;
+}
+
+/* ── Botões (Design System) ───────────────────────────────────────────────────────────────── */
+
+.botao {
+  --fundo: var(--verde-profundo);
+  --cor: var(--off-white);
+  --fundo-ativo: var(--floresta-2);
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 10px 28px;
+  border: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--fundo);
+  color: var(--cor);
+  font-size: 15.5px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.6s var(--suave), box-shadow 0.5s var(--suave), color 0.4s, background-color 0.4s;
+}
+
+.botao::before {
+  content: "";
+  position: absolute;
+  left: -15%;
+  right: -15%;
+  top: 100%;
+  height: 230%;
+  z-index: -1;
+  border-radius: 50%;
+  background: var(--fundo-ativo);
+  transition: top 0.7s var(--suave);
+}
+
+.botao:hover::before,
+.botao:focus-visible::before {
+  top: -60%;
+}
+
+.botao:has(.botao__icone) {
+  padding-right: 9px;
+}
+
+.botao__icone {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--cor);
+  color: var(--fundo);
+  overflow: hidden;
+  transition: background-color 0.4s, color 0.4s;
+}
+
+.botao__icone svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.6s var(--suave);
+}
+
+.botao:hover .botao__icone svg {
+  transform: translateX(2px) rotate(-25deg);
+}
+
+/* Variações de botão alinhadas à paleta Lira Gomes */
+.botao--primario {
+  --fundo: var(--off-white);
+  --cor: var(--verde-profundo);
+  --fundo-ativo: #FFFFFF;
+  box-shadow: 0 16px 36px -18px rgba(14, 22, 14, 0.55);
+}
+
+.botao--primario .botao__icone {
+  background: var(--verde-profundo);
+  color: var(--dourado-areia);
+}
+
+.botao--floresta {
+  --fundo: var(--verde-profundo);
+  --cor: var(--off-white);
+  --fundo-ativo: var(--verde-oliva);
+}
+
+.botao--floresta .botao__icone {
+  background: rgba(200, 174, 125, 0.18);
+  color: var(--dourado-areia);
+}
+
+.botao--claro-contorno {
+  --fundo: rgba(38, 51, 36, 0.38);
+  --cor: var(--off-white);
+  --fundo-ativo: rgba(245, 243, 237, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(245, 243, 237, 0.42);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.botao--pequeno {
+  min-height: 46px;
+  padding: 8px 22px;
+  font-size: 14.5px;
+}
+
+.botao--pequeno:has(.botao__icone) {
+  padding-right: 7px;
+}
+
+.botao--pequeno .botao__icone {
+  width: 34px;
+  height: 34px;
+}
+
+/* ── Topo / Cabeçalho de Navegação ────────────────────────────────────────────────────────── */
+
+.topo {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  background: rgba(245, 243, 237, 0.94);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  backdrop-filter: blur(16px) saturate(1.2);
+  border-bottom: 1px solid var(--linha);
+  transition: background-color 0.4s var(--suave), box-shadow 0.4s var(--suave);
+}
+
+.topo.rolou {
+  background: rgba(245, 243, 237, 0.98);
+  box-shadow: 0 8px 28px -18px rgba(38, 51, 36, 0.22);
+}
+
+.topo__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: var(--topo);
+  transition: height 0.4s var(--suave);
+}
+
+/* Marca oficial — preserva rigorosamente proporção 1365:768, cores e espaçamentos */
+.marca {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+.marca:focus-visible {
+  outline: 2px solid var(--verde-profundo);
+  outline-offset: 4px;
+}
+
+.marca__logo {
+  display: block;
+  width: auto;
+  height: 66px;
+  object-fit: contain;
+}
+
+/* Menu Desktop */
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline: auto;
+}
+
+.menu a {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--tinta-2);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.3s, background-color 0.3s;
+}
+
+.menu a:hover {
+  color: var(--verde-profundo);
+  background: rgba(38, 51, 36, 0.06);
+}
+
+.menu a:focus-visible {
+  outline: 2px solid var(--verde-profundo);
+  outline-offset: 2px;
+}
+
+.menu a[aria-current="page"],
+.menu a.atual {
+  color: var(--verde-profundo);
+  font-weight: 600;
+}
+
+.menu a[aria-current="page"]::after,
+.menu a.atual::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 4px;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: var(--dourado-areia);
+}
+
+.topo__acoes {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+/* Botão Hambúrguer (Mobile / Tablet) */
+.menu-botao {
+  display: none;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--verde-profundo);
+  color: var(--off-white);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.menu-botao:focus-visible {
+  outline: 2px solid var(--verde-profundo);
+  outline-offset: 3px;
+}
+
+.menu-botao__linhas {
+  pointer-events: none;
+}
+
+.menu-botao span {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  height: 1.5px;
+  background: var(--off-white);
+  transition: transform 0.45s var(--suave), top 0.45s var(--suave);
+}
+
+.menu-botao span:first-child {
+  top: 19px;
+}
+
+.menu-botao span:last-child {
+  top: 27px;
+}
+
+.menu-aberto .menu-botao span:first-child {
+  top: 23px;
+  transform: rotate(45deg);
+}
+
+.menu-aberto .menu-botao span:last-child {
+  top: 23px;
+  transform: rotate(-45deg);
+}
+
+/* Gaveta de Navegação Mobile */
+.menu-movel {
+  position: fixed;
+  inset: var(--topo) 0 0 0;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(28px, 5vh, 48px) clamp(20px, 6vw, 48px) 36px;
+  background: var(--off-white);
+  border-top: 1px solid var(--linha);
+  overflow-y: auto;
+  clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  transition: clip-path 0.65s var(--suave-2), visibility 0s 0.65s;
+}
+
+.menu-aberto .menu-movel {
+  clip-path: inset(0);
+  visibility: visible;
+  transition: clip-path 0.65s var(--suave-2);
+}
+
+.menu-movel__lista {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-movel__lista a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--linha);
+  color: var(--verde-profundo);
+  font-family: "Fraunces", "Lora", Georgia, serif;
+  font-size: clamp(24px, 6.2vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.45s var(--suave), transform 0.55s var(--suave), color 0.3s;
+}
+
+.menu-movel__lista a:hover,
+.menu-movel__lista a:focus-visible {
+  color: var(--verde-oliva);
+}
+
+.menu-movel__lista a span {
+  font-family: "Instrument Sans", "Manrope", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--verde-oliva);
+}
+
+.menu-aberto .menu-movel__lista a {
+  opacity: 1;
+  transform: none;
+}
+
+.menu-aberto .menu-movel__lista a:nth-child(1) { transition-delay: 0.12s; }
+.menu-aberto .menu-movel__lista a:nth-child(2) { transition-delay: 0.17s; }
+.menu-aberto .menu-movel__lista a:nth-child(3) { transition-delay: 0.22s; }
+.menu-aberto .menu-movel__lista a:nth-child(4) { transition-delay: 0.27s; }
+.menu-aberto .menu-movel__lista a:nth-child(5) { transition-delay: 0.32s; }
+
+.menu-movel__rodape {
+  display: grid;
+  gap: 14px;
+  padding-top: 24px;
+}
+
+.menu-movel__rodape .botao {
+  width: 100%;
+}
+
+.menu-movel__nota {
+  margin: 0;
+  color: var(--verde-oliva);
+  font-size: 13.5px;
+  text-align: center;
+}
+
+/* ── Hero (Primeira Dobra com Vídeo em Tela Cheia) ────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-top: calc(var(--topo) + clamp(36px, 5.5vh, 72px));
+  padding-bottom: clamp(48px, 7vh, 88px);
+  background-color: var(--verde-profundo);
+  color: var(--off-white);
+  overflow: clip;
+}
+
+/* Container de fundo do vídeo — preenche 100% da área visual da hero */
+.hero__midia {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  background-color: var(--verde-profundo);
+}
+
+/* O vídeo ocupa toda a largura e altura da hero com object-fit: cover.
+   Nenhuma animação CSS é aplicada ao vídeo para preservar o movimento original do arquivo. */
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Ponto focal ajustado para manter Thais (x≈64%) e Lucas (x≈86%) visíveis à direita */
+  object-position: 80% 28%;
+}
+
+/* Camada de sobreposição discreta e compatível com a marca:
+   garante contraste elevado para o texto à esquerda sem esconder Lucas e Thais à direita */
+.hero__sobreposicao {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    rgba(38, 51, 36, 0.92) 0%,
+    rgba(38, 51, 36, 0.86) 22%,
+    rgba(38, 51, 36, 0.68) 40%,
+    rgba(38, 51, 36, 0.34) 56%,
+    rgba(38, 51, 36, 0.08) 70%,
+    rgba(38, 51, 36, 0) 82%
+  );
+  pointer-events: none;
+}
+
+/* Elemento orgânico sutil inspirado nas linhas circulares do símbolo da marca */
+.hero__ornamento {
+  position: absolute;
+  left: -120px;
+  bottom: -160px;
+  z-index: -1;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  border: 1px solid rgba(200, 174, 125, 0.16);
+  pointer-events: none;
+}
+
+.hero__container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.hero__conteudo {
+  max-width: 650px;
+}
+
+/* Texto de apoio pequeno (Eyebrow) */
+.hero__apoio {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dourado-areia);
+}
+
+.hero__apoio::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  flex-shrink: 0;
+  background: var(--dourado-areia);
+}
+
+/* H1 Único da Hero */
+.hero__titulo {
+  margin: 0 0 24px;
+  color: var(--off-white);
+  font-size: clamp(2.25rem, 4.3vw, 4.1rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.028em;
+  text-wrap: balance;
+}
+
+/* Parágrafo principal */
+.hero__paragrafo {
+  max-width: 34em;
+  margin: 0 0 34px;
+  color: rgba(245, 243, 237, 0.92);
+  font-size: clamp(17px, 1.3vw, 19.5px);
+  line-height: 1.62;
+}
+
+/* CTAs da Hero */
+.hero__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+/* Texto complementar */
+.hero__complementar {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid rgba(200, 174, 125, 0.28);
+  color: rgba(245, 243, 237, 0.84);
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.hero__complementar::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--dourado-areia);
+}
+
+/* ── Animação Sincronizada da Hero (Entrada da esquerda para a direita) ───────────────────── */
+
+/* Quando o JS está ativo, o bloco textual parte levemente da esquerda (-36px) e surge
+   em sincronia com a entrada de Thais e Lucas no vídeo. */
+.js .hero__bloco-texto,
+.js .hero__bloco-acoes {
+  opacity: 0;
+  transform: translate3d(-36px, 0, 0);
+  will-change: transform, opacity;
+}
+
+.js.hero-pronta .hero__bloco-texto {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 0.95s var(--suave),
+    transform 1.1s var(--suave);
+}
+
+.js.hero-pronta .hero__bloco-acoes {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 0.95s var(--suave) 0.14s,
+    transform 1.1s var(--suave) 0.14s;
+}
+
+/* ── Modal / Escolha Clara de Contato pelo WhatsApp (Lucas ou Thais) ──────────────────────── */
+
+.modal-whatsapp {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 20px;
+  border: 0;
+  background: rgba(27, 37, 26, 0.68);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--tinta-2);
+}
+
+.modal-whatsapp:not([open]) {
+  display: none;
+}
+
+.modal-whatsapp__caixa {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  padding: clamp(24px, 4vw, 36px);
+  border-radius: 24px;
+  background: var(--off-white);
+  box-shadow: 0 28px 64px -24px rgba(15, 23, 14, 0.55), inset 0 0 0 1px var(--linha);
+}
+
+.modal-whatsapp__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.modal-whatsapp__olho {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--verde-oliva);
+}
+
+.modal-whatsapp__titulo {
+  font-size: clamp(1.45rem, 2.6vw, 1.85rem);
+  line-height: 1.15;
+  color: var(--verde-profundo);
+}
+
+.modal-whatsapp__fechar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid var(--linha);
+  border-radius: 50%;
+  background: var(--papel);
+  color: var(--verde-profundo);
+  cursor: pointer;
+  transition: background-color 0.25s, transform 0.25s;
+}
+
+.modal-whatsapp__fechar:hover {
+  background: var(--areia);
+}
+
+.modal-whatsapp__fechar svg {
+  width: 18px;
+  height: 18px;
+}
+
+.modal-whatsapp__descricao {
+  margin: 0 0 22px;
+  color: var(--tinta-2);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.modal-whatsapp__opcoes {
+  display: grid;
+  gap: 12px;
+}
+
+.opcao-profissional {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: var(--papel);
+  box-shadow: inset 0 0 0 1px var(--linha);
+  text-decoration: none;
+  transition: transform 0.35s var(--suave), box-shadow 0.35s var(--suave), background-color 0.3s;
+}
+
+.opcao-profissional:hover,
+.opcao-profissional:focus-visible {
+  background: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: inset 0 0 0 1.5px var(--verde-profundo), 0 14px 28px -18px rgba(38, 51, 36, 0.35);
+}
+
+.opcao-profissional__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.opcao-profissional__nome {
+  font-family: "Fraunces", "Lora", Georgia, serif;
+  font-size: 18.5px;
+  font-weight: 500;
+  color: var(--verde-profundo);
+}
+
+.opcao-profissional__crp {
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--verde-oliva);
+}
+
+.opcao-profissional__atuacao {
+  margin-top: 4px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--tinta-2);
+}
+
+.opcao-profissional__numero {
+  margin-top: 4px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--verde-profundo);
+}
+
+.opcao-profissional__seta {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--verde-profundo);
+  color: var(--dourado-areia);
+}
+
+.opcao-profissional__seta svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ── Responsividade (Tablet e Mobile) ─────────────────────────────────────────────────────── */
+
+@media (max-width: 1120px) {
+  .menu a {
+    padding: 9px 11px;
+    font-size: 14px;
+  }
+  .hero__video {
+    object-position: 82% 26%;
+  }
+}
+
+@media (max-width: 980px) {
+  :root {
+    --topo: 78px;
+  }
+
+  .menu,
+  .topo__cta {
+    display: none;
+  }
+
+  .menu-botao {
+    display: inline-block;
+  }
+
+  .marca__logo {
+    height: 56px;
+  }
+
+  .hero {
+    align-items: flex-end;
+    min-height: 100svh;
+    padding-top: calc(var(--topo) + clamp(240px, 44vw, 340px));
+    padding-bottom: 44px;
+    background-color: var(--floresta-3);
+  }
+
+  /* Em tablets e celulares, posicionamos o vídeo no topo da hero ocupando 100% da largura
+     com object-fit: cover e ponto focal em 92% 18%, garantindo que a faixa horizontal
+     de 48% a 98% do vídeo (onde estão Thais e Lucas lado a lado) fique 100% visível sem cortes,
+     fundindo-se suavemente ao fundo verde profundo onde o texto é exibido. */
+  .hero__video {
+    position: absolute;
+    top: var(--topo);
+    left: 0;
+    width: 100%;
+    height: clamp(320px, 58vw, 520px);
+    object-fit: cover;
+    object-position: 92% 18%;
+  }
+
+  .hero__sobreposicao {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(27, 37, 26, 0.10) 0%,
+        rgba(27, 37, 26, 0.08) calc(var(--topo) + 18vw),
+        rgba(27, 37, 26, 0.72) calc(var(--topo) + 40vw),
+        var(--floresta-3) calc(var(--topo) + 55vw),
+        var(--floresta-3) 100%
+      );
+  }
+
+  .hero__conteudo {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --topo: 72px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .marca__logo {
+    height: 50px;
+  }
+
+  .hero {
+    min-height: 100svh;
+    padding-top: calc(var(--topo) + clamp(210px, 56vw, 290px));
+    padding-bottom: 36px;
+  }
+
+  .hero__video {
+    top: var(--topo);
+    height: clamp(250px, 68vw, 360px);
+    object-position: 94% 16%;
+  }
+
+  .hero__sobreposicao {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(27, 37, 26, 0.06) 0%,
+        rgba(27, 37, 26, 0.08) calc(var(--topo) + 28vw),
+        rgba(27, 37, 26, 0.78) calc(var(--topo) + 52vw),
+        var(--floresta-3) calc(var(--topo) + 65vw),
+        var(--floresta-3) 100%
+      );
+  }
+
+  .hero__apoio {
+    margin-bottom: 12px;
+    font-size: 11.5px;
+    letter-spacing: 0.09em;
+  }
+
+  .hero__apoio::before {
+    width: 18px;
+  }
+
+  .hero__titulo {
+    margin-bottom: 14px;
+    font-size: clamp(1.75rem, 7.2vw, 2.25rem);
+    line-height: 1.1;
+  }
+
+  .hero__paragrafo {
+    margin-bottom: 22px;
+    font-size: 15.5px;
+    line-height: 1.55;
+  }
+
+  .hero__acoes {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .hero__acoes .botao {
+    width: 100%;
+    min-height: 52px;
+  }
+
+  .hero__complementar {
+    padding-top: 12px;
+    font-size: 13px;
+  }
+
+  .opcao-profissional {
+    padding: 15px 16px;
+  }
+}
+
+/* ── Preferência de Movimento Reduzido (Acessibilidade) ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .js .hero__bloco-texto,
+  .js .hero__bloco-acoes {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
