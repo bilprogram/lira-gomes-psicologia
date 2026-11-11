@@ -338,6 +338,49 @@
       </div>
     </section>
 
+    <!-- ═══════════════════════════════ RESPIRE COMIGO (EXERCÍCIO INTERATIVO) ═══════════════════════════════ -->
+    <section class="respiro" id="respiro" data-tema="escuro" aria-labelledby="movimento-titulo">
+      <div class="respiro__brilho" aria-hidden="true"></div>
+      <div class="container respiro__grade">
+        <div class="respiro__texto">
+          <p class="olho olho--claro" data-revela>05 · Motion &amp; Interaction</p>
+          <h2 class="respiro__titulo" id="movimento-titulo" data-revela>
+            Respire comigo por <em>um minuto.</em>
+          </h2>
+          <p data-revela>
+            Todo o movimento do sistema nasce de duas curvas: <code>--suave: cubic-bezier(.22, 1, .36, 1)</code> para entradas, revelações e botões, e <code>--suave-2: cubic-bezier(.65, 0, .35, 1)</code> para máscaras e ciclos de respiração. Teste o exercício interativo ao lado:
+          </p>
+          <div class="ritmos" role="group" aria-label="Ritmo da respiração" data-revela>
+            <button class="ritmo" type="button" aria-pressed="true" data-ritmo="4,2,6,0">Calma <span>4 · 2 · 6</span></button>
+            <button class="ritmo" type="button" aria-pressed="false" data-ritmo="4,4,4,4">Quadrada <span>4 · 4 · 4 · 4</span></button>
+          </div>
+          <div class="respiro__acoes" data-revela>
+            <button class="botao botao--claro" type="button" data-respiro-iniciar>
+              <span class="respiro__icone-play" aria-hidden="true"></span>
+              <span data-respiro-rotulo>Começar</span>
+            </button>
+            <p class="respiro__ciclos" data-respiro-ciclos>5 ciclos · cerca de 1 minuto</p>
+          </div>
+          <p class="respiro__nota" data-revela>
+            Respeita integralmente <code>prefers-reduced-motion: reduce</code>, trocando escalas por opacidade suave e desativando paralaxe e Lenis.
+          </p>
+        </div>
+        <div class="respiro__palco" data-revela="escala">
+          <div class="orbe" data-orbe>
+            <svg class="orbe__progresso" viewBox="0 0 200 200" aria-hidden="true">
+              <circle cx="100" cy="100" r="96"/>
+              <circle class="orbe__progresso-barra" cx="100" cy="100" r="96" data-orbe-progresso/>
+            </svg>
+            <span class="orbe__anel orbe__anel--3" aria-hidden="true"></span>
+            <span class="orbe__anel orbe__anel--2" aria-hidden="true"></span>
+            <span class="orbe__anel orbe__anel--1" aria-hidden="true"></span>
+            <span class="orbe__nucleo" aria-hidden="true"></span>
+            <p class="orbe__instrucao" aria-live="polite" data-orbe-instrucao>Respire</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ═══════════════════════════════ QUARTA DOBRA (LOCALIZAÇÃO) ═══════════════════════════════
          O id "contato" fica aqui enquanto a página de contato não existe (destino configurável em main.js). -->
     <section class="local" id="contato" aria-labelledby="local-titulo">

@@ -340,5 +340,151 @@
 
     observados.forEach((_, observado) => observador.observe(observado));
   }
+
+  /* ── 6. Exercício de Respiração Interativo (Respire Comigo) ─────────────────────────── */
+
+  const orbe = document.querySelector('[data-orbe]');
+  if (orbe) {
+    const secao = orbe.closest('.respiro');
+    const nucleo = orbe.querySelector('.orbe__nucleo');
+    const aneis = orbe.querySelectorAll('.orbe__anel');
+    const instrucao = orbe.querySelector('[data-orbe-instrucao]');
+    const barra = orbe.querySelector('[data-orbe-progresso]');
+    const botao = document.querySelector('[data-respiro-iniciar]');
+    const rotulo = document.querySelector('[data-respiro-rotulo]');
+    const ciclosTexto = document.querySelector('[data-respiro-ciclos]');
+    const botoesDeRitmo = document.querySelectorAll('[data-ritmo]');
+    const CICLOS = 5;
+    const CIRCUNFERENCIA = 603.2;
+    const PEQUENO = 0.74;
+    const GRANDE = 1.06;
+    const textoInicial = ciclosTexto ? ciclosTexto.textContent : '5 ciclos · cerca de 1 minuto';
+    let ritmo = [4, 2, 6, 0];
+    let rodando = false;
+    let ciclo = 0;
+    let relogio = 0;
+    let animacoes = [];
+
+    const fases = () => [
+      { nome: 'Inspire', de: PEQUENO, para: GRANDE, duracao: ritmo[0] },
+      { nome: 'Segure', de: GRANDE, para: GRANDE, duracao: ritmo[1] },
+      { nome: 'Solte', de: GRANDE, para: PEQUENO, duracao: ritmo[2] },
+      { nome: 'Segure', de: PEQUENO, para: PEQUENO, duracao: ritmo[3] }
+    ].filter((f) => f.duracao > 0);
+
+    const dizer = (texto) => {
+      if (!instrucao) return;
+      instrucao.style.opacity = '0';
+      setTimeout(() => {
+        instrucao.textContent = texto;
+        instrucao.style.opacity = '1';
+      }, 220);
+    };
+
+    const animar = (el, quadros, opcoes) => {
+      if (!el || typeof el.animate !== 'function') return;
+      animacoes.push(el.animate(quadros, Object.assign({ fill: 'forwards' }, opcoes)));
+    };
+
+    function fase(indice) {
+      if (!rodando) return;
+      const lista = fases();
+      if (indice >= lista.length) {
+        if (ciclo >= CICLOS) {
+          concluir();
+          return;
+        }
+        ciclo += 1;
+        indice = 0;
+        comecarCiclo();
+      }
+      const f = lista[indice];
+      const ms = f.duracao * 1000;
+      dizer(f.nome);
+      const curva = 'cubic-bezier(.45, 0, .55, 1)';
+      if (movimentoReduzido) {
+        animar(
+          nucleo,
+          [{ opacity: f.de === PEQUENO ? 0.55 : 1 }, { opacity: f.para === PEQUENO ? 0.55 : 1 }],
+          { duration: ms, easing: curva }
+        );
+      } else {
+        animar(
+          nucleo,
+          [{ transform: `scale(${f.de})` }, { transform: `scale(${f.para})` }],
+          { duration: ms, easing: curva }
+        );
+        aneis.forEach((anel, i) => {
+          const de = 1 + (f.de - PEQUENO) * (0.16 - i * 0.04);
+          const para = 1 + (f.para - PEQUENO) * (0.16 - i * 0.04);
+          animar(
+            anel,
+            [{ transform: `scale(${de})` }, { transform: `scale(${para})` }],
+            { duration: ms, easing: curva, delay: i * 90 }
+          );
+        });
+      }
+      relogio = setTimeout(() => fase(indice + 1), ms);
+    }
+
+    function comecarCiclo() {
+      const total = fases().reduce((s, f) => s + f.duracao, 0) * 1000;
+      animar(
+        barra,
+        [{ strokeDashoffset: CIRCUNFERENCIA }, { strokeDashoffset: 0 }],
+        { duration: total, easing: 'linear' }
+      );
+      if (ciclosTexto) ciclosTexto.textContent = `Ciclo ${ciclo} de ${CICLOS}`;
+    }
+
+    function limpar() {
+      clearTimeout(relogio);
+      animacoes.forEach((a) => {
+        try {
+          a.cancel();
+        } catch (_) {
+          /* ignora se já finalizou */
+        }
+      });
+      animacoes = [];
+    }
+
+    function iniciar() {
+      limpar();
+      rodando = true;
+      ciclo = 1;
+      if (secao) secao.classList.add('respirando');
+      if (rotulo) rotulo.textContent = 'Parar';
+      comecarCiclo();
+      fase(0);
+    }
+
+    function parar(textoDoFim) {
+      limpar();
+      rodando = false;
+      if (secao) secao.classList.remove('respirando');
+      if (rotulo) rotulo.textContent = 'Começar';
+      if (ciclosTexto) ciclosTexto.textContent = textoInicial;
+      dizer(textoDoFim || 'Respire');
+    }
+
+    function concluir() {
+      parar('Muito bem');
+      if (ciclosTexto) ciclosTexto.textContent = 'Você completou 5 ciclos. Como se sente agora?';
+      if (rotulo) rotulo.textContent = 'Respirar de novo';
+    }
+
+    if (botao) {
+      botao.addEventListener('click', () => (rodando ? parar() : iniciar()));
+    }
+
+    botoesDeRitmo.forEach((b) => {
+      b.addEventListener('click', () => {
+        botoesDeRitmo.forEach((outro) => outro.setAttribute('aria-pressed', String(outro === b)));
+        ritmo = b.dataset.ritmo.split(',').map(Number);
+        if (rodando) iniciar();
+      });
+    });
+  }
 })();
 
