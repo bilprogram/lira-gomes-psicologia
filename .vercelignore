@@ -1,0 +1,19 @@
+# Exclusão de deploy para Vercel — Lira Gomes Psicologia e Neuropsicologia
+# Impede a publicação de backups, mídias pesadas não utilizadas e documentos internos
+
+# 1. Pastas e arquivos de backup e originais brutos (~30 MB)
+_backup-originais/
+_backup-originais/**
+
+# 2. Documentação interna, questionários estratégicos e manuais de marca
+assets/direcao/
+assets/direcao/**
+*.docx
+*.pdf
+
+# 3. Arquivos de sistema do macOS
+.DS_Store
+**/.DS_Store
+
+# 4. Living design system interno de desenvolvimento (não faz parte da navegação do paciente)
+design-system.html
