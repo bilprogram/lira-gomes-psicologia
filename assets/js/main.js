@@ -229,5 +229,83 @@
       }
     }
   });
+
+  /* ── 5. Perguntas Frequentes (Acordeão Acessível) ────────────────────────────────────────── */
+
+  const perguntasFaq = document.querySelectorAll('[data-perguntas] details');
+
+  function atualizarAriaExpanded(det) {
+    const gatilho = det.querySelector('summary');
+    if (gatilho) {
+      gatilho.setAttribute('aria-expanded', String(det.open));
+    }
+  }
+
+  function fecharPergunta(det) {
+    const resposta = det.querySelector('.pergunta__resposta');
+    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
+      det.open = false;
+      atualizarAriaExpanded(det);
+      return;
+    }
+    det.dataset.animando = '1';
+    const anim = resposta.animate(
+      [
+        { height: `${resposta.scrollHeight}px`, opacity: 1 },
+        { height: '0px', opacity: 0 }
+      ],
+      { duration: 380, easing: 'cubic-bezier(.65, 0, .35, 1)' }
+    );
+    anim.onfinish = anim.oncancel = () => {
+      det.open = false;
+      atualizarAriaExpanded(det);
+      delete det.dataset.animando;
+    };
+  }
+
+  function abrirPergunta(det) {
+    perguntasFaq.forEach((outra) => {
+      if (outra !== det && outra.open) {
+        fecharPergunta(outra);
+      }
+    });
+
+    det.open = true;
+    atualizarAriaExpanded(det);
+
+    const resposta = det.querySelector('.pergunta__resposta');
+    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
+      return;
+    }
+
+    det.dataset.animando = '1';
+    const altura = resposta.scrollHeight;
+    const anim = resposta.animate(
+      [
+        { height: '0px', opacity: 0 },
+        { height: `${altura}px`, opacity: 1 }
+      ],
+      { duration: 460, easing: 'cubic-bezier(.22, 1, .36, 1)' }
+    );
+    anim.onfinish = anim.oncancel = () => {
+      delete det.dataset.animando;
+    };
+  }
+
+  perguntasFaq.forEach((det) => {
+    atualizarAriaExpanded(det);
+    const gatilho = det.querySelector('summary');
+    if (!gatilho) return;
+
+    gatilho.addEventListener('click', (evento) => {
+      evento.preventDefault();
+      if (det.dataset.animando) return;
+      if (det.open) {
+        fecharPergunta(det);
+      } else {
+        abrirPergunta(det);
+      }
+    });
+  });
 })();
 

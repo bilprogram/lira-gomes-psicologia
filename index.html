@@ -324,8 +324,132 @@
       </div>
     </section>
 
-    <!-- Âncoras semânticas configuráveis para as seções ainda não implementadas -->
-    <div id="contato" hidden></div>
+    <!-- ═══════════════════════════════ QUARTA DOBRA (LOCALIZAÇÃO) ═══════════════════════════════
+         O id "contato" fica aqui enquanto a página de contato não existe (destino configurável em main.js). -->
+    <section class="local" id="contato" aria-labelledby="local-titulo">
+      <div class="container local__grade">
+        <div class="local__texto">
+          <p class="olho">Localização</p>
+          <h2 class="local__titulo" id="local-titulo">Atendimento na Vila Andrade, em São Paulo</h2>
+          <p class="local__apoio">
+            O espaço de atendimento fica na R. Dep. João Sussumu Hirata, 940, conjunto 14, sala 1, Vila Andrade. A atuação presencial prioriza pessoas da Vila Andrade, Morumbi, Panamby, Jardim Sul, Vila Sônia, Butantã e regiões próximas.
+          </p>
+          <!-- Destino configurável em CONFIG_LIRA_GOMES.rotas.contato (main.js) -->
+          <a class="botao botao--floresta" href="#contato" data-rota="contato">
+            <span>Ver endereço e informações de acesso</span>
+            <span class="botao__icone" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </div>
+        <figure class="local__foto">
+          <img
+            src="assets/marca/img/otimizadas/fachada-predio.webp"
+            alt="Fachada do edifício na Vila Andrade, com torre de vidro e tijolos claros e jardim com palmeiras na entrada"
+            width="900"
+            height="1205"
+            loading="lazy"
+            decoding="async"
+          >
+        </figure>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════ QUINTA DOBRA (DÚVIDAS FREQUENTES / FAQ) ═══════════════════════════════ -->
+    <section class="duvidas" id="duvidas" aria-labelledby="duvidas-titulo">
+      <div class="container duvidas__grade">
+        <div class="duvidas__lado">
+          <p class="olho">Dúvidas frequentes</p>
+          <h2 class="duvidas__titulo" id="duvidas-titulo">
+            Informações importantes antes de agendar
+          </h2>
+
+          <!-- CTA discreto de fechamento direcionando para a escolha transparente entre Lucas e Thais -->
+          <div class="duvidas__cta">
+            <p class="duvidas__cta-texto">Ficou com alguma dúvida sobre o atendimento?</p>
+            <button
+              type="button"
+              class="botao botao--floresta"
+              data-abrir-whatsapp
+              aria-haspopup="dialog"
+              aria-controls="escolha-whatsapp"
+            >
+              <span>Fale pelo WhatsApp</span>
+              <span class="botao__icone" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="perguntas" data-perguntas>
+          <!-- Pergunta 1 -->
+          <details class="pergunta">
+            <summary class="pergunta__gatilho" id="faq-pergunta-1" aria-controls="faq-resposta-1">
+              <span class="pergunta__titulo">Vocês atendem por convênio?</span>
+              <span class="pergunta__sinal" aria-hidden="true"></span>
+            </summary>
+            <div class="pergunta__resposta" id="faq-resposta-1" role="region" aria-labelledby="faq-pergunta-1">
+              <p>
+                Os atendimentos são particulares. Emitimos nota fiscal para que você possa solicitar reembolso junto ao seu plano de saúde, conforme as condições e regras estabelecidas pela operadora. Recomendamos consultar previamente o convênio para verificar a cobertura e as condições de reembolso.
+              </p>
+            </div>
+          </details>
+
+          <!-- Pergunta 2 -->
+          <details class="pergunta">
+            <summary class="pergunta__gatilho" id="faq-pergunta-2" aria-controls="faq-resposta-2">
+              <span class="pergunta__titulo">Como funciona o agendamento?</span>
+              <span class="pergunta__sinal" aria-hidden="true"></span>
+            </summary>
+            <div class="pergunta__resposta" id="faq-resposta-2" role="region" aria-labelledby="faq-pergunta-2">
+              <p>
+                Os atendimentos são realizados mediante agendamento prévio. Para consultar a disponibilidade e obter informações sobre os serviços, entre em contato conosco pelo WhatsApp.
+              </p>
+            </div>
+          </details>
+
+          <!-- Pergunta 3 -->
+          <details class="pergunta">
+            <summary class="pergunta__gatilho" id="faq-pergunta-3" aria-controls="faq-resposta-3">
+              <span class="pergunta__titulo">Vocês oferecem atendimento presencial e online?</span>
+              <span class="pergunta__sinal" aria-hidden="true"></span>
+            </summary>
+            <div class="pergunta__resposta" id="faq-resposta-3" role="region" aria-labelledby="faq-pergunta-3">
+              <p>
+                Oferecemos psicoterapia nas modalidades presencial e online, conforme a disponibilidade de cada profissional. A avaliação neuropsicológica é realizada presencialmente.
+              </p>
+            </div>
+          </details>
+
+          <!-- Pergunta 4 -->
+          <details class="pergunta">
+            <summary class="pergunta__gatilho" id="faq-pergunta-4" aria-controls="faq-resposta-4">
+              <span class="pergunta__titulo">Quais serviços vocês oferecem?</span>
+              <span class="pergunta__sinal" aria-hidden="true"></span>
+            </summary>
+            <div class="pergunta__resposta" id="faq-resposta-4" role="region" aria-labelledby="faq-pergunta-4">
+              <p>
+                Oferecemos psicoterapia e avaliação neuropsicológica, de acordo com a atuação de cada profissional. Entre em contato para saber qual serviço é mais adequado à sua necessidade.
+              </p>
+            </div>
+          </details>
+
+          <!-- Pergunta 5 -->
+          <details class="pergunta">
+            <summary class="pergunta__gatilho" id="faq-pergunta-5" aria-controls="faq-resposta-5">
+              <span class="pergunta__titulo">Como saber qual profissional procurar?</span>
+              <span class="pergunta__sinal" aria-hidden="true"></span>
+            </summary>
+            <div class="pergunta__resposta" id="faq-resposta-5" role="region" aria-labelledby="faq-pergunta-5">
+              <p>
+                Você pode entrar em contato conosco para conhecer a atuação de Lucas e Thais e esclarecer suas dúvidas antes do agendamento. Cada profissional possui áreas de atuação específicas, e a indicação depende da sua demanda.
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
   </main>
 
   <!-- ═══════════════════ ESCOLHA DE PROFISSIONAL PARA CONTATO (WHATSAPP) ═══════════════════ -->
