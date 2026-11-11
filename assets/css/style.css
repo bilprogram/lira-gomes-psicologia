@@ -2248,7 +2248,7 @@ svg[viewBox="0 0 24 24"] {
   opacity: 1;
   transform: none;
   clip-path: inset(0 0 100% 0);
-  transition: clip-path 1.6s var(--suave-2);
+  transition: clip-path 0.85s var(--suave);
   transition-delay: var(--atraso, 0s);
 }
 

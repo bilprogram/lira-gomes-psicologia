@@ -321,7 +321,7 @@
   if ('IntersectionObserver' in window && reveladores.length && !movimentoReduzido) {
     document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
       grupo.querySelectorAll('[data-revela]').forEach((el, i) => {
-        el.style.setProperty('--atraso', `${Math.min(i * 0.08, 0.48)}s`);
+        el.style.setProperty('--atraso', `${Math.min(i * 0.05, 0.2)}s`);
       });
     });
 
@@ -342,7 +342,7 @@
         (observados.get(entrada.target) || []).forEach((el) => el.classList.add('visivel'));
         observador.unobserve(entrada.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
 
     observados.forEach((_, observado) => observador.observe(observado));
   }
