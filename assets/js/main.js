@@ -10,13 +10,13 @@
   /* ── 1. Configuração explícita de rotas e contatos (fácil de ajustar quando novas páginas entrarem) ── */
   const CONFIG_LIRA_GOMES = {
     rotas: {
-      inicio: '#inicio',
-      psicoterapia: '#psicoterapia',
-      avaliacaoNeuropsicologica: '#avaliacao-neuropsicologica',
-      profissionais: '#profissionais',
-      lucas: '#profissionais',
-      thais: '#profissionais',
-      contato: '#contato'
+      inicio: 'index.html#inicio',
+      psicoterapia: 'index.html#psicoterapia',
+      avaliacaoNeuropsicologica: 'index.html#avaliacao-neuropsicologica',
+      profissionais: 'index.html#profissionais',
+      lucas: 'lucas.html',
+      thais: 'thais.html',
+      contato: 'index.html#contato'
     },
     contatosWhatsapp: {
       lucas: {
