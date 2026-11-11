@@ -106,13 +106,24 @@
     setTimeout(liberarEntradaHero, 220);
 
     // Garante tentativa de reprodução silenciosa conforme políticas dos navegadores
+    videoHero.defaultMuted = true;
     videoHero.muted = true;
-    const promessaPlay = videoHero.play();
-    if (promessaPlay && typeof promessaPlay.catch === 'function') {
-      promessaPlay.catch(() => {
-        liberarEntradaHero();
-      });
-    }
+    videoHero.playsInline = true;
+
+    const tentarReproduzir = () => {
+      if (movimentoReduzido || !videoHero.paused || videoHero.ended) return;
+      videoHero.muted = true;
+      const promessaPlay = videoHero.play();
+      if (promessaPlay && typeof promessaPlay.catch === 'function') {
+        promessaPlay.catch(() => {
+          liberarEntradaHero();
+        });
+      }
+    };
+
+    tentarReproduzir();
+    videoHero.addEventListener('loadeddata', tentarReproduzir, { once: true });
+    videoHero.addEventListener('canplay', tentarReproduzir, { once: true });
   }
 
   configurarVideoEAnimacaoHero();
