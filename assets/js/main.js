@@ -179,7 +179,11 @@
   }
 
   window.addEventListener('scroll', atualizarEstadoRolagem, { passive: true });
-  atualizarEstadoRolagem();
+  if (window.requestAnimationFrame) {
+    window.requestAnimationFrame(atualizarEstadoRolagem);
+  } else {
+    atualizarEstadoRolagem();
+  }
 
   /* ── 4. Escolha Clara de Profissional para Contato pelo WhatsApp ────────────────────────── */
 
