@@ -173,17 +173,90 @@
     }, { passive: true });
   }
 
+  /* ── Controle de Rolagem do Topo (Estado 2, Estado 3 e Scroll Spy) ─────────────────── */
+
+  let ultimoScrollY = window.scrollY || 0;
+  let rolagemPendente = false;
+  const SELETORES_SECOES = ['#inicio', '#psicoterapia', '#avaliacao-neuropsicologica', '#profissionais', '#contato'];
+  const secoesNav = SELETORES_SECOES.map((sel) => document.querySelector(sel)).filter(Boolean);
+  const linksMenu = document.querySelectorAll('.menu a, .menu-movel__lista a');
+
   function atualizarEstadoRolagem() {
+    rolagemPendente = false;
     if (!topo) return;
-    topo.classList.toggle('rolou', window.scrollY > 16);
+
+    const scrollYAtual = Math.max(window.scrollY || 0, 0);
+    const diferencaScroll = scrollYAtual - ultimoScrollY;
+
+    // Estado 2: scrollY maior que 80px aplica a classe 'rolou'
+    const rolou = scrollYAtual > 80;
+    topo.classList.toggle('rolou', rolou);
+
+    // Estado 3: Smart Hide / Reveal
+    // Nunca esconde se: menu aberto, foco no nav, dentro da primeira dobra, ou movimento reduzido
+    const menuAberto = corpo.classList.contains('menu-aberto');
+    const focoNoTopo = topo.contains(document.activeElement);
+    const alturaHero = Math.max(window.innerHeight * 0.75, 450);
+
+    if (movimentoReduzido || menuAberto || focoNoTopo || scrollYAtual <= alturaHero) {
+      topo.classList.remove('escondido');
+    } else if (diferencaScroll > 6 && scrollYAtual > alturaHero) {
+      // Rolando para baixo: esconde
+      topo.classList.add('escondido');
+    } else if (diferencaScroll < -6) {
+      // Rolando para cima: reaparece com a mesma transição
+      topo.classList.remove('escondido');
+    }
+
+    ultimoScrollY = scrollYAtual;
+
+    // Atualização do item ativo conforme a seção visível (Scroll Spy)
+    if (secoesNav.length && linksMenu.length) {
+      const topoOffset = rolou ? 80 : 106;
+      let secaoAtiva = null;
+
+      for (let i = secoesNav.length - 1; i >= 0; i--) {
+        const sec = secoesNav[i];
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= topoOffset + 40) {
+          secaoAtiva = sec.id;
+          break;
+        }
+      }
+
+      if (!secaoAtiva && secoesNav[0]) {
+        secaoAtiva = secoesNav[0].id;
+      }
+
+      if (secaoAtiva) {
+        linksMenu.forEach((link) => {
+          const href = link.getAttribute('href') || '';
+          const match = href === `#${secaoAtiva}` || href.endsWith(`#${secaoAtiva}`);
+          if (match) {
+            link.setAttribute('aria-current', 'page');
+            link.classList.add('atual');
+          } else {
+            link.removeAttribute('aria-current');
+            link.classList.remove('atual');
+          }
+        });
+      }
+    }
   }
 
-  window.addEventListener('scroll', atualizarEstadoRolagem, { passive: true });
-  if (window.requestAnimationFrame) {
-    window.requestAnimationFrame(atualizarEstadoRolagem);
-  } else {
-    atualizarEstadoRolagem();
+  function dispararAtualizacaoScroll() {
+    if (!rolagemPendente) {
+      rolagemPendente = true;
+      if (window.requestAnimationFrame) {
+        window.requestAnimationFrame(atualizarEstadoRolagem);
+      } else {
+        setTimeout(atualizarEstadoRolagem, 16);
+      }
+    }
   }
+
+  window.addEventListener('scroll', dispararAtualizacaoScroll, { passive: true });
+  dispararAtualizacaoScroll();
 
   /* ── 4. Escolha Clara de Profissional para Contato pelo WhatsApp ────────────────────────── */
 

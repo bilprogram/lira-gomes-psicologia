@@ -303,22 +303,49 @@ svg[viewBox="0 0 24 24"] {
   height: 34px;
 }
 
-/* ── Topo / Cabeçalho de Navegação ────────────────────────────────────────────────────────── */
+/* ── Topo / Cabeçalho de Navegação Premium ────────────────────────────────────────── */
 
 .topo {
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
-  background: rgba(245, 243, 237, 0.94);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  backdrop-filter: blur(16px) saturate(1.2);
-  border-bottom: 1px solid var(--linha);
-  transition: background-color 0.4s var(--suave), box-shadow 0.4s var(--suave);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  transform: translateY(0);
+  transition:
+    background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, background-color, box-shadow;
 }
 
+/* Estado 2: Após rolagem (scrollY > 80px) */
 .topo.rolou {
-  background: rgba(245, 243, 237, 0.98);
-  box-shadow: 0 8px 28px -18px rgba(38, 51, 36, 0.22);
+  background: rgba(27, 37, 26, 0.62);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid rgba(200, 174, 125, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Fallback para navegadores sem suporte a backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(20px)) or (backdrop-filter: blur(20px))) {
+  .topo.rolou {
+    background: rgba(27, 37, 26, 0.94);
+  }
+}
+
+/* Estado 3: Esconder ao rolar para baixo após a primeira dobra */
+.topo.escondido:not(:focus-within) {
+  transform: translateY(-100%);
+}
+
+/* Nunca esconder se o menu estiver aberto ou foco do teclado dentro */
+body.menu-aberto .topo,
+.topo:focus-within {
+  transform: translateY(0) !important;
 }
 
 .topo__barra {
@@ -326,11 +353,15 @@ svg[viewBox="0 0 24 24"] {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  height: var(--topo);
-  transition: height 0.4s var(--suave);
+  height: 96px;
+  transition: height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Marca oficial — preserva rigorosamente proporção 1365:768, cores e espaçamentos */
+.topo.rolou .topo__barra {
+  height: 70px;
+}
+
+/* Marca oficial — logo responsiva e proporcional */
 .marca {
   display: inline-flex;
   align-items: center;
@@ -340,15 +371,20 @@ svg[viewBox="0 0 24 24"] {
 }
 
 .marca:focus-visible {
-  outline: 2px solid var(--verde-profundo);
+  outline: 2px solid var(--dourado-areia);
   outline-offset: 4px;
 }
 
 .marca__logo {
   display: block;
   width: auto;
-  height: 66px;
+  height: 64px;
   object-fit: contain;
+  transition: height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.topo.rolou .marca__logo {
+  height: 48px;
 }
 
 /* Menu Desktop */
@@ -361,30 +397,33 @@ svg[viewBox="0 0 24 24"] {
 
 .menu a {
   position: relative;
-  padding: 10px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
-  color: var(--tinta-2);
-  font-size: 15px;
-  font-weight: 500;
+  color: rgba(245, 243, 237, 0.85);
+  font-size: 14.5px;
+  font-weight: 450;
+  letter-spacing: 0.01em;
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.3s, background-color 0.3s;
+  transition: color 0.3s ease, background-color 0.3s ease, opacity 0.3s ease;
 }
 
 .menu a:hover {
-  color: var(--verde-profundo);
-  background: rgba(38, 51, 36, 0.06);
+  color: #FFFFFF;
+  background: rgba(245, 243, 237, 0.08);
+  opacity: 1;
 }
 
 .menu a:focus-visible {
-  outline: 2px solid var(--verde-profundo);
+  outline: 2px solid var(--dourado-areia);
   outline-offset: 2px;
 }
 
 .menu a[aria-current="page"],
 .menu a.atual {
-  color: var(--verde-profundo);
-  font-weight: 600;
+  color: #FFFFFF;
+  font-weight: 500;
+  opacity: 1;
 }
 
 .menu a[aria-current="page"]::after,
@@ -398,6 +437,7 @@ svg[viewBox="0 0 24 24"] {
   margin-left: -2.5px;
   border-radius: 50%;
   background: var(--dourado-areia);
+  box-shadow: 0 0 8px rgba(200, 174, 125, 0.7);
 }
 
 .topo__acoes {
@@ -407,22 +447,58 @@ svg[viewBox="0 0 24 24"] {
   flex-shrink: 0;
 }
 
+/* Botão CTA no Topo */
+.topo__cta {
+  height: 46px;
+  min-height: 46px;
+  padding: 8px 24px;
+  border-radius: 999px;
+  background: transparent !important;
+  border: 1px solid rgba(200, 174, 125, 0.75) !important;
+  color: var(--off-white) !important;
+  font-size: 14.5px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  box-shadow: none !important;
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.topo__cta:hover {
+  background: var(--dourado-areia) !important;
+  color: var(--floresta-3, #1B251A) !important;
+  border-color: var(--dourado-areia) !important;
+  box-shadow: 0 4px 20px rgba(200, 174, 125, 0.3) !important;
+}
+
+.topo__cta:focus-visible {
+  outline: 2px solid var(--dourado-areia);
+  outline-offset: 3px;
+}
+
 /* Botão Hambúrguer (Mobile / Tablet) */
 .menu-botao {
   display: none;
   position: relative;
-  width: 48px;
-  height: 48px;
-  border: 0;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(200, 174, 125, 0.4);
   border-radius: 50%;
-  background: var(--verde-profundo);
+  background: rgba(27, 37, 26, 0.45);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   color: var(--off-white);
   cursor: pointer;
   flex-shrink: 0;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.menu-botao:hover {
+  background: rgba(27, 37, 26, 0.75);
+  border-color: var(--dourado-areia);
 }
 
 .menu-botao:focus-visible {
-  outline: 2px solid var(--verde-profundo);
+  outline: 2px solid var(--dourado-areia);
   outline-offset: 3px;
 }
 
@@ -432,52 +508,60 @@ svg[viewBox="0 0 24 24"] {
 
 .menu-botao span {
   position: absolute;
-  left: 14px;
-  right: 14px;
+  left: 12px;
+  right: 12px;
   height: 1.5px;
   background: var(--off-white);
   transition: transform 0.45s var(--suave), top 0.45s var(--suave);
 }
 
 .menu-botao span:first-child {
-  top: 19px;
+  top: 17px;
 }
 
 .menu-botao span:last-child {
-  top: 27px;
+  top: 25px;
 }
 
 .menu-aberto .menu-botao span:first-child {
-  top: 23px;
+  top: 21px;
   transform: rotate(45deg);
 }
 
 .menu-aberto .menu-botao span:last-child {
-  top: 23px;
+  top: 21px;
   transform: rotate(-45deg);
 }
 
-/* Gaveta de Navegação Mobile */
+/* Gaveta de Navegação Mobile Harmonizada */
 .menu-movel {
   position: fixed;
-  inset: var(--topo) 0 0 0;
+  inset: 64px 0 0 0;
   z-index: 45;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: clamp(28px, 5vh, 48px) clamp(20px, 6vw, 48px) 36px;
-  background: var(--off-white);
-  border-top: 1px solid var(--linha);
+  padding: clamp(24px, 4vh, 40px) clamp(20px, 6vw, 40px) 36px;
+  background: rgba(27, 37, 26, 0.78);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border-top: 1px solid rgba(200, 174, 125, 0.15);
   overflow-y: auto;
   clip-path: inset(0 0 100% 0);
   visibility: hidden;
-  transition: clip-path 0.65s var(--suave-2), visibility 0s 0.65s;
+  transition: clip-path 0.55s var(--suave-2), visibility 0s 0.55s;
+}
+
+@supports not ((-webkit-backdrop-filter: blur(20px)) or (backdrop-filter: blur(20px))) {
+  .menu-movel {
+    background: rgba(27, 37, 26, 0.96);
+  }
 }
 
 .menu-aberto .menu-movel {
   clip-path: inset(0);
   visibility: visible;
-  transition: clip-path 0.65s var(--suave-2);
+  transition: clip-path 0.55s var(--suave-2);
 }
 
 .menu-movel__lista {
@@ -490,13 +574,13 @@ svg[viewBox="0 0 24 24"] {
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px 0;
-  border-bottom: 1px solid var(--linha);
-  color: var(--verde-profundo);
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(200, 174, 125, 0.14);
+  color: var(--off-white);
   font-family: "Fraunces", "Lora", Georgia, serif;
-  font-size: clamp(24px, 6.2vw, 36px);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  font-size: clamp(22px, 5.8vw, 32px);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
   text-decoration: none;
   opacity: 0;
   transform: translateY(20px);
@@ -505,7 +589,7 @@ svg[viewBox="0 0 24 24"] {
 
 .menu-movel__lista a:hover,
 .menu-movel__lista a:focus-visible {
-  color: var(--verde-oliva);
+  color: var(--dourado-areia);
 }
 
 .menu-movel__lista a span {
@@ -513,7 +597,7 @@ svg[viewBox="0 0 24 24"] {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
-  color: var(--verde-oliva);
+  color: var(--dourado-areia);
 }
 
 .menu-aberto .menu-movel__lista a {
@@ -539,7 +623,7 @@ svg[viewBox="0 0 24 24"] {
 
 .menu-movel__nota {
   margin: 0;
-  color: var(--verde-oliva);
+  color: rgba(245, 243, 237, 0.65);
   font-size: 13.5px;
   text-align: center;
 }
@@ -585,15 +669,22 @@ svg[viewBox="0 0 24 24"] {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(
-    90deg,
-    rgba(27, 37, 26, 0.96) 0%,
-    rgba(27, 37, 26, 0.90) 24%,
-    rgba(27, 37, 26, 0.74) 44%,
-    rgba(27, 37, 26, 0.40) 62%,
-    rgba(27, 37, 26, 0.10) 76%,
-    rgba(27, 37, 26, 0) 90%
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(27, 37, 26, 0.55) 0%,
+      rgba(27, 37, 26, 0.20) 70px,
+      rgba(27, 37, 26, 0) 140px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(27, 37, 26, 0.96) 0%,
+      rgba(27, 37, 26, 0.90) 24%,
+      rgba(27, 37, 26, 0.74) 44%,
+      rgba(27, 37, 26, 0.40) 62%,
+      rgba(27, 37, 26, 0.10) 76%,
+      rgba(27, 37, 26, 0) 90%
+    );
   pointer-events: none;
 }
 
@@ -1882,9 +1973,25 @@ svg[viewBox="0 0 24 24"] {
   }
 }
 
-@media (max-width: 980px) {
+@media (max-width: 900px) {
   :root {
-    --topo: 78px;
+    --topo: 64px;
+  }
+
+  .topo__barra {
+    height: 64px;
+  }
+
+  .topo.rolou .topo__barra {
+    height: 64px;
+  }
+
+  .marca__logo {
+    height: 44px;
+  }
+
+  .topo.rolou .marca__logo {
+    height: 40px;
   }
 
   .menu,
@@ -1896,8 +2003,8 @@ svg[viewBox="0 0 24 24"] {
     display: inline-block;
   }
 
-  .marca__logo {
-    height: 56px;
+  .menu-movel {
+    inset: 64px 0 0 0;
   }
 
   .hero {
@@ -1926,7 +2033,8 @@ svg[viewBox="0 0 24 24"] {
     background:
       linear-gradient(
         180deg,
-        rgba(27, 37, 26, 0.10) 0%,
+        rgba(27, 37, 26, 0.45) 0%,
+        rgba(27, 37, 26, 0.15) 64px,
         rgba(27, 37, 26, 0.08) calc(var(--topo) + 18vw),
         rgba(27, 37, 26, 0.72) calc(var(--topo) + 40vw),
         var(--floresta-3) calc(var(--topo) + 55vw),
@@ -1958,7 +2066,7 @@ svg[viewBox="0 0 24 24"] {
 
 @media (max-width: 640px) {
   :root {
-    --topo: 72px;
+    --topo: 64px;
   }
 
   body {
@@ -1966,7 +2074,7 @@ svg[viewBox="0 0 24 24"] {
   }
 
   .marca__logo {
-    height: 50px;
+    height: 42px;
   }
 
   .hero {
@@ -1985,13 +2093,27 @@ svg[viewBox="0 0 24 24"] {
     background:
       linear-gradient(
         180deg,
-        rgba(27, 37, 26, 0.06) 0%,
+        rgba(27, 37, 26, 0.45) 0%,
+        rgba(27, 37, 26, 0.15) 64px,
         rgba(27, 37, 26, 0.08) calc(var(--topo) + 28vw),
         rgba(27, 37, 26, 0.78) calc(var(--topo) + 52vw),
         var(--floresta-3) calc(var(--topo) + 65vw),
         var(--floresta-3) 100%
       );
   }
+}
+
+@media (max-width: 600px) {
+  .topo.rolou {
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    backdrop-filter: blur(12px) saturate(130%);
+  }
+
+  .menu-movel {
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+    backdrop-filter: blur(12px) saturate(130%);
+  }
+}
 
   .hero__apoio {
     margin-bottom: 14px;
@@ -2650,6 +2772,11 @@ svg[viewBox="0 0 24 24"] {
     transition-duration: 0.001ms !important;
     transition-delay: 0s !important;
     scroll-behavior: auto !important;
+  }
+
+  .topo,
+  .topo.escondido:not(:focus-within) {
+    transform: none !important;
   }
 
   .revelar-ativo [data-revela] {
