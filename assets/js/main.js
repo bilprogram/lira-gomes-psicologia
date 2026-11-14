@@ -652,7 +652,7 @@
   function prepararTitulosSecaoLinhas() {
     if (movimentoReduzido) return;
     const titulos = document.querySelectorAll(
-      '.servicos__titulo[data-revela], .respiro__titulo[data-revela], .local__titulo[data-revela], .duvidas__titulo[data-revela], .servico-hero__nome[data-revela], .perfil-hero__nome[data-revela], .titulo-editorial[data-revela]'
+      'h1[data-revela]:not(.hero__titulo), h2[data-revela]:not(.modal-whatsapp__titulo), .titulo-editorial[data-revela], .servicos__titulo[data-revela], .respiro__titulo[data-revela], .local__titulo[data-revela], .duvidas__titulo[data-revela], .servico-hero__nome[data-revela], .perfil-hero__nome[data-revela]'
     );
 
     titulos.forEach((titulo) => {
@@ -720,7 +720,7 @@
         if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
 
         const isMobile = window.innerWidth <= 768;
-        const atrasoEntreLinhas = isMobile ? 70 : 120; // 120ms desktop, 70ms mobile
+        const atrasoEntreLinhas = isMobile ? 80 : 120; // 120ms desktop, 80ms mobile
 
         const htmlLinhas = linhas
           .map((linhaHtml, idx) => {
@@ -746,6 +746,12 @@
         titulo.setAttribute('data-revela-tipo', 'linhas');
         if (jaVisivel) {
           titulo.classList.add('visivel');
+          titulo.querySelectorAll('.revela-linha').forEach((linha) => {
+            linha.style.opacity = '1';
+            linha.style.filter = 'none';
+            linha.style.transform = 'none';
+            linha.style.willChange = 'auto';
+          });
         }
       } catch (err) {
         // Fallback de segurança: nada quebra, texto inteiro visível intacto
@@ -760,8 +766,14 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       prepararTitulosSecaoLinhas();
-    }, 200);
+    }, 150);
   }, { passive: true });
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => {
+      prepararTitulosSecaoLinhas();
+    });
+  }
 
   function inicializarReveals() {
     if (movimentoReduzido) {
@@ -779,12 +791,12 @@
     const reveladores = document.querySelectorAll('[data-revela]');
     if (!reveladores.length) return;
 
-    // Escalonamento entre irmãos de um mesmo grupo (90 a 130ms até 8 elementos; 40ms acima)
+    // Escalonamento entre irmãos de um mesmo grupo (80 a 120ms até 8 elementos; 40ms acima)
     document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
       const filhos = grupo.querySelectorAll(':scope > [data-revela], :scope > * > [data-revela]');
       const total = filhos.length;
       const isMobile = window.innerWidth <= 768;
-      const stagger = total > 8 ? 0.040 : (isMobile ? 0.070 : 0.110);
+      const stagger = total > 8 ? 0.040 : (isMobile ? 0.080 : 0.100);
       filhos.forEach((el, i) => {
         el.style.setProperty('--atraso', `${(i * stagger).toFixed(3)}s`);
       });
@@ -801,31 +813,46 @@
         if (imediato) {
           el.classList.remove('animando');
           el.style.setProperty('--atraso', '0s');
+          el.style.opacity = '1';
           el.style.filter = 'none';
+          el.style.transform = 'none';
           el.style.willChange = 'auto';
+          if (el.dataset.revelaTipo === 'linhas') {
+            el.querySelectorAll('.revela-linha').forEach((linha) => {
+              linha.style.opacity = '1';
+              linha.style.filter = 'none';
+              linha.style.transform = 'none';
+              linha.style.willChange = 'auto';
+            });
+          }
           return;
         }
+
+        const limpar = () => {
+          el.classList.remove('animando');
+          el.style.opacity = '1';
+          el.style.filter = 'none';
+          el.style.transform = 'none';
+          el.style.willChange = 'auto';
+          if (el.dataset.revelaTipo === 'linhas') {
+            el.querySelectorAll('.revela-linha').forEach((linha) => {
+              linha.style.opacity = '1';
+              linha.style.filter = 'none';
+              linha.style.transform = 'none';
+              linha.style.willChange = 'auto';
+            });
+          }
+          blurAtivos = Math.max(0, blurAtivos - 1);
+          el.removeEventListener('transitionend', limpar);
+        };
 
         if (blurAtivos < MAX_BLUR_SIMULTANEOS) {
           blurAtivos++;
           el.classList.add('animando');
-          const limpar = () => {
-            el.classList.remove('animando');
-            el.style.filter = 'none';
-            el.style.willChange = 'auto';
-            blurAtivos = Math.max(0, blurAtivos - 1);
-            el.removeEventListener('transitionend', limpar);
-          };
           el.addEventListener('transitionend', limpar, { once: true });
           setTimeout(limpar, 1400);
         } else {
           el.classList.add('sem-blur', 'animando');
-          const limpar = () => {
-            el.classList.remove('animando');
-            el.style.filter = 'none';
-            el.style.willChange = 'auto';
-            el.removeEventListener('transitionend', limpar);
-          };
           el.addEventListener('transitionend', limpar, { once: true });
           setTimeout(limpar, 1400);
         }

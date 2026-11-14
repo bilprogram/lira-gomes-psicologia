@@ -42,11 +42,11 @@
   --suave: cubic-bezier(.22, 1, .36, 1);
   --suave-2: cubic-bezier(.65, 0, .35, 1);
   --ease-hero: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-premium: cubic-bezier(.16, 1, .3, 1);
   --dur-fast: 300ms;
   --dur-base: 700ms;
-  --dur-reveal: 1100ms;
-  --dur-soft: 950ms;
+  --dur-reveal: 1000ms;
+  --dur-soft: 900ms;
   --blur-reveal: 14px;
   --topo: 88px;
   --z-topo: 100;
@@ -1979,7 +1979,7 @@ body.menu-aberto .topo {
 .ritmo span {
   margin-left: 6px;
   font-weight: 400;
-  opacity: 0.65;
+  color: rgba(245, 243, 237, 0.65);
 }
 
 .ritmo[aria-pressed="true"] {
@@ -2990,8 +2990,8 @@ body.menu-aberto .topo {
 /* O estado oculto SÓ tem efeito quando html possui a classe .js-ready e elemento NÃO possui .visivel */
 html.js-ready [data-revela]:not(.visivel):not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho):not(.profissional__id):not([data-revela="destaque"]) {
   opacity: 0;
-  transform: translate3d(0, 48px, 0);
-  filter: blur(min(var(--blur-reveal), 10px));
+  transform: translate3d(0, 28px, 0);
+  filter: blur(min(var(--blur-reveal), 8px));
   transition:
     opacity 800ms var(--ease-premium),
     transform var(--dur-soft) var(--ease-premium),
@@ -3000,7 +3000,7 @@ html.js-ready [data-revela]:not(.visivel):not([data-revela-tipo="linhas"]):not([
 }
 
 html.js-ready [data-revela="escala"]:not(.visivel) {
-  transform: scale(0.94) translate3d(0, 48px, 0);
+  transform: scale(0.94) translate3d(0, 28px, 0);
 }
 
 /* 1. Títulos de seção por linhas com máscara de revelação e blur reveal */
@@ -3019,7 +3019,7 @@ html.js-ready [data-revela-tipo="linhas"] {
 html.js-ready [data-revela-tipo="linhas"]:not(.visivel) .revela-linha {
   display: block;
   opacity: 0;
-  transform: translate3d(0, 110%, 0) rotateX(3deg) skewY(1deg) scale(1.02);
+  transform: translate3d(0, 100%, 0);
   transform-origin: bottom left;
   filter: blur(var(--blur-reveal));
   transition:
@@ -3031,7 +3031,7 @@ html.js-ready [data-revela-tipo="linhas"]:not(.visivel) .revela-linha {
 
 html.js-ready [data-revela-tipo="linhas"].visivel .revela-linha {
   opacity: 1 !important;
-  transform: translate3d(0, 0, 0) rotateX(0deg) skewY(0deg) scale(1) !important;
+  transform: translate3d(0, 0, 0) !important;
   filter: none !important;
 }
 
@@ -3148,12 +3148,12 @@ html.js-ready .linha-dourada[data-revela].visivel {
 
 /* 8. Destaque sutil de etapa numerada ativa ao rolar pelo centro */
 .lista-etapas-ativa li {
-  opacity: 0.50;
-  transition: opacity 400ms var(--ease-premium);
+  color: rgba(38, 51, 36, 0.60);
+  transition: color 400ms var(--ease-premium);
 }
 
 .lista-etapas-ativa li.etapa-ativa {
-  opacity: 1;
+  color: var(--tinta);
 }
 
 /* 9. Faixa de contato, blocos de ação e marquee com blur reveal */
@@ -3246,7 +3246,7 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   }
 
   html.js-ready [data-revela]:not(.visivel):not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho) {
-    transform: translate3d(0, 32px, 0);
+    transform: translate3d(0, 20px, 0);
     filter: blur(min(var(--blur-reveal), 8px));
     transition:
       opacity 640ms var(--ease-premium),
@@ -3255,13 +3255,13 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   }
 
   html.js-ready [data-revela-tipo="linhas"]:not(.visivel) .revela-linha {
-    transform: translate3d(0, 32px, 0) scale(1);
+    transform: translate3d(0, 100%, 0);
     transform-origin: bottom center;
     filter: blur(var(--blur-reveal));
     transition:
-      opacity 720ms var(--ease-premium),
-      transform 960ms var(--ease-premium),
-      filter 960ms var(--ease-premium);
+      opacity 750ms var(--ease-premium),
+      transform 900ms var(--ease-premium),
+      filter 900ms var(--ease-premium);
   }
 
   html.js-ready [data-revela="mascara"]:not(.visivel) {
