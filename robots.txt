@@ -4,6 +4,6 @@
 User-agent: *
 Allow: /
 
-# Sitemap canônico do domínio de produção
-Sitemap: https://liragomespsicologia.com.br/sitemap.xml
+# Sitemap canônico — TODO: domínio
+Sitemap: https://[TODO: domínio]/sitemap.xml
 
