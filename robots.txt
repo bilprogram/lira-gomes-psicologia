@@ -4,5 +4,6 @@
 User-agent: *
 Allow: /
 
-# A diretiva Sitemap deve ser configurada com a URL canônica definitiva assim que o domínio de produção for confirmado.
-# Exemplo: Sitemap: https://<dominio-confirmado>/sitemap.xml
+# Sitemap canônico do domínio de produção
+Sitemap: https://liragomespsicologia.com.br/sitemap.xml
+
