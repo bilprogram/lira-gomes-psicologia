@@ -264,11 +264,31 @@
   const botoesAbrirWhatsapp = document.querySelectorAll('[data-abrir-whatsapp]');
   const botaoFecharWhatsapp = document.querySelector('[data-fechar-whatsapp]');
   let ultimoElementoFocado = null;
+  let servicoAtivo = 'psicoterapia';
 
   const MENSAGENS_WHATSAPP = {
     psicoterapia: 'Olá, vim pelo site e gostaria de saber mais sobre a psicoterapia.',
     avaliacao: 'Olá, vim pelo site e gostaria de saber mais sobre a avaliação neuropsicológica.'
   };
+
+  function atualizarLinksWhatsapp(servico) {
+    if (!modalWhatsapp) return;
+    servicoAtivo = servico || servicoAtivo || 'psicoterapia';
+    const mensagem = MENSAGENS_WHATSAPP[servicoAtivo] || MENSAGENS_WHATSAPP.psicoterapia;
+    const encoded = encodeURIComponent(mensagem);
+
+    const linksProfissionais = modalWhatsapp.querySelectorAll('.opcao-profissional');
+    linksProfissionais.forEach((link) => {
+      const baseUrl = link.href.split('?')[0];
+      link.href = `${baseUrl}?text=${encoded}`;
+    });
+
+    const abas = modalWhatsapp.querySelectorAll('[data-aba-servico]');
+    abas.forEach((aba) => {
+      const eAtiva = aba.getAttribute('data-aba-servico') === servicoAtivo;
+      aba.setAttribute('aria-pressed', eAtiva ? 'true' : 'false');
+    });
+  }
 
   function abrirEscolhaWhatsapp(evento) {
     if (!modalWhatsapp) return;
@@ -277,13 +297,7 @@
 
     const gatilho = evento && evento.currentTarget ? evento.currentTarget : null;
     const servico = gatilho ? gatilho.getAttribute('data-servico') : null;
-    const mensagem = servico && MENSAGENS_WHATSAPP[servico] ? MENSAGENS_WHATSAPP[servico] : null;
-
-    const linksProfissionais = modalWhatsapp.querySelectorAll('.opcao-profissional');
-    linksProfissionais.forEach((link) => {
-      const baseUrl = link.href.split('?')[0];
-      link.href = mensagem ? `${baseUrl}?text=${encodeURIComponent(mensagem)}` : baseUrl;
-    });
+    atualizarLinksWhatsapp(servico || servicoAtivo);
 
     if (corpo.classList.contains('menu-aberto')) {
       alternarMenu(false);
@@ -313,6 +327,19 @@
 
   botoesAbrirWhatsapp.forEach((botao) => {
     botao.addEventListener('click', abrirEscolhaWhatsapp);
+  });
+
+  if (modalWhatsapp) {
+    modalWhatsapp.querySelectorAll('[data-aba-servico]').forEach((aba) => {
+      aba.addEventListener('click', () => {
+        const servico = aba.getAttribute('data-aba-servico');
+        atualizarLinksWhatsapp(servico);
+      });
+    });
+  }
+
+  // Inicializa os links do modal já configurados
+  atualizarLinksWhatsapp('psicoterapia');
   });
 
   if (botaoFecharWhatsapp) {

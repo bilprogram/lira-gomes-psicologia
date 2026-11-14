@@ -61,3 +61,4 @@ Favicons e Ícones Web:
    semânticas com proporção intrínseca adequada (`width="925" height="775"` para a
    versão horizontal) e classes CSS padronizadas (`.marca__logo`).
 ================================================================================
+

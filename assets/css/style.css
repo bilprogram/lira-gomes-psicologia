@@ -1008,6 +1008,51 @@ body.menu-aberto .topo,
   line-height: 1.55;
 }
 
+.modal-whatsapp__servicos {
+  margin-bottom: 18px;
+}
+
+.modal-whatsapp__servicos-rotulo {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--verde-oliva);
+}
+
+.modal-whatsapp__servicos-botoes {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.modal-whatsapp__tab-servico {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--linha);
+  background: var(--papel);
+  color: var(--verde-profundo);
+  cursor: pointer;
+  transition: all 0.25s var(--suave);
+}
+
+.modal-whatsapp__tab-servico:hover {
+  background: var(--areia);
+}
+
+.modal-whatsapp__tab-servico[aria-pressed="true"] {
+  background: var(--verde-profundo);
+  color: var(--off-white);
+  border-color: var(--verde-profundo);
+}
+
 .modal-whatsapp__opcoes {
   display: grid;
   gap: 12px;

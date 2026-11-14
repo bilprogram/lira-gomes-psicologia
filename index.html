@@ -95,7 +95,7 @@
           src="assets/logo-lira-gomes/logo-lira-gomes-dourada-sem-fundo.webp"
           srcset="assets/logo-lira-gomes/logo-lira-gomes-dourada-140.webp 140w, assets/logo-lira-gomes/logo-lira-gomes-dourada-sem-fundo.webp 925w"
           sizes="(max-width: 768px) 53px, 70px"
-          alt="Lira Gomes Psicologia • Neuropsicologia"
+          alt="Lira Gomes Psicologia e Neuropsicologia"
           width="925"
           height="775"
           decoding="async"
@@ -156,7 +156,7 @@
       >
         <span>Agendar pelo WhatsApp</span>
       </button>
-      <p class="menu-movel__nota">Psicologia • Neuropsicologia | Vila Andrade, São Paulo</p>
+      <p class="menu-movel__nota">Avaliação Neuropsicológica • Psicoterapia | Vila Andrade, São Paulo</p>
     </div>
   </div>
 
@@ -244,23 +244,33 @@
           var links = modal.querySelectorAll('.opcao-profissional');
           var baseUrls = Array.from(links).map(function (a) { return a.href.split('?')[0]; });
 
-          document.querySelectorAll('.hero [data-servico]').forEach(function (botao) {
+          function aplicar(servico) {
+            var msg = mensagens[servico] || mensagens.psicoterapia;
+            var encoded = encodeURIComponent(msg);
+            links.forEach(function (a, i) {
+              a.href = baseUrls[i] + '?text=' + encoded;
+            });
+            var abas = modal.querySelectorAll('[data-aba-servico]');
+            abas.forEach(function (aba) {
+              aba.setAttribute('aria-pressed', aba.getAttribute('data-aba-servico') === servico ? 'true' : 'false');
+            });
+          }
+
+          document.querySelectorAll('[data-servico]').forEach(function (botao) {
             botao.addEventListener('click', function () {
-              var servico = botao.getAttribute('data-servico');
-              var msg = mensagens[servico];
-              links.forEach(function (a, i) {
-                a.href = msg ? baseUrls[i] + '?text=' + encodeURIComponent(msg) : baseUrls[i];
-              });
+              var s = botao.getAttribute('data-servico');
+              aplicar(s);
             }, true);
           });
 
-          document.querySelectorAll('[data-abrir-whatsapp]:not(.hero [data-servico])').forEach(function (botao) {
-            botao.addEventListener('click', function () {
-              links.forEach(function (a, i) {
-                a.href = baseUrls[i];
-              });
-            }, true);
+          modal.querySelectorAll('[data-aba-servico]').forEach(function (aba) {
+            aba.addEventListener('click', function () {
+              var s = aba.getAttribute('data-aba-servico');
+              aplicar(s);
+            });
           });
+
+          aplicar('psicoterapia');
         })();
       </script>
     </section>
@@ -535,21 +545,49 @@
             Informações importantes antes de agendar
           </h2>
 
-          <!-- CTA discreto de fechamento direcionando para a escolha transparente entre Lucas e Thais -->
+          <!-- CTA direcionando para escolha por serviço e profissional -->
           <div class="duvidas__cta" data-revela>
-            <p class="duvidas__cta-texto">Ficou com alguma dúvida sobre o atendimento?</p>
-            <button
-              type="button"
-              class="botao botao--floresta"
-              data-abrir-whatsapp
-              aria-haspopup="dialog"
-              aria-controls="escolha-whatsapp"
-            >
-              <span>Fale pelo WhatsApp</span>
-              <span class="botao__icone" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </span>
-            </button>
+            <p class="duvidas__cta-texto">Ficou com alguma dúvida sobre o atendimento? Fale conosco pelo WhatsApp:</p>
+            <div class="duvidas__botoes-servico" style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button
+                type="button"
+                class="botao botao--floresta"
+                data-abrir-whatsapp
+                data-servico="psicoterapia"
+                aria-haspopup="dialog"
+                aria-controls="escolha-whatsapp"
+              >
+                <span>Psicoterapia</span>
+                <span class="botao__icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </button>
+              <button
+                type="button"
+                class="botao botao--floresta"
+                data-abrir-whatsapp
+                data-servico="avaliacao"
+                aria-haspopup="dialog"
+                aria-controls="escolha-whatsapp"
+              >
+                <span>Avaliação Neuropsicológica</span>
+                <span class="botao__icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </button>
+            </div>
+            <!-- TODO: ativar quando o perfil e o e-mail existirem
+            <div class="duvidas__sociais" style="margin-top: 1rem; display: flex; gap: 16px; flex-wrap: wrap;">
+              <a href="https://instagram.com/liragomespsicologia" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 8px; color: var(--floresta); font-size: 0.88rem;">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                <span>@liragomespsicologia</span>
+              </a>
+              <a href="mailto:contato@liragomes.com.br" style="display: inline-flex; align-items: center; gap: 8px; color: var(--floresta); font-size: 0.88rem;">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>contato@liragomes.com.br</span>
+              </a>
+            </div>
+            -->
           </div>
         </div>
 
@@ -636,7 +674,7 @@
               src="assets/logo-lira-gomes/logo-lira-gomes-dourada-sem-fundo.webp"
               srcset="assets/logo-lira-gomes/logo-lira-gomes-dourada-140.webp 140w, assets/logo-lira-gomes/logo-lira-gomes-dourada-sem-fundo.webp 925w"
               sizes="(max-width: 768px) 60px, 80px"
-              alt="Lira Gomes Psicologia • Neuropsicologia"
+              alt="Lira Gomes Psicologia e Neuropsicologia"
               width="925"
               height="775"
               loading="lazy"
@@ -766,7 +804,7 @@
       <!-- 5. Fechamento e créditos -->
       <div class="rodape__base">
         <p class="rodape__copyright">
-          © <span data-ano>2026</span> Lira Gomes Psicologia • Neuropsicologia. Atendimento profissional ético e individualizado.
+          © <span data-ano>2026</span> Lira Gomes Psicologia. Atendimento profissional ético e individualizado.
         </p>
         <a class="rodape__topo-link" href="#inicio" aria-label="Voltar ao início da página">
           <span>Voltar ao topo</span>
@@ -797,8 +835,20 @@
       </div>
 
       <p class="modal-whatsapp__descricao">
-        Escolha o profissional para iniciar uma conversa diretamente pelo WhatsApp:
+        Escolha o serviço e o profissional para iniciar uma conversa diretamente pelo WhatsApp:
       </p>
+
+      <div class="modal-whatsapp__servicos" role="group" aria-label="Escolha o serviço">
+        <span class="modal-whatsapp__servicos-rotulo">1. Serviço desejado:</span>
+        <div class="modal-whatsapp__servicos-botoes">
+          <button type="button" class="modal-whatsapp__tab-servico" data-aba-servico="psicoterapia" aria-pressed="true">
+            Psicoterapia
+          </button>
+          <button type="button" class="modal-whatsapp__tab-servico" data-aba-servico="avaliacao" aria-pressed="false">
+            Avaliação Neuropsicológica
+          </button>
+        </div>
+      </div>
 
       <div class="modal-whatsapp__opcoes">
         <a
