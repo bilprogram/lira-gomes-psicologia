@@ -53,10 +53,15 @@
   const consultaMovimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
   let movimentoReduzido = consultaMovimentoReduzido.matches;
 
-  /* ── 2. Sincronização da animação do texto da hero com o vídeo ──────────────────────────── */
+  /* ── 2. Controle de Reprodução e Desempenho do Vídeo da Hero ────────────────────────────── */
 
   const videoHero = document.getElementById('hero-video');
   let heroLiberada = false;
+  let videoVisivelNaTela = true;
+
+  // Detecção de conexão de dados reduzidos ou rede lenta
+  const conexaoRede = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const conexaoEconomica = Boolean(conexaoRede && (conexaoRede.saveData || conexaoRede.effectiveType === 'slow-2g' || conexaoRede.effectiveType === '2g'));
 
   function liberarEntradaHero() {
     if (heroLiberada) return;
@@ -64,20 +69,48 @@
     raiz.classList.add('hero-pronta');
   }
 
+  function pausarVideo() {
+    if (videoHero && !videoHero.paused) {
+      try {
+        videoHero.pause();
+      } catch (_) {}
+    }
+  }
+
+  function reproduzirVideo() {
+    if (!videoHero || movimentoReduzido || conexaoEconomica || document.hidden || !videoVisivelNaTela) return;
+    if (videoHero.paused) {
+      videoHero.muted = true;
+      const promessaPlay = videoHero.play();
+      if (promessaPlay && typeof promessaPlay.catch === 'function') {
+        promessaPlay.catch(() => {
+          liberarEntradaHero();
+        });
+      }
+    }
+  }
+
+  function gerenciarReproducaoVideo() {
+    if (!videoHero) return;
+    if (movimentoReduzido || conexaoEconomica || document.hidden || !videoVisivelNaTela) {
+      pausarVideo();
+    } else {
+      reproduzirVideo();
+    }
+  }
+
   function configurarVideoEAnimacaoHero() {
-    if (movimentoReduzido) {
+    if (movimentoReduzido || conexaoEconomica) {
       liberarEntradaHero();
       if (videoHero) {
-        videoHero.pause();
-        // Posiciona no quadro em que Thais e Lucas já estão visíveis e estáveis (4.5s)
+        pausarVideo();
+        // Em movimento reduzido ou economia de dados, exibe o quadro estável ou o poster
         const posicionarQuadroEstavel = () => {
           try {
             if (videoHero.duration > 4.5) {
               videoHero.currentTime = 4.5;
             }
-          } catch (_) {
-            /* Ignora se o stream ainda não permitir seek */
-          }
+          } catch (_) {}
         };
         if (videoHero.readyState >= 1) {
           posicionarQuadroEstavel();
@@ -93,7 +126,11 @@
       return;
     }
 
-    // Dispara a entrada do bloco textual da esquerda para a direita assim que o vídeo inicia
+    videoHero.defaultMuted = true;
+    videoHero.muted = true;
+    videoHero.playsInline = true;
+
+    // Dispara a entrada dos elementos textuais assim que o vídeo inicia
     videoHero.addEventListener('playing', liberarEntradaHero, { once: true });
     videoHero.addEventListener('timeupdate', function aoAtualizarTempo() {
       if (videoHero.currentTime > 0.02) {
@@ -105,25 +142,27 @@
     // Fallback curto (220ms) para nunca atrasar a leitura do H1 ou dos botões caso a rede demore
     setTimeout(liberarEntradaHero, 220);
 
-    // Garante tentativa de reprodução silenciosa conforme políticas dos navegadores
-    videoHero.defaultMuted = true;
-    videoHero.muted = true;
-    videoHero.playsInline = true;
+    videoHero.addEventListener('loadeddata', reproduzirVideo, { once: true });
+    videoHero.addEventListener('canplay', reproduzirVideo, { once: true });
 
-    const tentarReproduzir = () => {
-      if (movimentoReduzido || !videoHero.paused || videoHero.ended) return;
-      videoHero.muted = true;
-      const promessaPlay = videoHero.play();
-      if (promessaPlay && typeof promessaPlay.catch === 'function') {
-        promessaPlay.catch(() => {
-          liberarEntradaHero();
+    // IntersectionObserver exclusivo para pausar o vídeo fora da viewport e desocupar GPU/decodificador
+    if ('IntersectionObserver' in window) {
+      const observadorVideo = new IntersectionObserver((entradas) => {
+        entradas.forEach((entrada) => {
+          videoVisivelNaTela = entrada.isIntersecting && entrada.intersectionRatio > 0.05;
+          gerenciarReproducaoVideo();
         });
-      }
-    };
+      }, { threshold: [0, 0.05, 0.25] });
 
-    tentarReproduzir();
-    videoHero.addEventListener('loadeddata', tentarReproduzir, { once: true });
-    videoHero.addEventListener('canplay', tentarReproduzir, { once: true });
+      observadorVideo.observe(videoHero);
+    }
+
+    // Pausa imediata quando a aba estiver em segundo plano (visibilitychange)
+    document.addEventListener('visibilitychange', () => {
+      gerenciarReproducaoVideo();
+    });
+
+    reproduzirVideo();
   }
 
   configurarVideoEAnimacaoHero();
@@ -132,8 +171,10 @@
     movimentoReduzido = evento.matches;
     if (movimentoReduzido) {
       liberarEntradaHero();
-      if (videoHero) videoHero.pause();
+      pausarVideo();
       raiz.classList.remove('revelar-ativo');
+    } else {
+      gerenciarReproducaoVideo();
     }
   });
 
