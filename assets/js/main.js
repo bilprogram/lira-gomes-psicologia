@@ -656,51 +656,96 @@
 
   /* ── 5. Revelação ao Rolar (Scroll Animations & Choreography) ───────────────────────────── */
 
+  // Se hardware for modesto, reduz blur para evitar queda de performance
+  if (typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) {
+    raiz.style.setProperty('--blur-reveal', '4px');
+  }
+
   function prepararTitulosSecaoLinhas() {
     if (movimentoReduzido) return;
     const titulos = document.querySelectorAll(
-      '.servicos__titulo[data-revela], .respiro__titulo[data-revela], .local__titulo[data-revela], .duvidas__titulo[data-revela], .servico-hero__nome[data-revela], .perfil-hero__nome[data-revela]'
+      '.servicos__titulo[data-revela], .respiro__titulo[data-revela], .local__titulo[data-revela], .duvidas__titulo[data-revela], .servico-hero__nome[data-revela], .perfil-hero__nome[data-revela], .titulo-editorial[data-revela]'
     );
 
     titulos.forEach((titulo) => {
-      if (titulo.getAttribute('data-linhas-preparadas')) return;
-      const textoOriginal = titulo.textContent.trim().replace(/\s+/g, ' ');
+      // Salva HTML e texto originais se ainda não salvos
+      if (!titulo.dataset.htmlOriginal) {
+        titulo.dataset.htmlOriginal = titulo.innerHTML;
+        titulo.dataset.textoOriginal = titulo.textContent.trim().replace(/\s+/g, ' ');
+      }
+      const htmlOriginal = titulo.dataset.htmlOriginal;
+      const textoOriginal = titulo.dataset.textoOriginal;
       if (!textoOriginal) return;
 
-      const palavras = textoOriginal.split(' ');
-      titulo.innerHTML = palavras
-        .map((p) => `<span class="revela-palavra-temp" style="display:inline-block;">${p}&nbsp;</span>`)
-        .join('');
+      const jaVisivel = titulo.classList.contains('visivel');
+
+      // Clona temporariamente preservando tags (ex: <em>) e envolvendo palavras em spans
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlOriginal;
+
+      function wrapText(node) {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const parts = node.nodeValue.split(/(\s+)/);
+          const frag = document.createDocumentFragment();
+          parts.forEach((p) => {
+            if (!p) return;
+            if (/^\s+$/.test(p)) {
+              frag.appendChild(document.createTextNode(p));
+            } else {
+              const sp = document.createElement('span');
+              sp.className = 'revela-palavra-temp';
+              sp.style.display = 'inline-block';
+              sp.textContent = p;
+              frag.appendChild(sp);
+            }
+          });
+          node.parentNode.replaceChild(frag, node);
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+          Array.from(node.childNodes).forEach(wrapText);
+        }
+      }
+      wrapText(tempDiv);
+      titulo.innerHTML = tempDiv.innerHTML;
 
       const spans = titulo.querySelectorAll('.revela-palavra-temp');
+      if (!spans.length) {
+        titulo.innerHTML = htmlOriginal;
+        return;
+      }
+
       const linhas = [];
       let linhaAtual = [];
       let topAtual = null;
 
       spans.forEach((span) => {
         const top = Math.round(span.getBoundingClientRect().top);
-        if (topAtual === null || Math.abs(top - topAtual) <= 4) {
-          linhaAtual.push(span.textContent.trim());
+        if (topAtual === null || Math.abs(top - topAtual) <= 6) {
+          linhaAtual.push(span.outerHTML);
           topAtual = top;
         } else {
           if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
-          linhaAtual = [span.textContent.trim()];
+          linhaAtual = [span.outerHTML];
           topAtual = top;
         }
       });
       if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
 
       const isMobile = window.innerWidth <= 768;
-      const atrasoEntreLinhas = isMobile ? 60 : 80;
+      const atrasoEntreLinhas = isMobile ? 70 : 120; // 120ms desktop, 70ms mobile
 
       const htmlLinhas = linhas
-        .map(
-          (linha, idx) => `
+        .map((linhaHtml, idx) => {
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = linhaHtml;
+          wrapper.querySelectorAll('.revela-palavra-temp').forEach((sp) => {
+            sp.replaceWith(...sp.childNodes);
+          });
+          return `
           <span class="revela-linha-mascara">
-            <span class="revela-linha" style="--atraso-linha:${idx * atrasoEntreLinhas}ms;">${linha}</span>
+            <span class="revela-linha" aria-hidden="true" style="--atraso-linha:${idx * atrasoEntreLinhas}ms;">${wrapper.innerHTML}</span>
           </span>
-        `
-        )
+        `;
+        })
         .join('');
 
       titulo.innerHTML = `
@@ -709,8 +754,19 @@
       `;
       titulo.setAttribute('data-linhas-preparadas', 'true');
       titulo.setAttribute('data-revela-tipo', 'linhas');
+      if (jaVisivel) {
+        titulo.classList.add('visivel');
+      }
     });
   }
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      prepararTitulosSecaoLinhas();
+    }, 200);
+  }, { passive: true });
 
   function inicializarReveals() {
     if (movimentoReduzido) {
@@ -721,20 +777,20 @@
     // Sinaliza que JS está ativo e pronto para revelações
     raiz.classList.add('js-ready', 'revelar-ativo');
 
-    // Prepara títulos de seção com máscara por linha
+    // Prepara títulos de seção com máscara por linha após document.fonts.ready
     prepararTitulosSecaoLinhas();
 
     const reveladores = document.querySelectorAll('[data-revela]');
     if (!reveladores.length) return;
 
-    const isMobile = window.innerWidth <= 768;
-    const atrasoPasso = isMobile ? 0.06 : 0.08; // 60ms no mobile, 80ms no desktop
-
-    // Escalonamento entre irmãos de um mesmo grupo
+    // Escalonamento entre irmãos de um mesmo grupo (90 a 130ms até 8 elementos; 40ms acima)
     document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
       const filhos = grupo.querySelectorAll(':scope > [data-revela], :scope > * > [data-revela]');
+      const total = filhos.length;
+      const isMobile = window.innerWidth <= 768;
+      const stagger = total > 8 ? 0.040 : (isMobile ? 0.070 : 0.110);
       filhos.forEach((el, i) => {
-        el.style.setProperty('--atraso', `${(i * atrasoPasso).toFixed(3)}s`);
+        el.style.setProperty('--atraso', `${(i * stagger).toFixed(3)}s`);
       });
     });
 
@@ -762,25 +818,44 @@
       (observados.get(gatilho) || []).forEach((el) => {
         el.classList.add('visivel');
         el.style.setProperty('--atraso', '0s');
+        el.style.filter = 'none';
       });
       observados.delete(gatilho);
     });
 
     if (observados.size === 0) return;
 
-    // REQUISITO: IntersectionObserver único, threshold 0.15, rootMargin inferior de -10%, disparo único
+    // Limite de desempenho: máximo de 12 elementos com blur animando simultaneamente
+    let blurAtivos = 0;
+    const MAX_BLUR_SIMULTANEOS = 12;
+
+    // REQUISITO: IntersectionObserver único compartilhado, threshold 0.15, rootMargin inferior de -10%, disparo único
     const observador = new IntersectionObserver((entradas) => {
       entradas.forEach((entrada) => {
         if (!entrada.isIntersecting) return;
         const els = observados.get(entrada.target) || [];
         els.forEach((el) => {
-          el.classList.add('animando', 'visivel');
-          const limparAnimando = () => {
-            el.classList.remove('animando');
-            el.removeEventListener('transitionend', limparAnimando);
-          };
-          el.addEventListener('transitionend', limparAnimando, { once: true });
-          setTimeout(limparAnimando, 1200);
+          if (blurAtivos < MAX_BLUR_SIMULTANEOS) {
+            blurAtivos++;
+            el.classList.add('animando', 'visivel');
+            const limpar = () => {
+              el.classList.remove('animando');
+              el.style.filter = 'none';
+              blurAtivos = Math.max(0, blurAtivos - 1);
+              el.removeEventListener('transitionend', limpar);
+            };
+            el.addEventListener('transitionend', limpar, { once: true });
+            setTimeout(limpar, 1400);
+          } else {
+            // Mais de 12 blur simultâneos: entra sem blur (apenas fade e translateY)
+            el.classList.add('sem-blur', 'animando', 'visivel');
+            const limpar = () => {
+              el.classList.remove('animando');
+              el.removeEventListener('transitionend', limpar);
+            };
+            el.addEventListener('transitionend', limpar, { once: true });
+            setTimeout(limpar, 1400);
+          }
         });
         observador.unobserve(entrada.target);
         observados.delete(entrada.target);
@@ -800,15 +875,155 @@
       document.querySelectorAll('[data-revela]:not(.visivel)').forEach((el) => {
         el.classList.add('visivel');
         el.classList.remove('animando');
+        el.style.filter = 'none';
       });
       raiz.classList.add('revelar-concluido');
     }, 3000);
   }
 
+  /* ── 5.1 Parallax Suave nas Imagens das Seções (Desktop apenas) ────────── */
+  function inicializarParallaxImagens() {
+    if (movimentoReduzido || window.innerWidth <= 768) return;
+
+    const alvos = document.querySelectorAll(
+      '.servico__foto img, .profissional__foto img, .local__foto img, .servico-hero__foto img, .perfil-hero__foto img'
+    );
+    if (!alvos.length) return;
+
+    const itens = [];
+    function recalcularDimensoes() {
+      itens.length = 0;
+      alvos.forEach((img) => {
+        const container = img.closest('figure') || img.parentElement;
+        const rect = container.getBoundingClientRect();
+        itens.push({
+          img: img,
+          container: container,
+          top: rect.top + window.scrollY,
+          height: rect.height,
+          ativo: false
+        });
+      });
+    }
+    recalcularDimensoes();
+
+    let animando = false;
+    function atualizarParallax() {
+      animando = false;
+      const scrollY = window.scrollY;
+      const alturaJanela = window.innerHeight;
+      const centroJanela = scrollY + alturaJanela / 2;
+
+      itens.forEach((it) => {
+        if (!it.ativo) return;
+        const centroElemento = it.top + it.height / 2;
+        const dist = centroJanela - centroElemento;
+        const fator = Math.max(-1, Math.min(1, dist / (alturaJanela / 2)));
+        const deslocamentoMax = it.height * 0.06;
+        const translateY = -(fator * deslocamentoMax);
+        it.img.style.setProperty('--parallax-y', `${translateY.toFixed(1)}px`);
+      });
+    }
+
+    function onScroll() {
+      if (!animando) {
+        animando = true;
+        requestAnimationFrame(atualizarParallax);
+      }
+    }
+
+    const observadorParallax = new IntersectionObserver((entradas) => {
+      let mudanca = false;
+      entradas.forEach((entrada) => {
+        const item = itens.find((it) => it.container === entrada.target);
+        if (item) {
+          item.ativo = entrada.isIntersecting;
+          if (entrada.isIntersecting) mudanca = true;
+        }
+      });
+      if (mudanca) {
+        onScroll();
+      }
+    }, { threshold: 0, rootMargin: '60px 0px 60px 0px' });
+
+    itens.forEach((it) => observadorParallax.observe(it.container));
+    onScroll();
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth <= 768) {
+        itens.forEach((it) => it.img.style.removeProperty('--parallax-y'));
+        return;
+      }
+      recalcularDimensoes();
+      onScroll();
+    }, { passive: true });
+  }
+
+  /* ── 5.2 Destaque de Etapa Ativa ao Passar pelo Centro da Tela ─────────── */
+  function inicializarDestaqueEtapas() {
+    if (movimentoReduzido) return;
+    const listas = document.querySelectorAll('.servico-lista');
+    if (!listas.length) return;
+
+    const itens = [];
+    listas.forEach((lista) => {
+      const lis = lista.querySelectorAll('li');
+      let ehNumerada = false;
+      lis.forEach((li) => {
+        if (/\b\d+\.\s+/.test(li.textContent)) {
+          ehNumerada = true;
+        }
+      });
+      if (ehNumerada) {
+        lista.classList.add('lista-etapas-ativa');
+        lis.forEach((li) => itens.push(li));
+      }
+    });
+
+    if (!itens.length) return;
+
+    let animando = false;
+    function atualizarDestaque() {
+      animando = false;
+      const topoJanela = window.innerHeight * 0.25;
+      const fundoJanela = window.innerHeight * 0.75;
+
+      itens.forEach((li) => {
+        const rect = li.getBoundingClientRect();
+        const centro = rect.top + rect.height / 2;
+        if (centro >= topoJanela && centro <= fundoJanela) {
+          li.classList.add('etapa-ativa');
+        } else {
+          li.classList.remove('etapa-ativa');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!animando) {
+        animando = true;
+        requestAnimationFrame(atualizarDestaque);
+      }
+    }, { passive: true });
+
+    atualizarDestaque();
+  }
+
   if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(inicializarReveals).catch(inicializarReveals);
+    document.fonts.ready.then(() => {
+      inicializarReveals();
+      inicializarParallaxImagens();
+      inicializarDestaqueEtapas();
+    }).catch(() => {
+      inicializarReveals();
+      inicializarParallaxImagens();
+      inicializarDestaqueEtapas();
+    });
   } else {
     inicializarReveals();
+    inicializarParallaxImagens();
+    inicializarDestaqueEtapas();
   }
 
   /* ── 5.1 Pausa do Marquee fora da Viewport ────────────────────────────────────────────── */

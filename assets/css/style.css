@@ -41,9 +41,13 @@
   --raio: 28px;
   --suave: cubic-bezier(.22, 1, .36, 1);
   --suave-2: cubic-bezier(.65, 0, .35, 1);
-  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-hero: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
   --dur-fast: 300ms;
   --dur-base: 700ms;
+  --dur-reveal: 1200ms;
+  --dur-soft: 1000ms;
+  --blur-reveal: 14px;
   --topo: 88px;
   --z-topo: 100;
   --z-menu-movel: 95;
@@ -260,11 +264,12 @@ svg[viewBox="0 0 24 24"] {
 .botao__icone svg {
   width: 18px;
   height: 18px;
-  transition: transform 0.6s var(--suave);
+  transition: transform 400ms var(--ease-premium);
 }
 
-.botao:hover .botao__icone svg {
-  transform: translateX(3px) rotate(-30deg);
+.botao:hover .botao__icone svg,
+.botao:focus-visible .botao__icone svg {
+  transform: translateX(4px) rotate(-30deg);
 }
 
 /* Variações de botão alinhadas à paleta Lira Gomes */
@@ -686,6 +691,7 @@ body.menu-aberto .topo {
 /* ── Hero (Primeira Dobra com Vídeo em Tela Cheia) ────────────────────────────────────────── */
 
 .hero {
+  --ease-premium: var(--ease-hero);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -1455,13 +1461,13 @@ body.menu-aberto .topo {
   border-radius: var(--raio);
   background: var(--papel);
   box-shadow: inset 0 0 0 1px var(--linha);
-  transition: transform 0.7s var(--suave), box-shadow 0.6s var(--suave);
+  transition: transform 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
 }
 
 .formato:hover,
 .servico:hover {
-  transform: translateY(-6px);
-  box-shadow: inset 0 0 0 1px var(--linha), 0 34px 60px -40px rgba(38, 51, 36, 0.45);
+  transform: translateY(-4px);
+  box-shadow: inset 0 0 0 1px var(--linha), 0 24px 48px -24px rgba(38, 51, 36, 0.35);
 }
 
 .formato--destaque {
@@ -1578,6 +1584,7 @@ body.menu-aberto .topo {
 }
 
 .link-seta {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -1587,22 +1594,39 @@ body.menu-aberto .topo {
   font-size: 15.5px;
   color: var(--verde-profundo);
   text-decoration: none;
-  border-bottom: 1px solid var(--dourado-areia);
+  border-bottom: 1px solid rgba(200, 174, 125, 0.35);
   padding-bottom: 3px;
-  transition: color 0.4s var(--suave), border-color 0.4s var(--suave);
+  transition: color 400ms var(--ease-premium);
+}
+
+.link-seta::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--ouro);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 400ms var(--ease-premium);
+}
+
+.link-seta:hover::after,
+.link-seta:focus-visible::after {
+  transform: scaleX(1);
 }
 
 .link-seta:hover,
 .link-seta:focus-visible {
   color: var(--verde-oliva);
-  border-color: var(--verde-oliva);
 }
 
 .link-seta svg {
   flex-shrink: 0;
   width: 18px;
   height: 18px;
-  transition: transform 0.6s var(--suave);
+  transition: transform 400ms var(--ease-premium);
 }
 
 .link-seta:hover svg,
@@ -1730,12 +1754,12 @@ body.menu-aberto .topo {
   border-radius: var(--raio);
   background: var(--papel);
   box-shadow: inset 0 0 0 1px var(--linha);
-  transition: transform 0.8s var(--suave), box-shadow 0.8s var(--suave);
+  transition: transform 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
 }
 
 .profissional:hover {
-  transform: translateY(-6px);
-  box-shadow: inset 0 0 0 1px var(--linha), 0 34px 60px -40px rgba(38, 51, 36, 0.45);
+  transform: translateY(-4px);
+  box-shadow: inset 0 0 0 1px var(--linha), 0 24px 48px -24px rgba(38, 51, 36, 0.35);
 }
 
 .profissional__foto {
@@ -2718,6 +2742,13 @@ body.menu-aberto .topo {
   border-radius: var(--raio);
   background: var(--papel);
   box-shadow: inset 0 0 0 1px var(--linha);
+  transition: transform 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
+}
+
+.perfil-card:hover,
+.servico-card:hover {
+  transform: translateY(-4px);
+  box-shadow: inset 0 0 0 1px var(--linha), 0 24px 48px -24px rgba(38, 51, 36, 0.35);
 }
 
 .perfil-card--destaque,
@@ -2886,30 +2917,27 @@ body.menu-aberto .topo {
 /* ── Revelar ao Rolar (Scroll Animations & Choreography) ───────────────────── */
 
 /* O estado oculto SÓ tem efeito quando html possui a classe .js-ready */
-html.js-ready [data-revela]:not([data-revela-tipo="linhas"]) {
+html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho) {
   opacity: 0;
-  transform: translate3d(0, 20px, 0);
-  transition: opacity var(--dur-base) var(--ease-premium), transform var(--dur-base) var(--ease-premium);
+  transform: translate3d(0, 32px, 0);
+  filter: blur(min(var(--blur-reveal), 8px));
+  transition:
+    opacity 800ms var(--ease-premium),
+    transform var(--dur-soft) var(--ease-premium),
+    filter var(--dur-soft) var(--ease-premium);
   transition-delay: var(--atraso, 0s);
 }
 
 html.js-ready [data-revela="escala"] {
-  transform: scale(0.96) translate3d(0, 20px, 0);
+  transform: scale(0.96) translate3d(0, 32px, 0);
 }
 
-html.js-ready [data-revela="mascara"] {
-  opacity: 1;
-  transform: none;
-  clip-path: inset(0 0 100% 0);
-  transition: clip-path var(--dur-base) var(--ease-premium);
-  transition-delay: var(--atraso, 0s);
-}
-
-/* Títulos de seção por linhas com máscara de revelação (overflow: hidden, 900ms) */
+/* 1. Títulos de seção por linhas com máscara de revelação e blur reveal */
 .revela-linha-mascara {
   display: block;
   overflow: hidden;
   padding-bottom: 0.08em;
+  perspective: 1000px;
 }
 
 html.js-ready [data-revela-tipo="linhas"] {
@@ -2919,48 +2947,229 @@ html.js-ready [data-revela-tipo="linhas"] {
 
 html.js-ready [data-revela-tipo="linhas"] .revela-linha {
   display: block;
-  transform: translate3d(0, 105%, 0);
-  transition: transform 900ms var(--ease-premium);
+  opacity: 0;
+  transform: translate3d(0, 60px, 0) rotateX(6deg) scale(1.02);
+  transform-origin: bottom center;
+  filter: blur(var(--blur-reveal));
+  transition:
+    opacity 900ms var(--ease-premium),
+    transform var(--dur-reveal) var(--ease-premium),
+    filter var(--dur-reveal) var(--ease-premium);
   transition-delay: var(--atraso-linha, 0s);
 }
 
 html.js-ready [data-revela-tipo="linhas"].visivel .revela-linha {
-  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+  filter: blur(0px);
 }
 
-/* Estado Visível / Revelado */
-html.js-ready [data-revela].visivel {
+html.js-ready [data-revela-tipo="linhas"].visivel:not(.animando) .revela-linha {
+  filter: none;
+  will-change: auto;
+}
+
+html.js-ready [data-revela-tipo="linhas"].animando .revela-linha {
+  will-change: opacity, transform, filter;
+}
+
+/* 2. Rótulos pequenos (.olho): fade + linha dourada crescendo em 700ms */
+html.js-ready .olho[data-revela] {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  filter: none;
+  transition: opacity 700ms var(--ease-premium), transform 700ms var(--ease-premium);
+  transition-delay: var(--atraso, 0s);
+}
+
+html.js-ready .olho[data-revela].visivel {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   filter: none;
 }
 
-html.js-ready [data-revela="mascara"].visivel {
-  clip-path: inset(0);
+html.js-ready .olho[data-revela]::before {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 700ms var(--ease-premium);
+  transition-delay: calc(var(--atraso, 0s) + 100ms);
 }
 
-/* Desempenho: will-change presente exclusivamente durante a animação */
-html.js-ready [data-revela].animando {
-  will-change: opacity, transform;
+html.js-ready .olho[data-revela].visivel::before {
+  transform: scaleX(1);
+}
+
+/* 3. Imagens e cards com foto: máscara de revelação clip-path 100% -> 0 em 1100ms, scale 1.12 -> 1 em 1600ms */
+html.js-ready [data-revela="mascara"] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(100% 0 0 0);
+  transition: clip-path 1100ms var(--ease-premium);
+  transition-delay: var(--atraso, 0s);
+  overflow: hidden;
+}
+
+html.js-ready [data-revela="mascara"].visivel {
+  clip-path: inset(0 0 0 0);
 }
 
 html.js-ready [data-revela="mascara"].animando {
   will-change: clip-path;
 }
 
-html.js-ready [data-revela-tipo="linhas"].animando .revela-linha {
+html.js-ready [data-revela="mascara"] img,
+html.js-ready [data-revela="mascara"] picture img {
+  transform: translate3d(0, var(--parallax-y, 0px), 0) scale(1.12);
+  transition: transform 1600ms var(--ease-premium);
+  transition-delay: var(--atraso, 0s);
   will-change: transform;
 }
 
-/* Mobile (até 768px): deslocamento mais leve de 14px, duração 20% menor (560ms / 720ms) */
+html.js-ready [data-revela="mascara"].visivel img,
+html.js-ready [data-revela="mascara"].visivel picture img {
+  transform: translate3d(0, var(--parallax-y, 0px), 0) scale(1);
+}
+
+html.js-ready [data-revela="mascara"].visivel:not(.animando) img,
+html.js-ready [data-revela="mascara"].visivel:not(.animando) picture img {
+  transition: transform 0.1s linear;
+  will-change: auto;
+}
+
+/* 7. Linhas douradas e divisores */
+html.js-ready [data-revela="linha"],
+html.js-ready .linha-dourada[data-revela] {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms var(--ease-premium);
+  transition-delay: var(--atraso, 0s);
+}
+
+html.js-ready [data-revela="linha"].visivel,
+html.js-ready .linha-dourada[data-revela].visivel {
+  transform: scaleX(1);
+}
+
+/* 8. Destaque sutil de etapa numerada ativa ao rolar pelo centro */
+.lista-etapas-ativa li {
+  opacity: 0.50;
+  transition: opacity 400ms var(--ease-premium);
+}
+
+.lista-etapas-ativa li.etapa-ativa {
+  opacity: 1;
+}
+
+/* 9. Faixa de contato e blocos de ação */
+html.js-ready .faixa-contato,
+html.js-ready .duvidas__cta[data-revela] {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  transition: opacity 900ms var(--ease-premium), transform 900ms var(--ease-premium);
+}
+
+html.js-ready .faixa-contato.visivel,
+html.js-ready .duvidas__cta[data-revela].visivel {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+html.js-ready .faixa-contato .botao,
+html.js-ready .duvidas__cta[data-revela] .botao {
+  transition: opacity 800ms var(--ease-premium), transform 800ms var(--ease-premium);
+}
+
+html.js-ready .faixa-contato:not(.visivel) .botao,
+html.js-ready .duvidas__cta[data-revela]:not(.visivel) .botao {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+
+html.js-ready .faixa-contato.visivel .botao:nth-child(1),
+html.js-ready .duvidas__cta[data-revela].visivel .botao:nth-child(1) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 100ms;
+}
+
+html.js-ready .faixa-contato.visivel .botao:nth-child(2),
+html.js-ready .duvidas__cta[data-revela].visivel .botao:nth-child(2) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition-delay: 200ms;
+}
+
+/* Estado Geral Visível / Revelado */
+html.js-ready [data-revela]:not([data-revela-tipo="linhas"]).visivel {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0px);
+}
+
+html.js-ready [data-revela]:not([data-revela-tipo="linhas"]).visivel:not(.animando) {
+  filter: none;
+  will-change: auto;
+}
+
+/* Elementos sem blur (quando limite de 12 blur simultâneos é atingido) */
+html.js-ready [data-revela].sem-blur,
+html.js-ready [data-revela-tipo="linhas"].sem-blur .revela-linha {
+  filter: none !important;
+}
+
+html.js-ready [data-revela].sem-blur.animando {
+  will-change: opacity, transform;
+}
+
+/* Desempenho: will-change presente exclusivamente durante a animação */
+html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.sem-blur).animando {
+  will-change: opacity, transform, filter;
+}
+
+/* Mobile (até 768px): deslocamento mais leve de 24px, duração 20% menor, sem rotateX e fade+scale para imagens */
 @media (max-width: 768px) {
-  html.js-ready [data-revela]:not([data-revela-tipo="linhas"]) {
-    transform: translate3d(0, 14px, 0);
-    transition-duration: 560ms;
+  :root {
+    --blur-reveal: 6px;
+    --dur-reveal: 960ms;
+    --dur-soft: 800ms;
+  }
+
+  html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho) {
+    transform: translate3d(0, 24px, 0);
+    filter: blur(min(var(--blur-reveal), 6px));
+    transition:
+      opacity 640ms var(--ease-premium),
+      transform 800ms var(--ease-premium),
+      filter 800ms var(--ease-premium);
   }
 
   html.js-ready [data-revela-tipo="linhas"] .revela-linha {
-    transition-duration: 720ms;
+    transform: translate3d(0, 24px, 0) scale(1);
+    transform-origin: bottom center;
+    filter: blur(var(--blur-reveal));
+    transition:
+      opacity 720ms var(--ease-premium),
+      transform 960ms var(--ease-premium),
+      filter 960ms var(--ease-premium);
+  }
+
+  html.js-ready [data-revela="mascara"] {
+    clip-path: none !important;
+    opacity: 0;
+    transform: scale(0.96) translate3d(0, 16px, 0);
+    transition: opacity 800ms var(--ease-premium), transform 800ms var(--ease-premium);
+  }
+
+  html.js-ready [data-revela="mascara"].visivel {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  html.js-ready [data-revela="mascara"] img,
+  html.js-ready [data-revela="mascara"] picture img {
+    transform: none !important;
+    transition: none !important;
+    will-change: auto;
   }
 }
 
@@ -2968,9 +3177,15 @@ html.js-ready [data-revela-tipo="linhas"].animando .revela-linha {
 @media (prefers-reduced-motion: reduce) {
   html.js-ready [data-revela],
   html.js-ready [data-revela-tipo="linhas"],
-  html.js-ready .revela-linha-mascara .revela-linha {
+  html.js-ready .revela-linha-mascara .revela-linha,
+  html.js-ready [data-revela="mascara"],
+  html.js-ready [data-revela="mascara"] img,
+  html.js-ready [data-revela="mascara"] picture img,
+  html.js-ready .olho[data-revela]::before,
+  .lista-etapas-ativa li {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
     clip-path: none !important;
     transition: none !important;
   }
@@ -2980,9 +3195,11 @@ html.js-ready [data-revela-tipo="linhas"].animando .revela-linha {
 html:not(.js-ready) [data-revela],
 html.revelar-concluido [data-revela],
 html.revelar-concluido [data-revela-tipo="linhas"],
-html.revelar-concluido .revela-linha-mascara .revela-linha {
+html.revelar-concluido .revela-linha-mascara .revela-linha,
+html.revelar-concluido [data-revela="mascara"] {
   opacity: 1 !important;
   transform: none !important;
+  filter: none !important;
   clip-path: none !important;
 }
 
