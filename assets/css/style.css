@@ -3230,17 +3230,17 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   will-change: opacity, transform, filter;
 }
 
-/* Mobile (até 768px): deslocamento de 28px, duração 20% menor, sem rotateX/skew e fade+scale para imagens */
+/* Mobile (até 768px): deslocamento de 32px, duração equilibrada, sem rotateX/skew e fade+scale para imagens */
 @media (max-width: 768px) {
   :root {
-    --blur-reveal: 6px;
+    --blur-reveal: 8px;
     --dur-reveal: 960ms;
     --dur-soft: 800ms;
   }
 
   html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho) {
-    transform: translate3d(0, 28px, 0);
-    filter: blur(min(var(--blur-reveal), 6px));
+    transform: translate3d(0, 32px, 0);
+    filter: blur(min(var(--blur-reveal), 8px));
     transition:
       opacity 640ms var(--ease-premium),
       transform 800ms var(--ease-premium),
@@ -3248,7 +3248,7 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   }
 
   html.js-ready [data-revela-tipo="linhas"] .revela-linha {
-    transform: translate3d(0, 28px, 0) scale(1);
+    transform: translate3d(0, 32px, 0) scale(1);
     transform-origin: bottom center;
     filter: blur(var(--blur-reveal));
     transition:
@@ -3295,12 +3295,11 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   }
 }
 
-/* Fallback de Segurança: nada fica invisível se JS falhar ou timeout de 3s disparar */
+/* Fallback de Segurança: nada fica invisível se JS falhar ao carregar */
 html:not(.js-ready) [data-revela],
-html.revelar-concluido [data-revela],
-html.revelar-concluido [data-revela-tipo="linhas"],
-html.revelar-concluido .revela-linha-mascara .revela-linha,
-html.revelar-concluido [data-revela="mascara"] {
+html:not(.js-ready) [data-revela-tipo="linhas"],
+html:not(.js-ready) .revela-linha-mascara .revela-linha,
+html:not(.js-ready) [data-revela="mascara"] {
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;

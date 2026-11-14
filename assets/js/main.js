@@ -648,19 +648,6 @@
 
   /* ── 5. Revelação ao Rolar (Scroll Animations & Choreography) ───────────────────────────── */
 
-  // Se hardware for modesto, reduz ou remove blur para evitar queda de performance
-  if (typeof navigator !== 'undefined') {
-    const baixaPotencia =
-      (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
-      (navigator.deviceMemory && navigator.deviceMemory <= 4);
-    if (baixaPotencia) {
-      if (window.innerWidth <= 768) {
-        raiz.style.setProperty('--blur-reveal', '0px');
-      } else {
-        raiz.style.setProperty('--blur-reveal', '4px');
-      }
-    }
-  }
 
   function prepararTitulosSecaoLinhas() {
     if (movimentoReduzido) return;
@@ -872,21 +859,11 @@
         }
       });
     }, {
-      threshold: 0.2,
-      rootMargin: '0px 0px -12% 0px'
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
     });
 
     observados.forEach((_, observado) => observador.observe(observado));
-
-    // REQUISITO: Timeout de segurança de 3s para revelar qualquer elemento que tenha ficado oculto
-    setTimeout(() => {
-      document.querySelectorAll('[data-revela]:not(.visivel)').forEach((el) => {
-        el.classList.add('visivel');
-        el.classList.remove('animando');
-        el.style.filter = 'none';
-      });
-      raiz.classList.add('revelar-concluido');
-    }, 3000);
   }
 
   /* ── 5.1 Parallax Suave nas Imagens das Seções (Desktop apenas) ────────── */
