@@ -340,7 +340,6 @@
 
   // Inicializa os links do modal já configurados
   atualizarLinksWhatsapp('psicoterapia');
-  });
 
   if (botaoFecharWhatsapp) {
     botaoFecharWhatsapp.addEventListener('click', fecharEscolhaWhatsapp);
