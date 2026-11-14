@@ -42,11 +42,11 @@
   --suave: cubic-bezier(.22, 1, .36, 1);
   --suave-2: cubic-bezier(.65, 0, .35, 1);
   --ease-hero: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 300ms;
   --dur-base: 700ms;
-  --dur-reveal: 1200ms;
-  --dur-soft: 1000ms;
+  --dur-reveal: 1100ms;
+  --dur-soft: 950ms;
   --blur-reveal: 14px;
   --topo: 88px;
   --z-topo: 100;
@@ -296,13 +296,45 @@ svg[viewBox="0 0 24 24"] {
   color: var(--dourado-areia);
 }
 
-.botao--claro-contorno {
+.botao--claro-contorno,
+.botao--contorno {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
   --fundo: rgba(38, 51, 36, 0.38);
   --cor: var(--off-white);
   --fundo-ativo: rgba(245, 243, 237, 0.16);
   box-shadow: inset 0 0 0 1px rgba(245, 243, 237, 0.42);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
+  transition: color 400ms var(--ease-premium), border-color 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
+}
+
+.botao--claro-contorno::before,
+.botao--contorno::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--dourado-areia);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 400ms var(--ease-premium);
+  z-index: -1;
+}
+
+.botao--claro-contorno:hover::before,
+.botao--claro-contorno:focus-visible::before,
+.botao--contorno:hover::before,
+.botao--contorno:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.botao--claro-contorno:hover,
+.botao--claro-contorno:focus-visible,
+.botao--contorno:hover,
+.botao--contorno:focus-visible {
+  color: var(--verde-profundo);
+  box-shadow: inset 0 0 0 1px var(--dourado-areia);
 }
 
 .botao--pequeno {
@@ -1510,9 +1542,16 @@ body.menu-aberto .topo {
   object-position: 50% 70%;
 }
 
+.formato .formato__foto img,
+.servico .servico__foto img,
+.profissional .profissional__foto img {
+  transition: transform 700ms var(--ease-premium);
+}
+
 .formato:hover .formato__foto img,
-.servico:hover .servico__foto img {
-  transform: scale(1.05);
+.servico:hover .servico__foto img,
+.profissional:hover .profissional__foto img {
+  transform: scale(1.04);
 }
 
 .formato__topo {
@@ -2323,19 +2362,28 @@ body.menu-aberto .topo {
   transform: rotate(90deg);
 }
 
-.pergunta[open] .pergunta__sinal {
+.pergunta[open] .pergunta__sinal,
+.pergunta.faq-aberto .pergunta__sinal {
   background: var(--verde-profundo);
   box-shadow: none;
   color: var(--off-white);
-  transform: rotate(180deg);
-}
-
-.pergunta[open] .pergunta__sinal::after {
-  transform: rotate(0deg);
+  transform: rotate(45deg);
 }
 
 .pergunta__resposta {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 400ms var(--ease-premium);
   overflow: hidden;
+}
+
+.pergunta__resposta > * {
+  overflow: hidden;
+}
+
+.pergunta[open] .pergunta__resposta,
+.pergunta.faq-aberto .pergunta__resposta {
+  grid-template-rows: 1fr;
 }
 
 .pergunta__resposta p {
@@ -2345,6 +2393,15 @@ body.menu-aberto .topo {
   color: var(--tinta-2);
   font-size: 16px;
   line-height: 1.65;
+  opacity: 0;
+  transform: translate3d(0, 12px, 0);
+  transition: opacity 350ms var(--ease-premium) 50ms, transform 350ms var(--ease-premium) 50ms;
+}
+
+.pergunta[open] .pergunta__resposta p,
+.pergunta.faq-aberto .pergunta__resposta p {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 @media (max-width: 980px) {
@@ -2914,13 +2971,27 @@ body.menu-aberto .topo {
   }
 }
 
+/* ── Transição entre seções: sombra sutil projetada no topo para sensação de camadas ── */
+.servicos,
+.respiro,
+.equipe,
+.local,
+.duvidas,
+.rodape,
+.servico-detalhe,
+.perfil-detalhe {
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 -40px 80px -20px rgba(18, 26, 18, 0.35);
+}
+
 /* ── Revelar ao Rolar (Scroll Animations & Choreography) ───────────────────── */
 
 /* O estado oculto SÓ tem efeito quando html possui a classe .js-ready */
-html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho) {
+html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho):not(.profissional__id):not([data-revela="destaque"]) {
   opacity: 0;
-  transform: translate3d(0, 32px, 0);
-  filter: blur(min(var(--blur-reveal), 8px));
+  transform: translate3d(0, 48px, 0);
+  filter: blur(min(var(--blur-reveal), 10px));
   transition:
     opacity 800ms var(--ease-premium),
     transform var(--dur-soft) var(--ease-premium),
@@ -2929,7 +3000,7 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
 }
 
 html.js-ready [data-revela="escala"] {
-  transform: scale(0.96) translate3d(0, 32px, 0);
+  transform: scale(0.94) translate3d(0, 48px, 0);
 }
 
 /* 1. Títulos de seção por linhas com máscara de revelação e blur reveal */
@@ -2948,8 +3019,8 @@ html.js-ready [data-revela-tipo="linhas"] {
 html.js-ready [data-revela-tipo="linhas"] .revela-linha {
   display: block;
   opacity: 0;
-  transform: translate3d(0, 60px, 0) rotateX(6deg) scale(1.02);
-  transform-origin: bottom center;
+  transform: translate3d(0, 110%, 0) rotateX(3deg) skewY(1deg) scale(1.02);
+  transform-origin: bottom left;
   filter: blur(var(--blur-reveal));
   transition:
     opacity 900ms var(--ease-premium),
@@ -2960,7 +3031,7 @@ html.js-ready [data-revela-tipo="linhas"] .revela-linha {
 
 html.js-ready [data-revela-tipo="linhas"].visivel .revela-linha {
   opacity: 1;
-  transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+  transform: translate3d(0, 0, 0) rotateX(0deg) skewY(0deg) scale(1);
   filter: blur(0px);
 }
 
@@ -2973,13 +3044,13 @@ html.js-ready [data-revela-tipo="linhas"].animando .revela-linha {
   will-change: opacity, transform, filter;
 }
 
-/* 2. Rótulos pequenos (.olho): fade + linha dourada crescendo em 700ms */
+/* 2. Rótulos pequenos (.olho): linha dourada cresce em 700ms antes do texto */
 html.js-ready .olho[data-revela] {
   opacity: 0;
-  transform: translate3d(0, 14px, 0);
+  transform: translate3d(0, 16px, 0);
   filter: none;
-  transition: opacity 700ms var(--ease-premium), transform 700ms var(--ease-premium);
-  transition-delay: var(--atraso, 0s);
+  transition: opacity 700ms var(--ease-premium) 150ms, transform 700ms var(--ease-premium) 150ms;
+  transition-delay: calc(var(--atraso, 0s) + 150ms);
 }
 
 html.js-ready .olho[data-revela].visivel {
@@ -2992,19 +3063,19 @@ html.js-ready .olho[data-revela]::before {
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 700ms var(--ease-premium);
-  transition-delay: calc(var(--atraso, 0s) + 100ms);
+  transition-delay: var(--atraso, 0s);
 }
 
 html.js-ready .olho[data-revela].visivel::before {
   transform: scaleX(1);
 }
 
-/* 3. Imagens e cards com foto: máscara de revelação clip-path 100% -> 0 em 1100ms, scale 1.12 -> 1 em 1600ms */
+/* 3. Imagens e cards com foto: máscara clip-path de 100% para 0 de baixo para cima em 1200ms, scale 1.15 para 1 em 1600ms */
 html.js-ready [data-revela="mascara"] {
   opacity: 1;
   transform: none;
   clip-path: inset(100% 0 0 0);
-  transition: clip-path 1100ms var(--ease-premium);
+  transition: clip-path 1200ms var(--ease-premium);
   transition-delay: var(--atraso, 0s);
   overflow: hidden;
 }
@@ -3019,7 +3090,7 @@ html.js-ready [data-revela="mascara"].animando {
 
 html.js-ready [data-revela="mascara"] img,
 html.js-ready [data-revela="mascara"] picture img {
-  transform: translate3d(0, var(--parallax-y, 0px), 0) scale(1.12);
+  transform: translate3d(0, var(--parallax-y, 0px), 0) scale(1.15);
   transition: transform 1600ms var(--ease-premium);
   transition-delay: var(--atraso, 0s);
   will-change: transform;
@@ -3034,6 +3105,26 @@ html.js-ready [data-revela="mascara"].visivel:not(.animando) img,
 html.js-ready [data-revela="mascara"].visivel:not(.animando) picture img {
   transition: transform 0.1s linear;
   will-change: auto;
+}
+
+/* 4. Números, CRPs e destaques: fade com blur curto (6px) e translateY de 20px */
+html.js-ready .profissional__id[data-revela],
+html.js-ready [data-revela="destaque"] {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  filter: blur(6px);
+  transition:
+    opacity 800ms var(--ease-premium),
+    transform 800ms var(--ease-premium),
+    filter 800ms var(--ease-premium);
+  transition-delay: var(--atraso, 0s);
+}
+
+html.js-ready .profissional__id[data-revela].visivel,
+html.js-ready [data-revela="destaque"].visivel {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0px);
 }
 
 /* 7. Linhas douradas e divisores */
@@ -3060,18 +3151,31 @@ html.js-ready .linha-dourada[data-revela].visivel {
   opacity: 1;
 }
 
-/* 9. Faixa de contato e blocos de ação */
+/* 9. Faixa de contato, blocos de ação e marquee com blur reveal */
 html.js-ready .faixa-contato,
+html.js-ready .faixa[data-revela],
 html.js-ready .duvidas__cta[data-revela] {
   opacity: 0;
   transform: translate3d(0, 40px, 0);
-  transition: opacity 900ms var(--ease-premium), transform 900ms var(--ease-premium);
+  filter: blur(min(var(--blur-reveal), 8px));
+  transition:
+    opacity 900ms var(--ease-premium),
+    transform 900ms var(--ease-premium),
+    filter 900ms var(--ease-premium);
 }
 
 html.js-ready .faixa-contato.visivel,
+html.js-ready .faixa[data-revela].visivel,
 html.js-ready .duvidas__cta[data-revela].visivel {
   opacity: 1;
   transform: translate3d(0, 0, 0);
+  filter: blur(0px);
+}
+
+html.js-ready .faixa-contato.visivel:not(.animando),
+html.js-ready .faixa[data-revela].visivel:not(.animando),
+html.js-ready .duvidas__cta[data-revela].visivel:not(.animando) {
+  filter: none;
 }
 
 html.js-ready .faixa-contato .botao,
@@ -3126,7 +3230,7 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   will-change: opacity, transform, filter;
 }
 
-/* Mobile (até 768px): deslocamento mais leve de 24px, duração 20% menor, sem rotateX e fade+scale para imagens */
+/* Mobile (até 768px): deslocamento de 28px, duração 20% menor, sem rotateX/skew e fade+scale para imagens */
 @media (max-width: 768px) {
   :root {
     --blur-reveal: 6px;
@@ -3135,7 +3239,7 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   }
 
   html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho) {
-    transform: translate3d(0, 24px, 0);
+    transform: translate3d(0, 28px, 0);
     filter: blur(min(var(--blur-reveal), 6px));
     transition:
       opacity 640ms var(--ease-premium),
@@ -3144,7 +3248,7 @@ html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="m
   }
 
   html.js-ready [data-revela-tipo="linhas"] .revela-linha {
-    transform: translate3d(0, 24px, 0) scale(1);
+    transform: translate3d(0, 28px, 0) scale(1);
     transform-origin: bottom center;
     filter: blur(var(--blur-reveal));
     transition:

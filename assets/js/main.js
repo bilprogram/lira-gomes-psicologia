@@ -588,25 +588,20 @@
   }
 
   function fecharPergunta(det) {
-    const resposta = det.querySelector('.pergunta__resposta');
-    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
+    if (!det.open) return;
+    if (movimentoReduzido) {
       det.open = false;
+      det.classList.remove('faq-aberto');
       atualizarAriaExpanded(det);
       return;
     }
     det.dataset.animando = '1';
-    const anim = resposta.animate(
-      [
-        { height: `${resposta.scrollHeight}px`, opacity: 1 },
-        { height: '0px', opacity: 0 }
-      ],
-      { duration: 350, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-    );
-    anim.onfinish = anim.oncancel = () => {
+    det.classList.remove('faq-aberto');
+    atualizarAriaExpanded(det);
+    setTimeout(() => {
       det.open = false;
-      atualizarAriaExpanded(det);
       delete det.dataset.animando;
-    };
+    }, 400);
   }
 
   function abrirPergunta(det) {
@@ -619,23 +614,20 @@
     det.open = true;
     atualizarAriaExpanded(det);
 
-    const resposta = det.querySelector('.pergunta__resposta');
-    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
+    if (movimentoReduzido) {
+      det.classList.add('faq-aberto');
       return;
     }
 
     det.dataset.animando = '1';
-    const altura = resposta.scrollHeight;
-    const anim = resposta.animate(
-      [
-        { height: '0px', opacity: 0 },
-        { height: `${altura}px`, opacity: 1 }
-      ],
-      { duration: 400, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
-    );
-    anim.onfinish = anim.oncancel = () => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        det.classList.add('faq-aberto');
+      });
+    });
+    setTimeout(() => {
       delete det.dataset.animando;
-    };
+    }, 450);
   }
 
   perguntasFaq.forEach((det) => {
@@ -656,9 +648,18 @@
 
   /* ── 5. Revelação ao Rolar (Scroll Animations & Choreography) ───────────────────────────── */
 
-  // Se hardware for modesto, reduz blur para evitar queda de performance
-  if (typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) {
-    raiz.style.setProperty('--blur-reveal', '4px');
+  // Se hardware for modesto, reduz ou remove blur para evitar queda de performance
+  if (typeof navigator !== 'undefined') {
+    const baixaPotencia =
+      (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+      (navigator.deviceMemory && navigator.deviceMemory <= 4);
+    if (baixaPotencia) {
+      if (window.innerWidth <= 768) {
+        raiz.style.setProperty('--blur-reveal', '0px');
+      } else {
+        raiz.style.setProperty('--blur-reveal', '4px');
+      }
+    }
   }
 
   function prepararTitulosSecaoLinhas() {
@@ -679,82 +680,89 @@
 
       const jaVisivel = titulo.classList.contains('visivel');
 
-      // Clona temporariamente preservando tags (ex: <em>) e envolvendo palavras em spans
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = htmlOriginal;
+      try {
+        // Clona temporariamente preservando tags (ex: <em>) e envolvendo palavras em spans
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = htmlOriginal;
 
-      function wrapText(node) {
-        if (node.nodeType === Node.TEXT_NODE) {
-          const parts = node.nodeValue.split(/(\s+)/);
-          const frag = document.createDocumentFragment();
-          parts.forEach((p) => {
-            if (!p) return;
-            if (/^\s+$/.test(p)) {
-              frag.appendChild(document.createTextNode(p));
-            } else {
-              const sp = document.createElement('span');
-              sp.className = 'revela-palavra-temp';
-              sp.style.display = 'inline-block';
-              sp.textContent = p;
-              frag.appendChild(sp);
-            }
-          });
-          node.parentNode.replaceChild(frag, node);
-        } else if (node.nodeType === Node.ELEMENT_NODE) {
-          Array.from(node.childNodes).forEach(wrapText);
+        function wrapText(node) {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const parts = node.nodeValue.split(/(\s+)/);
+            const frag = document.createDocumentFragment();
+            parts.forEach((p) => {
+              if (!p) return;
+              if (/^\s+$/.test(p)) {
+                frag.appendChild(document.createTextNode(p));
+              } else {
+                const sp = document.createElement('span');
+                sp.className = 'revela-palavra-temp';
+                sp.style.display = 'inline-block';
+                sp.textContent = p;
+                frag.appendChild(sp);
+              }
+            });
+            node.parentNode.replaceChild(frag, node);
+          } else if (node.nodeType === Node.ELEMENT_NODE) {
+            Array.from(node.childNodes).forEach(wrapText);
+          }
         }
-      }
-      wrapText(tempDiv);
-      titulo.innerHTML = tempDiv.innerHTML;
+        wrapText(tempDiv);
+        titulo.innerHTML = tempDiv.innerHTML;
 
-      const spans = titulo.querySelectorAll('.revela-palavra-temp');
-      if (!spans.length) {
-        titulo.innerHTML = htmlOriginal;
-        return;
-      }
-
-      const linhas = [];
-      let linhaAtual = [];
-      let topAtual = null;
-
-      spans.forEach((span) => {
-        const top = Math.round(span.getBoundingClientRect().top);
-        if (topAtual === null || Math.abs(top - topAtual) <= 6) {
-          linhaAtual.push(span.outerHTML);
-          topAtual = top;
-        } else {
-          if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
-          linhaAtual = [span.outerHTML];
-          topAtual = top;
+        const spans = titulo.querySelectorAll('.revela-palavra-temp');
+        if (!spans.length) {
+          titulo.innerHTML = htmlOriginal;
+          return;
         }
-      });
-      if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
 
-      const isMobile = window.innerWidth <= 768;
-      const atrasoEntreLinhas = isMobile ? 70 : 120; // 120ms desktop, 70ms mobile
+        const linhas = [];
+        let linhaAtual = [];
+        let topAtual = null;
 
-      const htmlLinhas = linhas
-        .map((linhaHtml, idx) => {
-          const wrapper = document.createElement('div');
-          wrapper.innerHTML = linhaHtml;
-          wrapper.querySelectorAll('.revela-palavra-temp').forEach((sp) => {
-            sp.replaceWith(...sp.childNodes);
-          });
-          return `
-          <span class="revela-linha-mascara">
-            <span class="revela-linha" aria-hidden="true" style="--atraso-linha:${idx * atrasoEntreLinhas}ms;">${wrapper.innerHTML}</span>
-          </span>
+        spans.forEach((span) => {
+          const top = Math.round(span.getBoundingClientRect().top);
+          if (topAtual === null || Math.abs(top - topAtual) <= 6) {
+            linhaAtual.push(span.outerHTML);
+            topAtual = top;
+          } else {
+            if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
+            linhaAtual = [span.outerHTML];
+            topAtual = top;
+          }
+        });
+        if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
+
+        const isMobile = window.innerWidth <= 768;
+        const atrasoEntreLinhas = isMobile ? 70 : 120; // 120ms desktop, 70ms mobile
+
+        const htmlLinhas = linhas
+          .map((linhaHtml, idx) => {
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = linhaHtml;
+            wrapper.querySelectorAll('.revela-palavra-temp').forEach((sp) => {
+              sp.replaceWith(...sp.childNodes);
+            });
+            return `
+            <span class="revela-linha-mascara">
+              <span class="revela-linha" aria-hidden="true" style="--atraso-linha:${idx * atrasoEntreLinhas}ms;">${wrapper.innerHTML}</span>
+            </span>
+          `;
+          })
+          .join('');
+
+        titulo.innerHTML = `
+          <span class="sr-only">${textoOriginal}</span>
+          <span class="revela-titulo-linhas" aria-hidden="true">${htmlLinhas}</span>
         `;
-        })
-        .join('');
-
-      titulo.innerHTML = `
-        <span class="sr-only">${textoOriginal}</span>
-        <span class="revela-titulo-linhas" aria-hidden="true">${htmlLinhas}</span>
-      `;
-      titulo.setAttribute('data-linhas-preparadas', 'true');
-      titulo.setAttribute('data-revela-tipo', 'linhas');
-      if (jaVisivel) {
+        titulo.setAttribute('aria-label', textoOriginal);
+        titulo.setAttribute('data-linhas-preparadas', 'true');
+        titulo.setAttribute('data-revela-tipo', 'linhas');
+        if (jaVisivel) {
+          titulo.classList.add('visivel');
+        }
+      } catch (err) {
+        // Fallback de segurança: nada quebra, texto inteiro visível intacto
+        titulo.innerHTML = htmlOriginal;
         titulo.classList.add('visivel');
       }
     });
@@ -864,8 +872,8 @@
         }
       });
     }, {
-      threshold: 0.15,
-      rootMargin: '0px 0px -10% 0px'
+      threshold: 0.2,
+      rootMargin: '0px 0px -12% 0px'
     });
 
     observados.forEach((_, observado) => observador.observe(observado));
@@ -1010,20 +1018,55 @@
     atualizarDestaque();
   }
 
+  /* ── 5.3 Aceleração Dinâmica do Marquee no Scroll (Desktop apenas) ─────── */
+  function inicializarAceleracaoMarquee() {
+    if (movimentoReduzido || window.innerWidth <= 768) return;
+    const trilho = document.querySelector('.faixa__trilho');
+    if (!trilho) return;
+
+    let ultimoScrollY = window.scrollY;
+    let ultimoTempo = performance.now();
+    let timerRetorno = null;
+
+    window.addEventListener('scroll', () => {
+      if (window.innerWidth <= 768) return;
+      const agora = performance.now();
+      const dt = agora - ultimoTempo;
+      if (dt > 16) {
+        const dy = Math.abs(window.scrollY - ultimoScrollY);
+        const velocidade = dy / dt; // pixels por milissegundo
+        ultimoScrollY = window.scrollY;
+        ultimoTempo = agora;
+
+        // Limita a aceleração a no máximo 1.6x
+        const fator = Math.min(1.6, 1.0 + velocidade * 0.35);
+        trilho.style.animationPlaybackRate = String(fator.toFixed(2));
+
+        clearTimeout(timerRetorno);
+        timerRetorno = setTimeout(() => {
+          trilho.style.animationPlaybackRate = '1';
+        }, 600);
+      }
+    }, { passive: true });
+  }
+
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
       inicializarReveals();
       inicializarParallaxImagens();
       inicializarDestaqueEtapas();
+      inicializarAceleracaoMarquee();
     }).catch(() => {
       inicializarReveals();
       inicializarParallaxImagens();
       inicializarDestaqueEtapas();
+      inicializarAceleracaoMarquee();
     });
   } else {
     inicializarReveals();
     inicializarParallaxImagens();
     inicializarDestaqueEtapas();
+    inicializarAceleracaoMarquee();
   }
 
   /* ── 5.1 Pausa do Marquee fora da Viewport ────────────────────────────────────────────── */
