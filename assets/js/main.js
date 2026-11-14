@@ -173,10 +173,10 @@
     }, { passive: true });
   }
 
-  /* ── Controle de Rolagem do Topo (Estado 2, Estado 3 e Scroll Spy) ─────────────────── */
+  /* ── Controle de Rolagem do Topo (Vidro Permanente após 40px e Scroll Spy) ────────── */
 
-  let ultimoScrollY = window.scrollY || 0;
   let rolagemPendente = false;
+  let estadoRolou = null;
   const SELETORES_SECOES = ['#inicio', '#psicoterapia', '#avaliacao-neuropsicologica', '#profissionais', '#contato'];
   const secoesNav = SELETORES_SECOES.map((sel) => document.querySelector(sel)).filter(Boolean);
   const linksMenu = document.querySelectorAll('.menu a, .menu-movel__lista a');
@@ -185,34 +185,19 @@
     rolagemPendente = false;
     if (!topo) return;
 
-    const scrollYAtual = Math.max(window.scrollY || 0, 0);
-    const diferencaScroll = scrollYAtual - ultimoScrollY;
+    const scrollYAtual = Math.max(window.scrollY || window.pageYOffset || 0, 0);
 
-    // Estado 2: scrollY maior que 80px aplica a classe 'rolou'
-    const rolou = scrollYAtual > 80;
-    topo.classList.toggle('rolou', rolou);
-
-    // Estado 3: Smart Hide / Reveal
-    // Nunca esconde se: menu aberto, foco no nav, dentro da primeira dobra, ou movimento reduzido
-    const menuAberto = corpo.classList.contains('menu-aberto');
-    const focoNoTopo = topo.contains(document.activeElement);
-    const alturaHero = Math.max(window.innerHeight * 0.75, 450);
-
-    if (movimentoReduzido || menuAberto || focoNoTopo || scrollYAtual <= alturaHero) {
-      topo.classList.remove('escondido');
-    } else if (diferencaScroll > 6 && scrollYAtual > alturaHero) {
-      // Rolando para baixo: esconde
-      topo.classList.add('escondido');
-    } else if (diferencaScroll < -6) {
-      // Rolando para cima: reaparece com a mesma transição
-      topo.classList.remove('escondido');
+    // Estado após 40px: vidro escuro verde profundo
+    const novoRolou = scrollYAtual > 40;
+    if (novoRolou !== estadoRolou) {
+      estadoRolou = novoRolou;
+      topo.classList.toggle('rolou', estadoRolou);
+      topo.classList.toggle('scrolled', estadoRolou);
     }
-
-    ultimoScrollY = scrollYAtual;
 
     // Atualização do item ativo conforme a seção visível (Scroll Spy)
     if (secoesNav.length && linksMenu.length) {
-      const topoOffset = rolou ? 80 : 106;
+      const topoOffset = estadoRolou ? 70 : 96;
       let secaoAtiva = null;
 
       for (let i = secoesNav.length - 1; i >= 0; i--) {
@@ -256,6 +241,8 @@
   }
 
   window.addEventListener('scroll', dispararAtualizacaoScroll, { passive: true });
+  window.addEventListener('load', dispararAtualizacaoScroll, { passive: true });
+  window.addEventListener('pageshow', dispararAtualizacaoScroll, { passive: true });
   dispararAtualizacaoScroll();
 
   /* ── 4. Escolha Clara de Profissional para Contato pelo WhatsApp ────────────────────────── */

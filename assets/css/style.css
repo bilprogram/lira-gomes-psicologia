@@ -42,6 +42,8 @@
   --suave: cubic-bezier(.22, 1, .36, 1);
   --suave-2: cubic-bezier(.65, 0, .35, 1);
   --topo: 88px;
+  --z-topo: 100;
+  --z-menu-movel: 95;
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────────────────────── */
@@ -308,44 +310,71 @@ svg[viewBox="0 0 24 24"] {
 .topo {
   position: fixed;
   inset: 0 0 auto;
-  z-index: 50;
+  z-index: var(--z-topo, 100);
   background: transparent;
   border-bottom: 1px solid transparent;
   box-shadow: none;
-  transform: translateY(0);
   transition:
-    background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform, background-color, box-shadow;
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
-/* Estado 2: Após rolagem (scrollY > 80px) */
-.topo.rolou {
-  background: rgba(27, 37, 26, 0.62);
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  backdrop-filter: blur(20px) saturate(140%);
-  border-bottom: 1px solid rgba(200, 174, 125, 0.18);
+/* Fundo em vidro aplicado via ::before para evitar quebra de stacking context e de backdrop-filter */
+.topo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: transparent;
+  pointer-events: none;
+  opacity: 0;
+  -webkit-backdrop-filter: blur(0px);
+  backdrop-filter: blur(0px);
+  transition:
+    opacity 0.35s ease,
+    background-color 0.35s ease,
+    -webkit-backdrop-filter 0.35s ease,
+    backdrop-filter 0.35s ease;
+}
+
+/* Estado após rolagem (scrollY > 40px): vidro escuro verde profundo com saturação */
+.topo.rolou::before,
+.topo.scrolled::before {
+  opacity: 1;
+  background: rgba(27, 37, 26, 0.60);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+.topo.rolou,
+.topo.scrolled {
+  border-bottom: 1px solid rgba(200, 174, 125, 0.15);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
-/* Fallback para navegadores sem suporte a backdrop-filter */
-@supports not ((-webkit-backdrop-filter: blur(20px)) or (backdrop-filter: blur(20px))) {
-  .topo.rolou {
-    background: rgba(27, 37, 26, 0.94);
+@media (max-width: 768px) {
+  .topo.rolou::before,
+  .topo.scrolled::before {
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
   }
 }
 
-/* Estado 3: Esconder ao rolar para baixo após a primeira dobra */
-.topo.escondido:not(:focus-within) {
-  transform: translateY(-100%);
+/* Fallback para navegadores sem suporte a backdrop-filter: fundo verde sólido com opacidade 0.92 */
+@supports not ((-webkit-backdrop-filter: blur(16px)) or (backdrop-filter: blur(16px))) {
+  .topo.rolou::before,
+  .topo.scrolled::before {
+    background: rgba(27, 37, 26, 0.92);
+  }
 }
 
-/* Nunca esconder se o menu estiver aberto ou foco do teclado dentro */
-body.menu-aberto .topo,
-.topo:focus-within {
-  transform: translateY(0) !important;
+/* Menu mobile aberto: nav sempre com fundo sólido legível */
+body.menu-aberto .topo::before,
+body.menu-aberto .topo {
+  background: var(--floresta-3, #1b251a) !important;
+  opacity: 1 !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
 }
 
 .topo__barra {
@@ -354,10 +383,11 @@ body.menu-aberto .topo,
   justify-content: space-between;
   gap: 20px;
   height: 96px;
-  transition: height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: height 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.topo.rolou .topo__barra {
+.topo.rolou .topo__barra,
+.topo.scrolled .topo__barra {
   height: 70px;
 }
 
@@ -537,7 +567,7 @@ body.menu-aberto .topo,
 .menu-movel {
   position: fixed;
   inset: 64px 0 0 0;
-  z-index: 45;
+  z-index: var(--z-menu-movel, 95);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -2270,14 +2300,15 @@ body.menu-aberto .topo,
 }
 
 @media (max-width: 600px) {
-  .topo.rolou {
-    -webkit-backdrop-filter: blur(12px) saturate(130%);
-    backdrop-filter: blur(12px) saturate(130%);
+  .topo.rolou::before,
+  .topo.scrolled::before {
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
   }
 
   .menu-movel {
-    -webkit-backdrop-filter: blur(12px) saturate(130%);
-    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
+    backdrop-filter: blur(10px) saturate(130%);
   }
 }
 
@@ -2883,8 +2914,9 @@ body.menu-aberto .topo,
   }
 
   .topo,
-  .topo.escondido:not(:focus-within) {
-    transform: none !important;
+  .topo::before,
+  .topo__barra {
+    transition: none !important;
   }
 
   .revelar-ativo [data-revela] {
