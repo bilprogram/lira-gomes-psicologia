@@ -769,11 +769,12 @@
       return;
     }
 
-    // Sinaliza que JS está ativo e pronto para revelações
-    raiz.classList.add('js-ready', 'revelar-ativo');
-
-    // Prepara títulos de seção com máscara por linha após document.fonts.ready
-    prepararTitulosSecaoLinhas();
+    // Prepara títulos de seção com máscara por linha com proteção em try/catch
+    try {
+      prepararTitulosSecaoLinhas();
+    } catch (e) {
+      console.warn('Fallback em títulos:', e);
+    }
 
     const reveladores = document.querySelectorAll('[data-revela]');
     if (!reveladores.length) return;
@@ -789,8 +790,65 @@
       });
     });
 
+    // Função centralizada e segura para revelar elementos
+    let blurAtivos = 0;
+    const MAX_BLUR_SIMULTANEOS = 12;
+
+    function revelarElemento(el, imediato = false) {
+      if (!el || el.classList.contains('visivel')) return;
+      try {
+        el.classList.add('visivel');
+        if (imediato) {
+          el.classList.remove('animando');
+          el.style.setProperty('--atraso', '0s');
+          el.style.filter = 'none';
+          el.style.willChange = 'auto';
+          return;
+        }
+
+        if (blurAtivos < MAX_BLUR_SIMULTANEOS) {
+          blurAtivos++;
+          el.classList.add('animando');
+          const limpar = () => {
+            el.classList.remove('animando');
+            el.style.filter = 'none';
+            el.style.willChange = 'auto';
+            blurAtivos = Math.max(0, blurAtivos - 1);
+            el.removeEventListener('transitionend', limpar);
+          };
+          el.addEventListener('transitionend', limpar, { once: true });
+          setTimeout(limpar, 1400);
+        } else {
+          el.classList.add('sem-blur', 'animando');
+          const limpar = () => {
+            el.classList.remove('animando');
+            el.style.filter = 'none';
+            el.style.willChange = 'auto';
+            el.removeEventListener('transitionend', limpar);
+          };
+          el.addEventListener('transitionend', limpar, { once: true });
+          setTimeout(limpar, 1400);
+        }
+      } catch (err) {
+        el.classList.add('visivel');
+      }
+    }
+
+    // REDE DE SEGURANÇA 1: Todo elemento cujo topo já passou da viewport é revelado na hora (cobre topo da página e reload no meio)
+    const alturaJanela = window.innerHeight || document.documentElement.clientHeight;
+    reveladores.forEach((el) => {
+      try {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= alturaJanela * 0.90) {
+          revelarElemento(el, true);
+        }
+      } catch (e) {}
+    });
+
+    // Mapeamento para IntersectionObserver
     const observados = new Map();
     reveladores.forEach((el) => {
+      if (el.classList.contains('visivel')) return;
       const observado = el.dataset.revela === 'mascara' && el.parentElement ? el.parentElement : el;
       if (!observados.has(observado)) {
         observados.set(observado, []);
@@ -798,72 +856,62 @@
       observados.get(observado).push(el);
     });
 
-    // REQUISITO: Não anime o que já está visível no carregamento da página
-    const alturaJanela = window.innerHeight || document.documentElement.clientHeight;
-    const jaVisiveis = [];
-
-    observados.forEach((els, gatilho) => {
-      const rect = gatilho.getBoundingClientRect();
-      if (rect.top < alturaJanela * 0.90 && rect.bottom > 0) {
-        jaVisiveis.push(gatilho);
-      }
-    });
-
-    jaVisiveis.forEach((gatilho) => {
-      (observados.get(gatilho) || []).forEach((el) => {
-        el.classList.add('visivel');
-        el.style.setProperty('--atraso', '0s');
-        el.style.filter = 'none';
-      });
-      observados.delete(gatilho);
-    });
-
-    if (observados.size === 0) return;
-
-    // Limite de desempenho: máximo de 12 elementos com blur animando simultaneamente
-    let blurAtivos = 0;
-    const MAX_BLUR_SIMULTANEOS = 12;
-
-    // REQUISITO: IntersectionObserver único compartilhado, threshold 0.15, rootMargin inferior de -10%, disparo único
-    const observador = new IntersectionObserver((entradas) => {
-      entradas.forEach((entrada) => {
-        if (!entrada.isIntersecting) return;
-        const els = observados.get(entrada.target) || [];
-        els.forEach((el) => {
-          if (blurAtivos < MAX_BLUR_SIMULTANEOS) {
-            blurAtivos++;
-            el.classList.add('animando', 'visivel');
-            const limpar = () => {
-              el.classList.remove('animando');
-              el.style.filter = 'none';
-              blurAtivos = Math.max(0, blurAtivos - 1);
-              el.removeEventListener('transitionend', limpar);
-            };
-            el.addEventListener('transitionend', limpar, { once: true });
-            setTimeout(limpar, 1400);
-          } else {
-            // Mais de 12 blur simultâneos: entra sem blur (apenas fade e translateY)
-            el.classList.add('sem-blur', 'animando', 'visivel');
-            const limpar = () => {
-              el.classList.remove('animando');
-              el.removeEventListener('transitionend', limpar);
-            };
-            el.addEventListener('transitionend', limpar, { once: true });
-            setTimeout(limpar, 1400);
+    // IntersectionObserver único compartilhado (threshold 0 e rootMargin inferior de -8% para elementos altos e disparos confiáveis)
+    if ('IntersectionObserver' in window) {
+      const observador = new IntersectionObserver((entradas) => {
+        entradas.forEach((entrada) => {
+          if (!entrada.isIntersecting) return;
+          const els = observados.get(entrada.target) || [entrada.target];
+          els.forEach((el) => revelarElemento(el, false));
+          observador.unobserve(entrada.target);
+          observados.delete(entrada.target);
+          if (observados.size === 0) {
+            observador.disconnect();
           }
         });
-        observador.unobserve(entrada.target);
-        observados.delete(entrada.target);
-        if (observados.size === 0) {
-          observador.disconnect();
-        }
+      }, {
+        threshold: 0,
+        rootMargin: '0px 0px -8% 0px'
       });
-    }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
-    });
 
-    observados.forEach((_, observado) => observador.observe(observado));
+      observados.forEach((_, observado) => observador.observe(observado));
+    } else {
+      // Fallback sem IntersectionObserver
+      reveladores.forEach((el) => revelarElemento(el, true));
+    }
+
+    // REDE DE SEGURANÇA 2: Listener de scroll passivo com requestAnimationFrame para checar qualquer elemento que entre na tela
+    let rafScrollId = null;
+    function checarElementosNoScroll() {
+      if (rafScrollId) return;
+      rafScrollId = requestAnimationFrame(() => {
+        rafScrollId = null;
+        const h = window.innerHeight || document.documentElement.clientHeight;
+        document.querySelectorAll('[data-revela]:not(.visivel)').forEach((el) => {
+          try {
+            const r = el.getBoundingClientRect();
+            if (r.top <= h * 0.92) {
+              revelarElemento(el, false);
+            }
+          } catch (e) {}
+        });
+      });
+    }
+
+    window.addEventListener('scroll', checarElementosNoScroll, { passive: true });
+    window.addEventListener('resize', checarElementosNoScroll, { passive: true });
+
+    // REDE DE SEGURANÇA 3: Suporte a cliques em âncoras para revelar o destino imediatamente
+    document.addEventListener('click', (evento) => {
+      const link = evento.target.closest('a[href^="#"]');
+      if (!link) return;
+      setTimeout(checarElementosNoScroll, 100);
+      setTimeout(checarElementosNoScroll, 400);
+      setTimeout(checarElementosNoScroll, 800);
+    }, { passive: true });
+
+    // Sinaliza que JS está ativo e pronto para revelações somente após a inicialização ter sucesso
+    raiz.classList.add('js-ready', 'revelar-ativo');
   }
 
   /* ── 5.1 Parallax Suave nas Imagens das Seções (Desktop apenas) ────────── */
