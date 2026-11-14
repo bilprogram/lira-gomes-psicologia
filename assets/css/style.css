@@ -41,13 +41,9 @@
   --raio: 28px;
   --suave: cubic-bezier(.22, 1, .36, 1);
   --suave-2: cubic-bezier(.65, 0, .35, 1);
-  --ease-hero: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 300ms;
   --dur-base: 700ms;
-  --dur-reveal: 1100ms;
-  --dur-soft: 950ms;
-  --blur-reveal: 14px;
   --topo: 88px;
   --z-topo: 100;
   --z-menu-movel: 95;
@@ -64,13 +60,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: var(--topo);
-  background: var(--verde-profundo);
+  background: var(--marfim);
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background: var(--verde-profundo);
+  background: var(--marfim);
   color: var(--tinta-2);
   font-family: "Instrument Sans", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 17px;
@@ -264,12 +260,11 @@ svg[viewBox="0 0 24 24"] {
 .botao__icone svg {
   width: 18px;
   height: 18px;
-  transition: transform 400ms var(--ease-premium);
+  transition: transform 0.6s var(--suave);
 }
 
-.botao:hover .botao__icone svg,
-.botao:focus-visible .botao__icone svg {
-  transform: translateX(4px) rotate(-30deg);
+.botao:hover .botao__icone svg {
+  transform: translateX(3px) rotate(-30deg);
 }
 
 /* Variações de botão alinhadas à paleta Lira Gomes */
@@ -296,45 +291,13 @@ svg[viewBox="0 0 24 24"] {
   color: var(--dourado-areia);
 }
 
-.botao--claro-contorno,
-.botao--contorno {
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
+.botao--claro-contorno {
   --fundo: rgba(38, 51, 36, 0.38);
   --cor: var(--off-white);
   --fundo-ativo: rgba(245, 243, 237, 0.16);
   box-shadow: inset 0 0 0 1px rgba(245, 243, 237, 0.42);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  transition: color 400ms var(--ease-premium), border-color 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
-}
-
-.botao--claro-contorno::before,
-.botao--contorno::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--dourado-areia);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 400ms var(--ease-premium);
-  z-index: -1;
-}
-
-.botao--claro-contorno:hover::before,
-.botao--claro-contorno:focus-visible::before,
-.botao--contorno:hover::before,
-.botao--contorno:focus-visible::before {
-  transform: scaleX(1);
-}
-
-.botao--claro-contorno:hover,
-.botao--claro-contorno:focus-visible,
-.botao--contorno:hover,
-.botao--contorno:focus-visible {
-  color: var(--verde-profundo);
-  box-shadow: inset 0 0 0 1px var(--dourado-areia);
 }
 
 .botao--pequeno {
@@ -723,7 +686,6 @@ body.menu-aberto .topo {
 /* ── Hero (Primeira Dobra com Vídeo em Tela Cheia) ────────────────────────────────────────── */
 
 .hero {
-  --ease-premium: var(--ease-hero);
   position: relative;
   isolation: isolate;
   display: flex;
@@ -1432,7 +1394,7 @@ body.menu-aberto .topo {
 
 .servicos {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   padding-block: clamp(80px, 10vw, 144px);
   background: var(--off-white);
 }
@@ -1493,13 +1455,13 @@ body.menu-aberto .topo {
   border-radius: var(--raio);
   background: var(--papel);
   box-shadow: inset 0 0 0 1px var(--linha);
-  transition: transform 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
+  transition: transform 0.7s var(--suave), box-shadow 0.6s var(--suave);
 }
 
 .formato:hover,
 .servico:hover {
-  transform: translateY(-4px);
-  box-shadow: inset 0 0 0 1px var(--linha), 0 24px 48px -24px rgba(38, 51, 36, 0.35);
+  transform: translateY(-6px);
+  box-shadow: inset 0 0 0 1px var(--linha), 0 34px 60px -40px rgba(38, 51, 36, 0.45);
 }
 
 .formato--destaque {
@@ -1542,16 +1504,9 @@ body.menu-aberto .topo {
   object-position: 50% 70%;
 }
 
-.formato .formato__foto img,
-.servico .servico__foto img,
-.profissional .profissional__foto img {
-  transition: transform 700ms var(--ease-premium);
-}
-
 .formato:hover .formato__foto img,
-.servico:hover .servico__foto img,
-.profissional:hover .profissional__foto img {
-  transform: scale(1.04);
+.servico:hover .servico__foto img {
+  transform: scale(1.05);
 }
 
 .formato__topo {
@@ -1623,7 +1578,6 @@ body.menu-aberto .topo {
 }
 
 .link-seta {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -1633,39 +1587,22 @@ body.menu-aberto .topo {
   font-size: 15.5px;
   color: var(--verde-profundo);
   text-decoration: none;
-  border-bottom: 1px solid rgba(200, 174, 125, 0.35);
+  border-bottom: 1px solid var(--dourado-areia);
   padding-bottom: 3px;
-  transition: color 400ms var(--ease-premium);
-}
-
-.link-seta::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: var(--ouro);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 400ms var(--ease-premium);
-}
-
-.link-seta:hover::after,
-.link-seta:focus-visible::after {
-  transform: scaleX(1);
+  transition: color 0.4s var(--suave), border-color 0.4s var(--suave);
 }
 
 .link-seta:hover,
 .link-seta:focus-visible {
   color: var(--verde-oliva);
+  border-color: var(--verde-oliva);
 }
 
 .link-seta svg {
   flex-shrink: 0;
   width: 18px;
   height: 18px;
-  transition: transform 400ms var(--ease-premium);
+  transition: transform 0.6s var(--suave);
 }
 
 .link-seta:hover svg,
@@ -1682,7 +1619,7 @@ body.menu-aberto .topo {
 
 .faixa {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   overflow: clip;
   padding: clamp(18px, 2vw, 26px) 0;
   background: var(--verde-profundo);
@@ -1743,10 +1680,8 @@ body.menu-aberto .topo {
   }
 
   .servicos {
-    position: relative;
-    z-index: 2;
     border-radius: var(--raio) var(--raio) 0 0;
-    box-shadow: 0 -32px 100px rgba(18, 26, 18, 0.35);
+    box-shadow: 0 -24px 60px -30px rgba(14, 22, 14, 0.5);
   }
 }
 
@@ -1754,7 +1689,7 @@ body.menu-aberto .topo {
 
 .equipe {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   padding-block: clamp(96px, 12vw, 170px);
   background: var(--areia);
 }
@@ -1793,12 +1728,12 @@ body.menu-aberto .topo {
   border-radius: var(--raio);
   background: var(--papel);
   box-shadow: inset 0 0 0 1px var(--linha);
-  transition: transform 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
+  transition: transform 0.8s var(--suave), box-shadow 0.8s var(--suave);
 }
 
 .profissional:hover {
-  transform: translateY(-4px);
-  box-shadow: inset 0 0 0 1px var(--linha), 0 24px 48px -24px rgba(38, 51, 36, 0.35);
+  transform: translateY(-6px);
+  box-shadow: inset 0 0 0 1px var(--linha), 0 34px 60px -40px rgba(38, 51, 36, 0.45);
 }
 
 .profissional__foto {
@@ -1893,7 +1828,7 @@ body.menu-aberto .topo {
 
 .respiro {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   padding-block: clamp(80px, 10vw, 144px);
   overflow: clip;
   background: var(--floresta);
@@ -2139,7 +2074,7 @@ body.menu-aberto .topo {
 
 .local {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   padding-block: clamp(96px, 12vw, 170px);
   background: var(--off-white);
 }
@@ -2251,7 +2186,7 @@ body.menu-aberto .topo {
 
 .duvidas {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   padding-block: clamp(80px, 10vw, 144px);
   background: var(--areia);
 }
@@ -2362,28 +2297,19 @@ body.menu-aberto .topo {
   transform: rotate(90deg);
 }
 
-.pergunta[open] .pergunta__sinal,
-.pergunta.faq-aberto .pergunta__sinal {
+.pergunta[open] .pergunta__sinal {
   background: var(--verde-profundo);
   box-shadow: none;
   color: var(--off-white);
-  transform: rotate(45deg);
+  transform: rotate(180deg);
+}
+
+.pergunta[open] .pergunta__sinal::after {
+  transform: rotate(0deg);
 }
 
 .pergunta__resposta {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 400ms var(--ease-premium);
   overflow: hidden;
-}
-
-.pergunta__resposta > * {
-  overflow: hidden;
-}
-
-.pergunta[open] .pergunta__resposta,
-.pergunta.faq-aberto .pergunta__resposta {
-  grid-template-rows: 1fr;
 }
 
 .pergunta__resposta p {
@@ -2393,15 +2319,6 @@ body.menu-aberto .topo {
   color: var(--tinta-2);
   font-size: 16px;
   line-height: 1.65;
-  opacity: 0;
-  transform: translate3d(0, 12px, 0);
-  transition: opacity 350ms var(--ease-premium) 50ms, transform 350ms var(--ease-premium) 50ms;
-}
-
-.pergunta[open] .pergunta__resposta p,
-.pergunta.faq-aberto .pergunta__resposta p {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
 }
 
 @media (max-width: 980px) {
@@ -2672,8 +2589,6 @@ body.menu-aberto .topo {
 
 .pagina-perfil,
 .pagina-servico {
-  position: relative;
-  z-index: 2;
   padding-top: calc(var(--topo) + clamp(28px, 4vw, 56px));
   padding-bottom: clamp(64px, 8vw, 120px);
   background: var(--off-white);
@@ -2799,13 +2714,6 @@ body.menu-aberto .topo {
   border-radius: var(--raio);
   background: var(--papel);
   box-shadow: inset 0 0 0 1px var(--linha);
-  transition: transform 400ms var(--ease-premium), box-shadow 400ms var(--ease-premium);
-}
-
-.perfil-card:hover,
-.servico-card:hover {
-  transform: translateY(-4px);
-  box-shadow: inset 0 0 0 1px var(--linha), 0 24px 48px -24px rgba(38, 51, 36, 0.35);
 }
 
 .perfil-card--destaque,
@@ -2971,346 +2879,46 @@ body.menu-aberto .topo {
   }
 }
 
-/* ── Transição entre seções: sombra sutil projetada no topo para sensação de camadas ── */
-.servicos,
-.respiro,
-.equipe,
-.local,
-.duvidas,
-.rodape,
-.servico-detalhe,
-.perfil-detalhe {
-  position: relative;
-  z-index: 2;
-  box-shadow: 0 -40px 80px -20px rgba(18, 26, 18, 0.35);
-}
-
 /* ── Revelar ao Rolar (Scroll Animations & Choreography) ───────────────────── */
 
-/* O estado oculto SÓ tem efeito quando html possui a classe .js-ready */
-html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho):not(.profissional__id):not([data-revela="destaque"]) {
-  opacity: 0;
-  transform: translate3d(0, 48px, 0);
-  filter: blur(min(var(--blur-reveal), 10px));
-  transition:
-    opacity 800ms var(--ease-premium),
-    transform var(--dur-soft) var(--ease-premium),
-    filter var(--dur-soft) var(--ease-premium);
-  transition-delay: var(--atraso, 0s);
-}
-
-html.js-ready [data-revela="escala"] {
-  transform: scale(0.94) translate3d(0, 48px, 0);
-}
-
-/* 1. Títulos de seção por linhas com máscara de revelação e blur reveal */
-.revela-linha-mascara {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.08em;
-  perspective: 1000px;
-}
-
-html.js-ready [data-revela-tipo="linhas"] {
-  opacity: 1;
-  transform: none;
-}
-
-html.js-ready [data-revela-tipo="linhas"] .revela-linha {
-  display: block;
-  opacity: 0;
-  transform: translate3d(0, 110%, 0) rotateX(3deg) skewY(1deg) scale(1.02);
-  transform-origin: bottom left;
-  filter: blur(var(--blur-reveal));
-  transition:
-    opacity 900ms var(--ease-premium),
-    transform var(--dur-reveal) var(--ease-premium),
-    filter var(--dur-reveal) var(--ease-premium);
-  transition-delay: var(--atraso-linha, 0s);
-}
-
-html.js-ready [data-revela-tipo="linhas"].visivel .revela-linha {
-  opacity: 1;
-  transform: translate3d(0, 0, 0) rotateX(0deg) skewY(0deg) scale(1);
-  filter: blur(0px);
-}
-
-html.js-ready [data-revela-tipo="linhas"].visivel:not(.animando) .revela-linha {
-  filter: none;
-  will-change: auto;
-}
-
-html.js-ready [data-revela-tipo="linhas"].animando .revela-linha {
-  will-change: opacity, transform, filter;
-}
-
-/* 2. Rótulos pequenos (.olho): linha dourada cresce em 700ms antes do texto */
-html.js-ready .olho[data-revela] {
-  opacity: 0;
-  transform: translate3d(0, 16px, 0);
-  filter: none;
-  transition: opacity 700ms var(--ease-premium) 150ms, transform 700ms var(--ease-premium) 150ms;
-  transition-delay: calc(var(--atraso, 0s) + 150ms);
-}
-
-html.js-ready .olho[data-revela].visivel {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  filter: none;
-}
-
-html.js-ready .olho[data-revela]::before {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 700ms var(--ease-premium);
-  transition-delay: var(--atraso, 0s);
-}
-
-html.js-ready .olho[data-revela].visivel::before {
-  transform: scaleX(1);
-}
-
-/* 3. Imagens e cards com foto: máscara clip-path de 100% para 0 de baixo para cima em 1200ms, scale 1.15 para 1 em 1600ms */
-html.js-ready [data-revela="mascara"] {
-  opacity: 1;
-  transform: none;
-  clip-path: inset(100% 0 0 0);
-  transition: clip-path 1200ms var(--ease-premium);
-  transition-delay: var(--atraso, 0s);
-  overflow: hidden;
-}
-
-html.js-ready [data-revela="mascara"].visivel {
-  clip-path: inset(0 0 0 0);
-}
-
-html.js-ready [data-revela="mascara"].animando {
-  will-change: clip-path;
-}
-
-html.js-ready [data-revela="mascara"] img,
-html.js-ready [data-revela="mascara"] picture img {
-  transform: translate3d(0, var(--parallax-y, 0px), 0) scale(1.15);
-  transition: transform 1600ms var(--ease-premium);
-  transition-delay: var(--atraso, 0s);
-  will-change: transform;
-}
-
-html.js-ready [data-revela="mascara"].visivel img,
-html.js-ready [data-revela="mascara"].visivel picture img {
-  transform: translate3d(0, var(--parallax-y, 0px), 0) scale(1);
-}
-
-html.js-ready [data-revela="mascara"].visivel:not(.animando) img,
-html.js-ready [data-revela="mascara"].visivel:not(.animando) picture img {
-  transition: transform 0.1s linear;
-  will-change: auto;
-}
-
-/* 4. Números, CRPs e destaques: fade com blur curto (6px) e translateY de 20px */
-html.js-ready .profissional__id[data-revela],
-html.js-ready [data-revela="destaque"] {
+.revelar-ativo [data-revela] {
   opacity: 0;
   transform: translate3d(0, 20px, 0);
-  filter: blur(6px);
-  transition:
-    opacity 800ms var(--ease-premium),
-    transform 800ms var(--ease-premium),
-    filter 800ms var(--ease-premium);
+  transition: opacity var(--dur-base) var(--ease-premium), transform var(--dur-base) var(--ease-premium);
   transition-delay: var(--atraso, 0s);
 }
 
-html.js-ready .profissional__id[data-revela].visivel,
-html.js-ready [data-revela="destaque"].visivel {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  filter: blur(0px);
+.revelar-ativo [data-revela="escala"] {
+  transform: scale(0.96);
 }
 
-/* 7. Linhas douradas e divisores */
-html.js-ready [data-revela="linha"],
-html.js-ready .linha-dourada[data-revela] {
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 900ms var(--ease-premium);
+.revelar-ativo [data-revela="mascara"] {
+  opacity: 1;
+  transform: none;
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path var(--dur-base) var(--ease-premium);
   transition-delay: var(--atraso, 0s);
 }
 
-html.js-ready [data-revela="linha"].visivel,
-html.js-ready .linha-dourada[data-revela].visivel {
-  transform: scaleX(1);
-}
-
-/* 8. Destaque sutil de etapa numerada ativa ao rolar pelo centro */
-.lista-etapas-ativa li {
-  opacity: 0.50;
-  transition: opacity 400ms var(--ease-premium);
-}
-
-.lista-etapas-ativa li.etapa-ativa {
+.revelar-ativo [data-revela].visivel {
   opacity: 1;
-}
-
-/* 9. Faixa de contato, blocos de ação e marquee com blur reveal */
-html.js-ready .faixa-contato,
-html.js-ready .faixa[data-revela],
-html.js-ready .duvidas__cta[data-revela] {
-  opacity: 0;
-  transform: translate3d(0, 40px, 0);
-  filter: blur(min(var(--blur-reveal), 8px));
-  transition:
-    opacity 900ms var(--ease-premium),
-    transform 900ms var(--ease-premium),
-    filter 900ms var(--ease-premium);
-}
-
-html.js-ready .faixa-contato.visivel,
-html.js-ready .faixa[data-revela].visivel,
-html.js-ready .duvidas__cta[data-revela].visivel {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  filter: blur(0px);
-}
-
-html.js-ready .faixa-contato.visivel:not(.animando),
-html.js-ready .faixa[data-revela].visivel:not(.animando),
-html.js-ready .duvidas__cta[data-revela].visivel:not(.animando) {
+  transform: none;
   filter: none;
 }
 
-html.js-ready .faixa-contato .botao,
-html.js-ready .duvidas__cta[data-revela] .botao {
-  transition: opacity 800ms var(--ease-premium), transform 800ms var(--ease-premium);
+.revelar-ativo [data-revela="mascara"].visivel {
+  clip-path: inset(0);
 }
 
-html.js-ready .faixa-contato:not(.visivel) .botao,
-html.js-ready .duvidas__cta[data-revela]:not(.visivel) .botao {
-  opacity: 0;
-  transform: translate3d(0, 20px, 0);
-}
-
-html.js-ready .faixa-contato.visivel .botao:nth-child(1),
-html.js-ready .duvidas__cta[data-revela].visivel .botao:nth-child(1) {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition-delay: 100ms;
-}
-
-html.js-ready .faixa-contato.visivel .botao:nth-child(2),
-html.js-ready .duvidas__cta[data-revela].visivel .botao:nth-child(2) {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  transition-delay: 200ms;
-}
-
-/* Estado Geral Visível / Revelado */
-html.js-ready [data-revela]:not([data-revela-tipo="linhas"]).visivel {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-  filter: blur(0px);
-}
-
-html.js-ready [data-revela]:not([data-revela-tipo="linhas"]).visivel:not(.animando) {
-  filter: none;
-  will-change: auto;
-}
-
-/* Elementos sem blur (quando limite de 12 blur simultâneos é atingido) */
-html.js-ready [data-revela].sem-blur,
-html.js-ready [data-revela-tipo="linhas"].sem-blur .revela-linha {
-  filter: none !important;
-}
-
-html.js-ready [data-revela].sem-blur.animando {
-  will-change: opacity, transform;
-}
-
-/* Desempenho: will-change presente exclusivamente durante a animação */
-html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.sem-blur).animando {
-  will-change: opacity, transform, filter;
-}
-
-/* Mobile (até 768px): deslocamento de 32px, duração equilibrada, sem rotateX/skew e fade+scale para imagens */
-@media (max-width: 768px) {
-  :root {
-    --blur-reveal: 8px;
-    --dur-reveal: 960ms;
-    --dur-soft: 800ms;
+@media (max-width: 820px) {
+  .revelar-ativo [data-revela] {
+    transform: translate3d(0, 14px, 0);
   }
-
-  html.js-ready [data-revela]:not([data-revela-tipo="linhas"]):not([data-revela="mascara"]):not(.olho) {
-    transform: translate3d(0, 32px, 0);
-    filter: blur(min(var(--blur-reveal), 8px));
-    transition:
-      opacity 640ms var(--ease-premium),
-      transform 800ms var(--ease-premium),
-      filter 800ms var(--ease-premium);
-  }
-
-  html.js-ready [data-revela-tipo="linhas"] .revela-linha {
-    transform: translate3d(0, 32px, 0) scale(1);
-    transform-origin: bottom center;
-    filter: blur(var(--blur-reveal));
-    transition:
-      opacity 720ms var(--ease-premium),
-      transform 960ms var(--ease-premium),
-      filter 960ms var(--ease-premium);
-  }
-
-  html.js-ready [data-revela="mascara"] {
-    clip-path: none !important;
-    opacity: 0;
-    transform: scale(0.96) translate3d(0, 16px, 0);
-    transition: opacity 800ms var(--ease-premium), transform 800ms var(--ease-premium);
-  }
-
-  html.js-ready [data-revela="mascara"].visivel {
-    opacity: 1;
-    transform: scale(1) translate3d(0, 0, 0);
-  }
-
-  html.js-ready [data-revela="mascara"] img,
-  html.js-ready [data-revela="mascara"] picture img {
-    transform: none !important;
-    transition: none !important;
-    will-change: auto;
-  }
-}
-
-/* Acessibilidade: prefers-reduced-motion respeitado estritamente */
-@media (prefers-reduced-motion: reduce) {
-  html.js-ready [data-revela],
-  html.js-ready [data-revela-tipo="linhas"],
-  html.js-ready .revela-linha-mascara .revela-linha,
-  html.js-ready [data-revela="mascara"],
-  html.js-ready [data-revela="mascara"] img,
-  html.js-ready [data-revela="mascara"] picture img,
-  html.js-ready .olho[data-revela]::before,
-  .lista-etapas-ativa li {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    clip-path: none !important;
-    transition: none !important;
-  }
-}
-
-/* Fallback de Segurança: nada fica invisível se JS falhar ao carregar */
-html:not(.js-ready) [data-revela],
-html:not(.js-ready) [data-revela-tipo="linhas"],
-html:not(.js-ready) .revela-linha-mascara .revela-linha,
-html:not(.js-ready) [data-revela="mascara"] {
-  opacity: 1 !important;
-  transform: none !important;
-  filter: none !important;
-  clip-path: none !important;
 }
 
 /* ── Rodapé Institucional ──────────────────────────────────────────────────── */
 
 .rodape {
-  position: relative;
-  z-index: 2;
   padding: clamp(72px, 8vw, 104px) 0 36px;
   background: var(--verde-profundo);
   border-top: 1px solid rgba(245, 243, 237, 0.1);

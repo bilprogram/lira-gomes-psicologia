@@ -402,19 +402,6 @@
       }
     }
 
-    // Esconde a hero (visibility: hidden) quando totalmente coberta pela segunda dobra
-    if (heroElement) {
-      if (scrollYAtual >= cachedAlturaHero) {
-        if (heroElement.style.visibility !== 'hidden') {
-          heroElement.style.visibility = 'hidden';
-        }
-      } else {
-        if (heroElement.style.visibility !== 'visible') {
-          heroElement.style.visibility = 'visible';
-        }
-      }
-    }
-
     // Gerencia pausa do vídeo da hero quando coberto ou fora da tela
     gerenciarReproducaoVideo();
 
@@ -588,20 +575,25 @@
   }
 
   function fecharPergunta(det) {
-    if (!det.open) return;
-    if (movimentoReduzido) {
+    const resposta = det.querySelector('.pergunta__resposta');
+    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
       det.open = false;
-      det.classList.remove('faq-aberto');
       atualizarAriaExpanded(det);
       return;
     }
     det.dataset.animando = '1';
-    det.classList.remove('faq-aberto');
-    atualizarAriaExpanded(det);
-    setTimeout(() => {
+    const anim = resposta.animate(
+      [
+        { height: `${resposta.scrollHeight}px`, opacity: 1 },
+        { height: '0px', opacity: 0 }
+      ],
+      { duration: 350, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+    );
+    anim.onfinish = anim.oncancel = () => {
       det.open = false;
+      atualizarAriaExpanded(det);
       delete det.dataset.animando;
-    }, 400);
+    };
   }
 
   function abrirPergunta(det) {
@@ -614,20 +606,23 @@
     det.open = true;
     atualizarAriaExpanded(det);
 
-    if (movimentoReduzido) {
-      det.classList.add('faq-aberto');
+    const resposta = det.querySelector('.pergunta__resposta');
+    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
       return;
     }
 
     det.dataset.animando = '1';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        det.classList.add('faq-aberto');
-      });
-    });
-    setTimeout(() => {
+    const altura = resposta.scrollHeight;
+    const anim = resposta.animate(
+      [
+        { height: '0px', opacity: 0 },
+        { height: `${altura}px`, opacity: 1 }
+      ],
+      { duration: 400, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+    );
+    anim.onfinish = anim.oncancel = () => {
       delete det.dataset.animando;
-    }, 450);
+    };
   }
 
   perguntasFaq.forEach((det) => {
@@ -648,402 +643,38 @@
 
   /* ── 5. Revelação ao Rolar (Scroll Animations & Choreography) ───────────────────────────── */
 
-
-  function prepararTitulosSecaoLinhas() {
-    if (movimentoReduzido) return;
-    const titulos = document.querySelectorAll(
-      '.servicos__titulo[data-revela], .respiro__titulo[data-revela], .local__titulo[data-revela], .duvidas__titulo[data-revela], .servico-hero__nome[data-revela], .perfil-hero__nome[data-revela], .titulo-editorial[data-revela]'
-    );
-
-    titulos.forEach((titulo) => {
-      // Salva HTML e texto originais se ainda não salvos
-      if (!titulo.dataset.htmlOriginal) {
-        titulo.dataset.htmlOriginal = titulo.innerHTML;
-        titulo.dataset.textoOriginal = titulo.textContent.trim().replace(/\s+/g, ' ');
-      }
-      const htmlOriginal = titulo.dataset.htmlOriginal;
-      const textoOriginal = titulo.dataset.textoOriginal;
-      if (!textoOriginal) return;
-
-      const jaVisivel = titulo.classList.contains('visivel');
-
-      try {
-        // Clona temporariamente preservando tags (ex: <em>) e envolvendo palavras em spans
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlOriginal;
-
-        function wrapText(node) {
-          if (node.nodeType === Node.TEXT_NODE) {
-            const parts = node.nodeValue.split(/(\s+)/);
-            const frag = document.createDocumentFragment();
-            parts.forEach((p) => {
-              if (!p) return;
-              if (/^\s+$/.test(p)) {
-                frag.appendChild(document.createTextNode(p));
-              } else {
-                const sp = document.createElement('span');
-                sp.className = 'revela-palavra-temp';
-                sp.style.display = 'inline-block';
-                sp.textContent = p;
-                frag.appendChild(sp);
-              }
-            });
-            node.parentNode.replaceChild(frag, node);
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            Array.from(node.childNodes).forEach(wrapText);
-          }
-        }
-        wrapText(tempDiv);
-        titulo.innerHTML = tempDiv.innerHTML;
-
-        const spans = titulo.querySelectorAll('.revela-palavra-temp');
-        if (!spans.length) {
-          titulo.innerHTML = htmlOriginal;
-          return;
-        }
-
-        const linhas = [];
-        let linhaAtual = [];
-        let topAtual = null;
-
-        spans.forEach((span) => {
-          const top = Math.round(span.getBoundingClientRect().top);
-          if (topAtual === null || Math.abs(top - topAtual) <= 6) {
-            linhaAtual.push(span.outerHTML);
-            topAtual = top;
-          } else {
-            if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
-            linhaAtual = [span.outerHTML];
-            topAtual = top;
-          }
-        });
-        if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
-
-        const isMobile = window.innerWidth <= 768;
-        const atrasoEntreLinhas = isMobile ? 70 : 120; // 120ms desktop, 70ms mobile
-
-        const htmlLinhas = linhas
-          .map((linhaHtml, idx) => {
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = linhaHtml;
-            wrapper.querySelectorAll('.revela-palavra-temp').forEach((sp) => {
-              sp.replaceWith(...sp.childNodes);
-            });
-            return `
-            <span class="revela-linha-mascara">
-              <span class="revela-linha" aria-hidden="true" style="--atraso-linha:${idx * atrasoEntreLinhas}ms;">${wrapper.innerHTML}</span>
-            </span>
-          `;
-          })
-          .join('');
-
-        titulo.innerHTML = `
-          <span class="sr-only">${textoOriginal}</span>
-          <span class="revela-titulo-linhas" aria-hidden="true">${htmlLinhas}</span>
-        `;
-        titulo.setAttribute('aria-label', textoOriginal);
-        titulo.setAttribute('data-linhas-preparadas', 'true');
-        titulo.setAttribute('data-revela-tipo', 'linhas');
-        if (jaVisivel) {
-          titulo.classList.add('visivel');
-        }
-      } catch (err) {
-        // Fallback de segurança: nada quebra, texto inteiro visível intacto
-        titulo.innerHTML = htmlOriginal;
-        titulo.classList.add('visivel');
-      }
-    });
-  }
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      prepararTitulosSecaoLinhas();
-    }, 200);
-  }, { passive: true });
-
-  function inicializarReveals() {
-    if (movimentoReduzido) {
-      document.querySelectorAll('[data-revela]').forEach((el) => el.classList.add('visivel'));
-      return;
-    }
-
-    // Sinaliza que JS está ativo e pronto para revelações
-    raiz.classList.add('js-ready', 'revelar-ativo');
-
-    // Prepara títulos de seção com máscara por linha após document.fonts.ready
-    prepararTitulosSecaoLinhas();
-
-    const reveladores = document.querySelectorAll('[data-revela]');
-    if (!reveladores.length) return;
-
-    // Escalonamento entre irmãos de um mesmo grupo (90 a 130ms até 8 elementos; 40ms acima)
+  const reveladores = document.querySelectorAll('[data-revela]');
+  if ('IntersectionObserver' in window && reveladores.length && !movimentoReduzido) {
     document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
-      const filhos = grupo.querySelectorAll(':scope > [data-revela], :scope > * > [data-revela]');
-      const total = filhos.length;
-      const isMobile = window.innerWidth <= 768;
-      const stagger = total > 8 ? 0.040 : (isMobile ? 0.070 : 0.110);
-      filhos.forEach((el, i) => {
-        el.style.setProperty('--atraso', `${(i * stagger).toFixed(3)}s`);
+      grupo.querySelectorAll('[data-revela]').forEach((el, i) => {
+        el.style.setProperty('--atraso', `${Math.min(i * 0.08, 0.32)}s`);
       });
     });
 
+    raiz.classList.add('revelar-ativo');
+
+    // A máscara fechada (clip-path: inset) tem área visual inicial zero no Chromium;
+    // por isso, observamos o container pai quando for máscara.
     const observados = new Map();
     reveladores.forEach((el) => {
       const observado = el.dataset.revela === 'mascara' && el.parentElement ? el.parentElement : el;
-      if (!observados.has(observado)) {
-        observados.set(observado, []);
-      }
+      if (!observados.has(observado)) observados.set(observado, []);
       observados.get(observado).push(el);
     });
 
-    // REQUISITO: Não anime o que já está visível no carregamento da página
-    const alturaJanela = window.innerHeight || document.documentElement.clientHeight;
-    const jaVisiveis = [];
-
-    observados.forEach((els, gatilho) => {
-      const rect = gatilho.getBoundingClientRect();
-      if (rect.top < alturaJanela * 0.90 && rect.bottom > 0) {
-        jaVisiveis.push(gatilho);
-      }
-    });
-
-    jaVisiveis.forEach((gatilho) => {
-      (observados.get(gatilho) || []).forEach((el) => {
-        el.classList.add('visivel');
-        el.style.setProperty('--atraso', '0s');
-        el.style.filter = 'none';
-      });
-      observados.delete(gatilho);
-    });
-
-    if (observados.size === 0) return;
-
-    // Limite de desempenho: máximo de 12 elementos com blur animando simultaneamente
-    let blurAtivos = 0;
-    const MAX_BLUR_SIMULTANEOS = 12;
-
-    // REQUISITO: IntersectionObserver único compartilhado, threshold 0.15, rootMargin inferior de -10%, disparo único
     const observador = new IntersectionObserver((entradas) => {
       entradas.forEach((entrada) => {
         if (!entrada.isIntersecting) return;
-        const els = observados.get(entrada.target) || [];
-        els.forEach((el) => {
-          if (blurAtivos < MAX_BLUR_SIMULTANEOS) {
-            blurAtivos++;
-            el.classList.add('animando', 'visivel');
-            const limpar = () => {
-              el.classList.remove('animando');
-              el.style.filter = 'none';
-              blurAtivos = Math.max(0, blurAtivos - 1);
-              el.removeEventListener('transitionend', limpar);
-            };
-            el.addEventListener('transitionend', limpar, { once: true });
-            setTimeout(limpar, 1400);
-          } else {
-            // Mais de 12 blur simultâneos: entra sem blur (apenas fade e translateY)
-            el.classList.add('sem-blur', 'animando', 'visivel');
-            const limpar = () => {
-              el.classList.remove('animando');
-              el.removeEventListener('transitionend', limpar);
-            };
-            el.addEventListener('transitionend', limpar, { once: true });
-            setTimeout(limpar, 1400);
-          }
-        });
+        (observados.get(entrada.target) || []).forEach((el) => el.classList.add('visivel'));
         observador.unobserve(entrada.target);
         observados.delete(entrada.target);
         if (observados.size === 0) {
           observador.disconnect();
         }
       });
-    }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
-    });
+    }, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
 
     observados.forEach((_, observado) => observador.observe(observado));
-  }
-
-  /* ── 5.1 Parallax Suave nas Imagens das Seções (Desktop apenas) ────────── */
-  function inicializarParallaxImagens() {
-    if (movimentoReduzido || window.innerWidth <= 768) return;
-
-    const alvos = document.querySelectorAll(
-      '.servico__foto img, .profissional__foto img, .local__foto img, .servico-hero__foto img, .perfil-hero__foto img'
-    );
-    if (!alvos.length) return;
-
-    const itens = [];
-    function recalcularDimensoes() {
-      itens.length = 0;
-      alvos.forEach((img) => {
-        const container = img.closest('figure') || img.parentElement;
-        const rect = container.getBoundingClientRect();
-        itens.push({
-          img: img,
-          container: container,
-          top: rect.top + window.scrollY,
-          height: rect.height,
-          ativo: false
-        });
-      });
-    }
-    recalcularDimensoes();
-
-    let animando = false;
-    function atualizarParallax() {
-      animando = false;
-      const scrollY = window.scrollY;
-      const alturaJanela = window.innerHeight;
-      const centroJanela = scrollY + alturaJanela / 2;
-
-      itens.forEach((it) => {
-        if (!it.ativo) return;
-        const centroElemento = it.top + it.height / 2;
-        const dist = centroJanela - centroElemento;
-        const fator = Math.max(-1, Math.min(1, dist / (alturaJanela / 2)));
-        const deslocamentoMax = it.height * 0.06;
-        const translateY = -(fator * deslocamentoMax);
-        it.img.style.setProperty('--parallax-y', `${translateY.toFixed(1)}px`);
-      });
-    }
-
-    function onScroll() {
-      if (!animando) {
-        animando = true;
-        requestAnimationFrame(atualizarParallax);
-      }
-    }
-
-    const observadorParallax = new IntersectionObserver((entradas) => {
-      let mudanca = false;
-      entradas.forEach((entrada) => {
-        const item = itens.find((it) => it.container === entrada.target);
-        if (item) {
-          item.ativo = entrada.isIntersecting;
-          if (entrada.isIntersecting) mudanca = true;
-        }
-      });
-      if (mudanca) {
-        onScroll();
-      }
-    }, { threshold: 0, rootMargin: '60px 0px 60px 0px' });
-
-    itens.forEach((it) => observadorParallax.observe(it.container));
-    onScroll();
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-      if (window.innerWidth <= 768) {
-        itens.forEach((it) => it.img.style.removeProperty('--parallax-y'));
-        return;
-      }
-      recalcularDimensoes();
-      onScroll();
-    }, { passive: true });
-  }
-
-  /* ── 5.2 Destaque de Etapa Ativa ao Passar pelo Centro da Tela ─────────── */
-  function inicializarDestaqueEtapas() {
-    if (movimentoReduzido) return;
-    const listas = document.querySelectorAll('.servico-lista');
-    if (!listas.length) return;
-
-    const itens = [];
-    listas.forEach((lista) => {
-      const lis = lista.querySelectorAll('li');
-      let ehNumerada = false;
-      lis.forEach((li) => {
-        if (/\b\d+\.\s+/.test(li.textContent)) {
-          ehNumerada = true;
-        }
-      });
-      if (ehNumerada) {
-        lista.classList.add('lista-etapas-ativa');
-        lis.forEach((li) => itens.push(li));
-      }
-    });
-
-    if (!itens.length) return;
-
-    let animando = false;
-    function atualizarDestaque() {
-      animando = false;
-      const topoJanela = window.innerHeight * 0.25;
-      const fundoJanela = window.innerHeight * 0.75;
-
-      itens.forEach((li) => {
-        const rect = li.getBoundingClientRect();
-        const centro = rect.top + rect.height / 2;
-        if (centro >= topoJanela && centro <= fundoJanela) {
-          li.classList.add('etapa-ativa');
-        } else {
-          li.classList.remove('etapa-ativa');
-        }
-      });
-    }
-
-    window.addEventListener('scroll', () => {
-      if (!animando) {
-        animando = true;
-        requestAnimationFrame(atualizarDestaque);
-      }
-    }, { passive: true });
-
-    atualizarDestaque();
-  }
-
-  /* ── 5.3 Aceleração Dinâmica do Marquee no Scroll (Desktop apenas) ─────── */
-  function inicializarAceleracaoMarquee() {
-    if (movimentoReduzido || window.innerWidth <= 768) return;
-    const trilho = document.querySelector('.faixa__trilho');
-    if (!trilho) return;
-
-    let ultimoScrollY = window.scrollY;
-    let ultimoTempo = performance.now();
-    let timerRetorno = null;
-
-    window.addEventListener('scroll', () => {
-      if (window.innerWidth <= 768) return;
-      const agora = performance.now();
-      const dt = agora - ultimoTempo;
-      if (dt > 16) {
-        const dy = Math.abs(window.scrollY - ultimoScrollY);
-        const velocidade = dy / dt; // pixels por milissegundo
-        ultimoScrollY = window.scrollY;
-        ultimoTempo = agora;
-
-        // Limita a aceleração a no máximo 1.6x
-        const fator = Math.min(1.6, 1.0 + velocidade * 0.35);
-        trilho.style.animationPlaybackRate = String(fator.toFixed(2));
-
-        clearTimeout(timerRetorno);
-        timerRetorno = setTimeout(() => {
-          trilho.style.animationPlaybackRate = '1';
-        }, 600);
-      }
-    }, { passive: true });
-  }
-
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => {
-      inicializarReveals();
-      inicializarParallaxImagens();
-      inicializarDestaqueEtapas();
-      inicializarAceleracaoMarquee();
-    }).catch(() => {
-      inicializarReveals();
-      inicializarParallaxImagens();
-      inicializarDestaqueEtapas();
-      inicializarAceleracaoMarquee();
-    });
-  } else {
-    inicializarReveals();
-    inicializarParallaxImagens();
-    inicializarDestaqueEtapas();
-    inicializarAceleracaoMarquee();
   }
 
   /* ── 5.1 Pausa do Marquee fora da Viewport ────────────────────────────────────────────── */
