@@ -328,14 +328,23 @@
           <!-- Card 2: Formato Destaque (fundo areia conforme design system) -->
           <article class="formato formato--destaque servico" id="avaliacao-neuropsicologica" data-revela>
             <figure class="formato__foto servico__foto" data-revela="mascara">
-              <img
-                src="assets/marca/img/otimizadas/card2.webp"
-                alt="Entrada do conjunto 14, com painel de madeira ripada, prateleira com plantas, orquídea e pequenas esculturas"
-                width="1000"
-                height="1778"
-                loading="lazy"
-                decoding="async"
-              >
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset="assets/marca/img/otimizadas/avaliacao-neuropsicologica-sessao-testes-vila-andrade-sp.webp 800w, assets/marca/img/otimizadas/avaliacao-neuropsicologica-sessao-testes-vila-andrade-sp-1600.webp 1600w"
+                  sizes="(max-width: 768px) 100vw, 560px"
+                >
+                <img
+                  src="assets/marca/img/otimizadas/avaliacao-neuropsicologica-sessao-testes-vila-andrade-sp.jpg"
+                  srcset="assets/marca/img/otimizadas/avaliacao-neuropsicologica-sessao-testes-vila-andrade-sp.jpg 800w, assets/marca/img/otimizadas/avaliacao-neuropsicologica-sessao-testes-vila-andrade-sp-1600.jpg 1600w"
+                  sizes="(max-width: 768px) 100vw, 560px"
+                  alt="Sessão de avaliação neuropsicológica com tarefa de cubos e folha de teste sobre a mesa"
+                  width="800"
+                  height="994"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </picture>
             </figure>
             <div class="formato__topo">
               <div class="formato__icone" aria-hidden="true">

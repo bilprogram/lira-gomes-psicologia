@@ -1217,6 +1217,13 @@ body.menu-aberto .topo,
   transform: translateZ(0);
 }
 
+.formato__foto picture,
+.servico__foto picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .formato__foto img,
 .servico__foto img {
   width: 100%;
@@ -1228,7 +1235,7 @@ body.menu-aberto .topo,
 .formato:nth-child(1) .formato__foto img,
 .servico:nth-child(1) .servico__foto img { object-position: 50% 62%; }
 .formato:nth-child(2) .formato__foto img,
-.servico:nth-child(2) .servico__foto img { object-position: 50% 52%; }
+.servico:nth-child(2) .servico__foto img { object-position: 50% 70%; }
 
 .formato:hover .formato__foto img,
 .servico:hover .servico__foto img {
