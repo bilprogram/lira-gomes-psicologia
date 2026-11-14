@@ -313,6 +313,15 @@
       aberto ? 'Fechar o menu de navegação' : 'Abrir o menu de navegação'
     );
     menuMovel.setAttribute('aria-hidden', String(!aberto));
+
+    if (aberto) {
+      const primeiroItem = menuMovel.querySelector('a, button');
+      if (primeiroItem) {
+        setTimeout(() => primeiroItem.focus(), 50);
+      }
+    } else if (document.activeElement && menuMovel.contains(document.activeElement)) {
+      botaoMenu.focus();
+    }
   }
 
   if (botaoMenu && menuMovel) {
