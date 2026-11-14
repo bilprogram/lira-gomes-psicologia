@@ -1,0 +1,63 @@
+================================================================================
+KIT OFICIAL DE IDENTIDADE VISUAL & LOGOTIPO — LIRA GOMES PSICOLOGIA
+================================================================================
+
+AVISO OBRIGATÓRIO A TODOS OS DESENVOLVEDORES E DESIGNERS:
+NÃO ALTERE NEM ADICIONE LOGOS FORA DESTA PASTA (assets/logo-lira-gomes/).
+
+--------------------------------------------------------------------------------
+1. IDENTIFICAÇÃO DA LOGO OFICIAL (FONTE DA VERDADE)
+--------------------------------------------------------------------------------
+A única versão oficial e autorizada da marca Lira Gomes Psicologia possui as
+seguintes características visuais inconfundíveis:
+- Símbolo circular formado por 3 arcos/ondas douradas contínuas e harmoniosamente
+  entrelaçadas no interior de um aro circular.
+- NÃO CONTÉM nenhuma silhueta ou perfil de rosto humano no interior das ondas
+  (a versão anterior contendo silhueta humana foi definitivamente descontinuada
+  e está proibida em todo o projeto).
+- Tipografia: "LIRA GOMES" em caixa alta serifada refinada e sublinhada por
+  "PSICOLOGIA • NEUROPSICOLOGIA" em caixa alta sans-serif espaçada.
+
+--------------------------------------------------------------------------------
+2. ARQUIVOS OFICIAIS DESTA PASTA
+--------------------------------------------------------------------------------
+Versões Completas (Símbolo + Tipografia Oficial):
+- logo-lira-gomes-dourada-sem-fundo.png (925x775, RGBA, alta resolução para fundos escuros e topo)
+- logo-lira-gomes-dourada-sem-fundo.webp (925x775, versão web leve e nítida)
+- logo-lira-gomes-dourada-140.webp (140x117, versão responsiva para telas menores / srcset)
+- logo-lira-gomes-sem-fundo.png (793x735, RGBA, versão escura para fundos claros)
+- logo-lira-gomes-sem-fundo.webp (793x735, versão web escura para fundos claros e schema)
+- logo-lira-gomes-140.webp (140x129, versão responsiva escura para srcset)
+
+Versões Compactas (Símbolo + "LIRA GOMES" sem subtexto fino):
+- logo-lira-gomes-compacta-dourada-sem-fundo.png (908x700, RGBA)
+- logo-lira-gomes-compacta-dourada-sem-fundo.webp (908x700)
+- logo-lira-gomes-compacta-sem-fundo.png (751x650, RGBA)
+- logo-lira-gomes-compacta-sem-fundo.webp (751x650)
+
+Versões Símbolo Isolado:
+- simbolo-lira-gomes-dourado-sem-fundo.png (512x512, respiro de ~8%)
+- simbolo-lira-gomes-dourado-sem-fundo.webp (512x512)
+
+Favicons e Ícones Web:
+- favicon.ico (formato ICO multi-resolução: 16x16, 24x24, 32x32, 48x48)
+- favicon-16x16.png
+- favicon-32x32.png
+- favicon-48x48.png
+- apple-touch-icon.png (180x180, para dispositivos iOS)
+- android-chrome-192x192.png & favicon-192x192.png (192x192)
+- android-chrome-512x512.png & favicon-512x512.png (512x512)
+
+--------------------------------------------------------------------------------
+3. PROIBIÇÃO EXPRESSA E DIRETRIZES TÉCNICAS
+--------------------------------------------------------------------------------
+1. É EXPRESSAMENTE PROIBIDO utilizar qualquer arquivo localizado em pastas de
+   backup (_backup*/, _backup-logo-antiga/, _backup-originais/) ou reintroduzir
+   qualquer versão legada que contenha silhueta de perfil humano.
+2. Não recrie a pasta `assets/marca/logos/`. Qualquer chamada a logos deve ser
+   feita exclusivamente para o caminho relativo `assets/logo-lira-gomes/<arquivo>`.
+3. Não utilize URLs absolutas com domínio da Vercel ou terceiros.
+4. Ao referenciar a logo em novos componentes ou páginas, utilize sempre as tags
+   semânticas com proporção intrínseca adequada (`width="925" height="775"` para a
+   versão horizontal) e classes CSS padronizadas (`.marca__logo`).
+================================================================================
