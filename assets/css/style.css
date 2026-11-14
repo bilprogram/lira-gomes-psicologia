@@ -637,8 +637,8 @@ body.menu-aberto .topo,
   align-items: flex-end;
   min-height: 100vh;
   min-height: 100svh;
-  padding-top: calc(var(--topo) + clamp(48px, 8vh, 96px));
-  padding-bottom: clamp(48px, 7vh, 96px);
+  padding-top: calc(var(--topo) + clamp(120px, 12vh, 160px));
+  padding-bottom: clamp(56px, 8vh, 104px);
   background-color: var(--verde-profundo);
   color: var(--off-white);
   overflow: clip;
@@ -664,7 +664,7 @@ body.menu-aberto .topo,
 }
 
 /* Camada de sobreposição discreta e compatível com a marca:
-   reforçada levemente à esquerda para garantir legibilidade sem esconder Lucas e Thais à direita */
+   reforçada levemente à esquerda (até ~60%) para garantir legibilidade sem escurecer o rosto da profissional */
 .hero__sobreposicao {
   position: absolute;
   inset: 0;
@@ -678,12 +678,12 @@ body.menu-aberto .topo,
     ),
     linear-gradient(
       90deg,
-      rgba(27, 37, 26, 0.96) 0%,
-      rgba(27, 37, 26, 0.92) 28%,
-      rgba(27, 37, 26, 0.80) 48%,
-      rgba(27, 37, 26, 0.45) 64%,
-      rgba(27, 37, 26, 0.12) 78%,
-      rgba(27, 37, 26, 0) 90%
+      rgba(27, 37, 26, 0.95) 0%,
+      rgba(27, 37, 26, 0.90) 28%,
+      rgba(27, 37, 26, 0.78) 46%,
+      rgba(27, 37, 26, 0.40) 58%,
+      rgba(27, 37, 26, 0.10) 68%,
+      rgba(27, 37, 26, 0) 80%
     );
   pointer-events: none;
 }
@@ -707,10 +707,12 @@ body.menu-aberto .topo,
   width: 100%;
 }
 
-/* Coluna de texto restrita a 680px sem invadir a profissional à direita */
+/* Coluna de texto restrita a min(600px, 52vw), alinhada rigorosamente à esquerda */
 .hero__conteudo {
   width: 100%;
-  max-width: 680px;
+  max-width: min(600px, 52vw);
+  margin: 0;
+  padding: 0;
 }
 
 /* Texto de apoio pequeno (Eyebrow) - Tag para título: 24px */
@@ -719,53 +721,56 @@ body.menu-aberto .topo,
   align-items: center;
   gap: 12px;
   margin: 0 0 24px;
-  font-size: clamp(11px, 0.82vw, 12px);
+  font-size: clamp(11px, 0.8vw, 12px);
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--dourado-areia);
+  white-space: normal;
+  max-width: 100%;
 }
 
 .hero__apoio::before {
   content: "";
-  width: 28px;
+  width: 36px;
   height: 1px;
   flex-shrink: 0;
   background: var(--dourado-areia);
 }
 
-/* H1 Único da Hero: Grande, elegante, até 3 linhas no desktop */
+/* H1 Único da Hero: Grande, elegante, alinhado à esquerda */
 .hero__titulo {
-  max-width: 760px;
+  max-width: 16ch;
   margin: 0 0 24px;
   color: var(--off-white);
   font-family: "Fraunces", "Lora", Georgia, serif;
-  font-size: clamp(2.6rem, 5vw, 5.2rem);
+  font-size: clamp(2.4rem, 3.4vw + 0.6rem, 3.9rem);
   font-weight: 400;
-  line-height: 1.06;
+  line-height: 1.1;
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
 /* Parágrafo principal (Subtítulo) - Subtítulo para botões: 40px */
 .hero__paragrafo {
-  max-width: 580px;
+  max-width: 440px;
   margin: 0 0 40px;
-  color: rgba(245, 243, 237, 0.85);
-  font-size: clamp(17px, 1.25vw, 19px);
-  line-height: 1.6;
+  color: rgba(245, 243, 237, 0.80);
+  font-size: clamp(16px, 1.2vw, 18px);
+  font-weight: 350;
+  line-height: 1.7;
 }
 
-/* CTAs da Hero: container flex com gap de 14 a 16px e flex-wrap */
+/* CTAs da Hero: container flex com gap de 14px e flex-wrap */
 .hero__acoes {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   margin: 0;
 }
 
-/* Botões de serviço: largura automática, altura 52px, padding horizontal 28 a 32px */
+/* Botões de serviço: largura automática, nunca esticada, altura 52px, padding 0 8px 0 24px */
 .hero__acoes .botao {
   width: auto;
   display: inline-flex;
@@ -773,14 +778,15 @@ body.menu-aberto .topo,
   justify-content: center;
   min-height: 52px;
   height: 52px;
-  padding: 0 30px;
-  font-size: 15px;
+  padding: 0 8px 0 24px;
+  font-size: 14.5px;
   font-weight: 500;
 }
 
 .hero__acoes .botao .botao__icone {
   width: 36px;
   height: 36px;
+  flex-shrink: 0;
 }
 
 /* Botão Psicoterapia: preenchido claro */
@@ -821,7 +827,7 @@ body.menu-aberto .topo,
   transform: translateY(-2px);
 }
 
-/* Link "Conheça nossos serviços": alinhado à esquerda na linha inicial do título, margin-top 28px */
+/* Link "Conheça nossos serviços": alinhado à esquerda na linha inicial do título, margin-top 24px */
 .hero__link-servicos {
   flex-basis: 100%;
   width: auto;
@@ -832,7 +838,7 @@ body.menu-aberto .topo,
   align-self: flex-start;
   min-height: auto;
   height: auto;
-  margin: 28px 0 0 0;
+  margin: 24px 0 0 0;
   padding: 0;
   color: var(--off-white);
   font-size: 15px;
@@ -840,6 +846,7 @@ body.menu-aberto .topo,
   text-align: left;
   text-decoration: underline;
   text-decoration-color: rgba(200, 174, 125, 0.65);
+  text-decoration-thickness: 1px;
   text-underline-offset: 6px;
   background: transparent !important;
   box-shadow: none !important;
@@ -859,26 +866,27 @@ body.menu-aberto .topo,
   text-decoration-color: var(--dourado-areia);
 }
 
-/* Nota inferior: 13 a 14px, opacidade ~0.7, max 2 linhas, ponto alinhado, margin-top 40px */
+/* Nota inferior: 13px, opacidade 0.65, max 2 linhas, ponto alinhado ao centro da 1ª linha, margin-top 40px */
 .hero__complementar {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 10px;
-  max-width: 680px;
+  max-width: 520px;
   margin: 40px 0 0 0;
-  padding-top: 0;
-  border-top: none;
-  color: rgba(245, 243, 237, 0.70);
-  font-size: 13.5px;
-  line-height: 1.5;
+  padding: 0;
+  border: none;
+  color: rgba(245, 243, 237, 0.65);
+  font-size: 13px;
+  line-height: 1.6;
+  text-wrap: balance;
 }
 
 .hero__complementar::before {
   content: "";
   position: relative;
-  top: -1px;
-  width: 6px;
-  height: 6px;
+  top: 8px;
+  width: 5px;
+  height: 5px;
   flex-shrink: 0;
   border-radius: 50%;
   background: var(--dourado-areia);
@@ -2151,20 +2159,22 @@ body.menu-aberto .topo,
   }
 
   .hero__apoio::before {
-    width: 20px;
+    width: 24px;
   }
 
   .hero__titulo {
     margin-bottom: 20px;
-    font-size: clamp(2.4rem, 7.8vw, 2.85rem);
-    line-height: 1.08;
+    font-size: clamp(2.1rem, 6.8vw, 2.4rem);
+    line-height: 1.1;
     letter-spacing: -0.02em;
+    max-width: 100%;
   }
 
   .hero__paragrafo {
     margin-bottom: 28px;
     font-size: 16px;
     line-height: 1.55;
+    max-width: 100%;
   }
 
   .hero__acoes {
@@ -2177,6 +2187,8 @@ body.menu-aberto .topo,
   .hero__acoes .botao {
     width: 100%;
     min-height: 52px;
+    height: 52px;
+    padding: 0 16px 0 24px;
   }
 
   .hero__link-servicos {
@@ -2191,7 +2203,8 @@ body.menu-aberto .topo,
     margin-top: 28px;
     border-top: none;
     font-size: 13px;
-    line-height: 1.45;
+    line-height: 1.5;
+    max-width: 100%;
   }
 
   .js .hero__bloco-texto,
