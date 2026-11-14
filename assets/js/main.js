@@ -148,6 +148,7 @@
     clearTimeout(temporizadorResizeTitulo);
     temporizadorResizeTitulo = setTimeout(() => {
       prepararTituloHero();
+      recalcularMedidasHero();
     }, 150);
   }, { passive: true });
 
@@ -326,6 +327,18 @@
 
   /* ── Controle de Rolagem do Topo (Vidro Permanente após 40px e Scroll Spy) ────────── */
 
+  const heroElement = document.getElementById('inicio');
+  const heroConteudo = document.querySelector('.hero__conteudo');
+  let cachedAlturaHero = 900;
+  let ultimoProgressoHero = -1;
+
+  function recalcularMedidasHero() {
+    if (heroElement) {
+      cachedAlturaHero = heroElement.offsetHeight || window.innerHeight;
+    }
+  }
+  recalcularMedidasHero();
+
   let rolagemPendente = false;
   let estadoRolou = null;
   const SELETORES_SECOES = ['#inicio', '#psicoterapia', '#avaliacao-neuropsicologica', '#profissionais', '#contato'];
@@ -344,6 +357,36 @@
       estadoRolou = novoRolou;
       topo.classList.toggle('rolou', estadoRolou);
       topo.classList.toggle('scrolled', estadoRolou);
+    }
+
+    // Frente 1: Transição progressiva da hero ao subir a segunda dobra (embaçamento e fade)
+    if (heroConteudo && !movimentoReduzido) {
+      if (scrollYAtual <= cachedAlturaHero * 1.15) {
+        const limiteScroll = cachedAlturaHero * 0.70;
+        const p = Math.min(Math.max(scrollYAtual / limiteScroll, 0), 1);
+
+        if (Math.abs(p - ultimoProgressoHero) > 0.002) {
+          ultimoProgressoHero = p;
+          heroConteudo.style.setProperty('--hero-p', p.toFixed(3));
+
+          if (p > 0.005 && p < 0.995) {
+            heroConteudo.classList.add('hero-transicao-ativa');
+            heroConteudo.classList.remove('hero-oculta');
+          } else if (p >= 0.995) {
+            heroConteudo.classList.remove('hero-transicao-ativa');
+            heroConteudo.classList.add('hero-oculta');
+          } else {
+            heroConteudo.classList.remove('hero-transicao-ativa', 'hero-oculta');
+          }
+
+          // Desativa cliques nos botões quando opacidade estiver abaixo de 0.2 (p > 0.8)
+          if (p > 0.80) {
+            heroConteudo.setAttribute('data-opaca-baixa', 'true');
+          } else {
+            heroConteudo.removeAttribute('data-opaca-baixa');
+          }
+        }
+      }
     }
 
     // Gerencia pausa do vídeo da hero quando coberto ou fora da tela
