@@ -69,6 +69,22 @@
     raiz.classList.add('hero-pronta');
   }
 
+  function verificarVisibilidadeVideo() {
+    if (!videoHero) return false;
+    const hero = videoHero.closest('.hero');
+    if (!hero) return false;
+
+    // Em telas onde a hero é sticky, quando os serviços sobem, a hero fica coberta
+    const scrollYAtual = Math.max(window.scrollY || window.pageYOffset || 0, 0);
+    const alturaHero = hero.offsetHeight || window.innerHeight;
+    if (scrollYAtual >= alturaHero) {
+      return false;
+    }
+
+    const rect = hero.getBoundingClientRect();
+    return rect.bottom > 60 && rect.top < window.innerHeight;
+  }
+
   function pausarVideo() {
     if (videoHero && !videoHero.paused) {
       try {
@@ -78,6 +94,7 @@
   }
 
   function reproduzirVideo() {
+    videoVisivelNaTela = verificarVisibilidadeVideo();
     if (!videoHero || movimentoReduzido || conexaoEconomica || document.hidden || !videoVisivelNaTela) return;
     if (videoHero.paused) {
       videoHero.muted = true;
@@ -92,6 +109,7 @@
 
   function gerenciarReproducaoVideo() {
     if (!videoHero) return;
+    videoVisivelNaTela = verificarVisibilidadeVideo();
     if (movimentoReduzido || conexaoEconomica || document.hidden || !videoVisivelNaTela) {
       pausarVideo();
     } else {
@@ -235,6 +253,9 @@
       topo.classList.toggle('rolou', estadoRolou);
       topo.classList.toggle('scrolled', estadoRolou);
     }
+
+    // Gerencia pausa do vídeo da hero quando coberto ou fora da tela
+    gerenciarReproducaoVideo();
 
     // Atualização do item ativo conforme a seção visível (Scroll Spy)
     if (secoesNav.length && linksMenu.length) {
