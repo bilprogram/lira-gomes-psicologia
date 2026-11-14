@@ -60,13 +60,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: var(--topo);
-  background: var(--marfim);
+  background: var(--verde-profundo);
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
-  background: var(--marfim);
+  background: var(--verde-profundo);
   color: var(--tinta-2);
   font-family: "Instrument Sans", "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 17px;
@@ -1394,7 +1394,7 @@ body.menu-aberto .topo {
 
 .servicos {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-block: clamp(80px, 10vw, 144px);
   background: var(--off-white);
 }
@@ -1619,7 +1619,7 @@ body.menu-aberto .topo {
 
 .faixa {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   overflow: clip;
   padding: clamp(18px, 2vw, 26px) 0;
   background: var(--verde-profundo);
@@ -1680,8 +1680,10 @@ body.menu-aberto .topo {
   }
 
   .servicos {
+    position: relative;
+    z-index: 2;
     border-radius: var(--raio) var(--raio) 0 0;
-    box-shadow: 0 -24px 60px -30px rgba(14, 22, 14, 0.5);
+    box-shadow: 0 -32px 100px rgba(18, 26, 18, 0.35);
   }
 }
 
@@ -1689,7 +1691,7 @@ body.menu-aberto .topo {
 
 .equipe {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-block: clamp(96px, 12vw, 170px);
   background: var(--areia);
 }
@@ -1828,7 +1830,7 @@ body.menu-aberto .topo {
 
 .respiro {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-block: clamp(80px, 10vw, 144px);
   overflow: clip;
   background: var(--floresta);
@@ -2074,7 +2076,7 @@ body.menu-aberto .topo {
 
 .local {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-block: clamp(96px, 12vw, 170px);
   background: var(--off-white);
 }
@@ -2186,7 +2188,7 @@ body.menu-aberto .topo {
 
 .duvidas {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   padding-block: clamp(80px, 10vw, 144px);
   background: var(--areia);
 }
@@ -2589,6 +2591,8 @@ body.menu-aberto .topo {
 
 .pagina-perfil,
 .pagina-servico {
+  position: relative;
+  z-index: 2;
   padding-top: calc(var(--topo) + clamp(28px, 4vw, 56px));
   padding-bottom: clamp(64px, 8vw, 120px);
   background: var(--off-white);
@@ -2881,18 +2885,19 @@ body.menu-aberto .topo {
 
 /* ── Revelar ao Rolar (Scroll Animations & Choreography) ───────────────────── */
 
-.revelar-ativo [data-revela] {
+/* O estado oculto SÓ tem efeito quando html possui a classe .js-ready */
+html.js-ready [data-revela]:not([data-revela-tipo="linhas"]) {
   opacity: 0;
   transform: translate3d(0, 20px, 0);
   transition: opacity var(--dur-base) var(--ease-premium), transform var(--dur-base) var(--ease-premium);
   transition-delay: var(--atraso, 0s);
 }
 
-.revelar-ativo [data-revela="escala"] {
-  transform: scale(0.96);
+html.js-ready [data-revela="escala"] {
+  transform: scale(0.96) translate3d(0, 20px, 0);
 }
 
-.revelar-ativo [data-revela="mascara"] {
+html.js-ready [data-revela="mascara"] {
   opacity: 1;
   transform: none;
   clip-path: inset(0 0 100% 0);
@@ -2900,25 +2905,92 @@ body.menu-aberto .topo {
   transition-delay: var(--atraso, 0s);
 }
 
-.revelar-ativo [data-revela].visivel {
+/* Títulos de seção por linhas com máscara de revelação (overflow: hidden, 900ms) */
+.revela-linha-mascara {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+html.js-ready [data-revela-tipo="linhas"] {
   opacity: 1;
   transform: none;
+}
+
+html.js-ready [data-revela-tipo="linhas"] .revela-linha {
+  display: block;
+  transform: translate3d(0, 105%, 0);
+  transition: transform 900ms var(--ease-premium);
+  transition-delay: var(--atraso-linha, 0s);
+}
+
+html.js-ready [data-revela-tipo="linhas"].visivel .revela-linha {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Estado Visível / Revelado */
+html.js-ready [data-revela].visivel {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
   filter: none;
 }
 
-.revelar-ativo [data-revela="mascara"].visivel {
+html.js-ready [data-revela="mascara"].visivel {
   clip-path: inset(0);
 }
 
-@media (max-width: 820px) {
-  .revelar-ativo [data-revela] {
+/* Desempenho: will-change presente exclusivamente durante a animação */
+html.js-ready [data-revela].animando {
+  will-change: opacity, transform;
+}
+
+html.js-ready [data-revela="mascara"].animando {
+  will-change: clip-path;
+}
+
+html.js-ready [data-revela-tipo="linhas"].animando .revela-linha {
+  will-change: transform;
+}
+
+/* Mobile (até 768px): deslocamento mais leve de 14px, duração 20% menor (560ms / 720ms) */
+@media (max-width: 768px) {
+  html.js-ready [data-revela]:not([data-revela-tipo="linhas"]) {
     transform: translate3d(0, 14px, 0);
+    transition-duration: 560ms;
   }
+
+  html.js-ready [data-revela-tipo="linhas"] .revela-linha {
+    transition-duration: 720ms;
+  }
+}
+
+/* Acessibilidade: prefers-reduced-motion respeitado estritamente */
+@media (prefers-reduced-motion: reduce) {
+  html.js-ready [data-revela],
+  html.js-ready [data-revela-tipo="linhas"],
+  html.js-ready .revela-linha-mascara .revela-linha {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
+  }
+}
+
+/* Fallback de Segurança: nada fica invisível se JS falhar ou timeout de 3s disparar */
+html:not(.js-ready) [data-revela],
+html.revelar-concluido [data-revela],
+html.revelar-concluido [data-revela-tipo="linhas"],
+html.revelar-concluido .revela-linha-mascara .revela-linha {
+  opacity: 1 !important;
+  transform: none !important;
+  clip-path: none !important;
 }
 
 /* ── Rodapé Institucional ──────────────────────────────────────────────────── */
 
 .rodape {
+  position: relative;
+  z-index: 2;
   padding: clamp(72px, 8vw, 104px) 0 36px;
   background: var(--verde-profundo);
   border-top: 1px solid rgba(245, 243, 237, 0.1);

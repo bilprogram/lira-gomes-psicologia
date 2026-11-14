@@ -402,6 +402,19 @@
       }
     }
 
+    // Esconde a hero (visibility: hidden) quando totalmente coberta pela segunda dobra
+    if (heroElement) {
+      if (scrollYAtual >= cachedAlturaHero) {
+        if (heroElement.style.visibility !== 'hidden') {
+          heroElement.style.visibility = 'hidden';
+        }
+      } else {
+        if (heroElement.style.visibility !== 'visible') {
+          heroElement.style.visibility = 'visible';
+        }
+      }
+    }
+
     // Gerencia pausa do vídeo da hero quando coberto ou fora da tela
     gerenciarReproducaoVideo();
 
@@ -643,38 +656,159 @@
 
   /* ── 5. Revelação ao Rolar (Scroll Animations & Choreography) ───────────────────────────── */
 
-  const reveladores = document.querySelectorAll('[data-revela]');
-  if ('IntersectionObserver' in window && reveladores.length && !movimentoReduzido) {
+  function prepararTitulosSecaoLinhas() {
+    if (movimentoReduzido) return;
+    const titulos = document.querySelectorAll(
+      '.servicos__titulo[data-revela], .respiro__titulo[data-revela], .local__titulo[data-revela], .duvidas__titulo[data-revela], .servico-hero__nome[data-revela], .perfil-hero__nome[data-revela]'
+    );
+
+    titulos.forEach((titulo) => {
+      if (titulo.getAttribute('data-linhas-preparadas')) return;
+      const textoOriginal = titulo.textContent.trim().replace(/\s+/g, ' ');
+      if (!textoOriginal) return;
+
+      const palavras = textoOriginal.split(' ');
+      titulo.innerHTML = palavras
+        .map((p) => `<span class="revela-palavra-temp" style="display:inline-block;">${p}&nbsp;</span>`)
+        .join('');
+
+      const spans = titulo.querySelectorAll('.revela-palavra-temp');
+      const linhas = [];
+      let linhaAtual = [];
+      let topAtual = null;
+
+      spans.forEach((span) => {
+        const top = Math.round(span.getBoundingClientRect().top);
+        if (topAtual === null || Math.abs(top - topAtual) <= 4) {
+          linhaAtual.push(span.textContent.trim());
+          topAtual = top;
+        } else {
+          if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
+          linhaAtual = [span.textContent.trim()];
+          topAtual = top;
+        }
+      });
+      if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
+
+      const isMobile = window.innerWidth <= 768;
+      const atrasoEntreLinhas = isMobile ? 60 : 80;
+
+      const htmlLinhas = linhas
+        .map(
+          (linha, idx) => `
+          <span class="revela-linha-mascara">
+            <span class="revela-linha" style="--atraso-linha:${idx * atrasoEntreLinhas}ms;">${linha}</span>
+          </span>
+        `
+        )
+        .join('');
+
+      titulo.innerHTML = `
+        <span class="sr-only">${textoOriginal}</span>
+        <span class="revela-titulo-linhas" aria-hidden="true">${htmlLinhas}</span>
+      `;
+      titulo.setAttribute('data-linhas-preparadas', 'true');
+      titulo.setAttribute('data-revela-tipo', 'linhas');
+    });
+  }
+
+  function inicializarReveals() {
+    if (movimentoReduzido) {
+      document.querySelectorAll('[data-revela]').forEach((el) => el.classList.add('visivel'));
+      return;
+    }
+
+    // Sinaliza que JS está ativo e pronto para revelações
+    raiz.classList.add('js-ready', 'revelar-ativo');
+
+    // Prepara títulos de seção com máscara por linha
+    prepararTitulosSecaoLinhas();
+
+    const reveladores = document.querySelectorAll('[data-revela]');
+    if (!reveladores.length) return;
+
+    const isMobile = window.innerWidth <= 768;
+    const atrasoPasso = isMobile ? 0.06 : 0.08; // 60ms no mobile, 80ms no desktop
+
+    // Escalonamento entre irmãos de um mesmo grupo
     document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
-      grupo.querySelectorAll('[data-revela]').forEach((el, i) => {
-        el.style.setProperty('--atraso', `${Math.min(i * 0.08, 0.32)}s`);
+      const filhos = grupo.querySelectorAll(':scope > [data-revela], :scope > * > [data-revela]');
+      filhos.forEach((el, i) => {
+        el.style.setProperty('--atraso', `${(i * atrasoPasso).toFixed(3)}s`);
       });
     });
 
-    raiz.classList.add('revelar-ativo');
-
-    // A máscara fechada (clip-path: inset) tem área visual inicial zero no Chromium;
-    // por isso, observamos o container pai quando for máscara.
     const observados = new Map();
     reveladores.forEach((el) => {
       const observado = el.dataset.revela === 'mascara' && el.parentElement ? el.parentElement : el;
-      if (!observados.has(observado)) observados.set(observado, []);
+      if (!observados.has(observado)) {
+        observados.set(observado, []);
+      }
       observados.get(observado).push(el);
     });
 
+    // REQUISITO: Não anime o que já está visível no carregamento da página
+    const alturaJanela = window.innerHeight || document.documentElement.clientHeight;
+    const jaVisiveis = [];
+
+    observados.forEach((els, gatilho) => {
+      const rect = gatilho.getBoundingClientRect();
+      if (rect.top < alturaJanela * 0.90 && rect.bottom > 0) {
+        jaVisiveis.push(gatilho);
+      }
+    });
+
+    jaVisiveis.forEach((gatilho) => {
+      (observados.get(gatilho) || []).forEach((el) => {
+        el.classList.add('visivel');
+        el.style.setProperty('--atraso', '0s');
+      });
+      observados.delete(gatilho);
+    });
+
+    if (observados.size === 0) return;
+
+    // REQUISITO: IntersectionObserver único, threshold 0.15, rootMargin inferior de -10%, disparo único
     const observador = new IntersectionObserver((entradas) => {
       entradas.forEach((entrada) => {
         if (!entrada.isIntersecting) return;
-        (observados.get(entrada.target) || []).forEach((el) => el.classList.add('visivel'));
+        const els = observados.get(entrada.target) || [];
+        els.forEach((el) => {
+          el.classList.add('animando', 'visivel');
+          const limparAnimando = () => {
+            el.classList.remove('animando');
+            el.removeEventListener('transitionend', limparAnimando);
+          };
+          el.addEventListener('transitionend', limparAnimando, { once: true });
+          setTimeout(limparAnimando, 1200);
+        });
         observador.unobserve(entrada.target);
         observados.delete(entrada.target);
         if (observados.size === 0) {
           observador.disconnect();
         }
       });
-    }, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -10% 0px'
+    });
 
     observados.forEach((_, observado) => observador.observe(observado));
+
+    // REQUISITO: Timeout de segurança de 3s para revelar qualquer elemento que tenha ficado oculto
+    setTimeout(() => {
+      document.querySelectorAll('[data-revela]:not(.visivel)').forEach((el) => {
+        el.classList.add('visivel');
+        el.classList.remove('animando');
+      });
+      raiz.classList.add('revelar-concluido');
+    }, 3000);
+  }
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(inicializarReveals).catch(inicializarReveals);
+  } else {
+    inicializarReveals();
   }
 
   /* ── 5.1 Pausa do Marquee fora da Viewport ────────────────────────────────────────────── */
