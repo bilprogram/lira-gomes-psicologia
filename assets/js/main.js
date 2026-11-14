@@ -7,10 +7,6 @@
 (function () {
   'use strict';
 
-  if ('scrollRestoration' in history) {
-    history.scrollRestoration = 'auto';
-  }
-
   /* ── 1. Configuração explícita de rotas e contatos (fácil de ajustar quando novas páginas entrarem) ── */
   const CONFIG_LIRA_GOMES = {
     rotas: {
@@ -313,15 +309,6 @@
       aberto ? 'Fechar o menu de navegação' : 'Abrir o menu de navegação'
     );
     menuMovel.setAttribute('aria-hidden', String(!aberto));
-
-    if (aberto) {
-      const primeiroItem = menuMovel.querySelector('a, button');
-      if (primeiroItem) {
-        setTimeout(() => primeiroItem.focus(), 50);
-      }
-    } else if (document.activeElement && menuMovel.contains(document.activeElement)) {
-      botaoMenu.focus();
-    }
   }
 
   if (botaoMenu && menuMovel) {
@@ -588,20 +575,25 @@
   }
 
   function fecharPergunta(det) {
-    if (!det.open) return;
-    if (movimentoReduzido) {
+    const resposta = det.querySelector('.pergunta__resposta');
+    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
       det.open = false;
-      det.classList.remove('faq-aberto');
       atualizarAriaExpanded(det);
       return;
     }
     det.dataset.animando = '1';
-    det.classList.remove('faq-aberto');
-    atualizarAriaExpanded(det);
-    setTimeout(() => {
+    const anim = resposta.animate(
+      [
+        { height: `${resposta.scrollHeight}px`, opacity: 1 },
+        { height: '0px', opacity: 0 }
+      ],
+      { duration: 380, easing: 'cubic-bezier(.65, 0, .35, 1)' }
+    );
+    anim.onfinish = anim.oncancel = () => {
       det.open = false;
+      atualizarAriaExpanded(det);
       delete det.dataset.animando;
-    }, 400);
+    };
   }
 
   function abrirPergunta(det) {
@@ -614,20 +606,23 @@
     det.open = true;
     atualizarAriaExpanded(det);
 
-    if (movimentoReduzido) {
-      det.classList.add('faq-aberto');
+    const resposta = det.querySelector('.pergunta__resposta');
+    if (movimentoReduzido || !resposta || typeof resposta.animate !== 'function') {
       return;
     }
 
     det.dataset.animando = '1';
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        det.classList.add('faq-aberto');
-      });
-    });
-    setTimeout(() => {
+    const altura = resposta.scrollHeight;
+    const anim = resposta.animate(
+      [
+        { height: '0px', opacity: 0 },
+        { height: `${altura}px`, opacity: 1 }
+      ],
+      { duration: 460, easing: 'cubic-bezier(.22, 1, .36, 1)' }
+    );
+    anim.onfinish = anim.oncancel = () => {
       delete det.dataset.animando;
-    }, 450);
+    };
   }
 
   perguntasFaq.forEach((det) => {
@@ -648,508 +643,34 @@
 
   /* ── 5. Revelação ao Rolar (Scroll Animations & Choreography) ───────────────────────────── */
 
-
-  function prepararTitulosSecaoLinhas() {
-    if (movimentoReduzido) return;
-    const titulos = document.querySelectorAll(
-      'h1[data-revela]:not(.hero__titulo), h2[data-revela]:not(.modal-whatsapp__titulo), .titulo-editorial[data-revela], .servicos__titulo[data-revela], .respiro__titulo[data-revela], .local__titulo[data-revela], .duvidas__titulo[data-revela], .servico-hero__nome[data-revela], .perfil-hero__nome[data-revela]'
-    );
-
-    titulos.forEach((titulo) => {
-      // Salva HTML e texto originais se ainda não salvos
-      if (!titulo.dataset.htmlOriginal) {
-        titulo.dataset.htmlOriginal = titulo.innerHTML;
-        titulo.dataset.textoOriginal = titulo.textContent.trim().replace(/\s+/g, ' ');
-      }
-      const htmlOriginal = titulo.dataset.htmlOriginal;
-      const textoOriginal = titulo.dataset.textoOriginal;
-      if (!textoOriginal) return;
-
-      const jaVisivel = titulo.classList.contains('visivel');
-
-      try {
-        // Clona temporariamente preservando tags (ex: <em>) e envolvendo palavras em spans
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = htmlOriginal;
-
-        function wrapText(node) {
-          if (node.nodeType === Node.TEXT_NODE) {
-            const parts = node.nodeValue.split(/(\s+)/);
-            const frag = document.createDocumentFragment();
-            parts.forEach((p) => {
-              if (!p) return;
-              if (/^\s+$/.test(p)) {
-                frag.appendChild(document.createTextNode(p));
-              } else {
-                const sp = document.createElement('span');
-                sp.className = 'revela-palavra-temp';
-                sp.style.display = 'inline-block';
-                sp.textContent = p;
-                frag.appendChild(sp);
-              }
-            });
-            node.parentNode.replaceChild(frag, node);
-          } else if (node.nodeType === Node.ELEMENT_NODE) {
-            Array.from(node.childNodes).forEach(wrapText);
-          }
-        }
-        wrapText(tempDiv);
-        titulo.innerHTML = tempDiv.innerHTML;
-
-        const spans = titulo.querySelectorAll('.revela-palavra-temp');
-        if (!spans.length) {
-          titulo.innerHTML = htmlOriginal;
-          return;
-        }
-
-        const linhas = [];
-        let linhaAtual = [];
-        let topAtual = null;
-
-        spans.forEach((span) => {
-          const top = Math.round(span.getBoundingClientRect().top);
-          if (topAtual === null || Math.abs(top - topAtual) <= 6) {
-            linhaAtual.push(span.outerHTML);
-            topAtual = top;
-          } else {
-            if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
-            linhaAtual = [span.outerHTML];
-            topAtual = top;
-          }
-        });
-        if (linhaAtual.length) linhas.push(linhaAtual.join(' '));
-
-        const isMobile = window.innerWidth <= 768;
-        const atrasoEntreLinhas = isMobile ? 80 : 120; // 120ms desktop, 80ms mobile
-
-        const htmlLinhas = linhas
-          .map((linhaHtml, idx) => {
-            const wrapper = document.createElement('div');
-            wrapper.innerHTML = linhaHtml;
-            wrapper.querySelectorAll('.revela-palavra-temp').forEach((sp) => {
-              sp.replaceWith(...sp.childNodes);
-            });
-            return `
-            <span class="revela-linha-mascara">
-              <span class="revela-linha" aria-hidden="true" style="--atraso-linha:${idx * atrasoEntreLinhas}ms;">${wrapper.innerHTML}</span>
-            </span>
-          `;
-          })
-          .join('');
-
-        titulo.innerHTML = `
-          <span class="sr-only">${textoOriginal}</span>
-          <span class="revela-titulo-linhas" aria-hidden="true">${htmlLinhas}</span>
-        `;
-        titulo.setAttribute('aria-label', textoOriginal);
-        titulo.setAttribute('data-linhas-preparadas', 'true');
-        titulo.setAttribute('data-revela-tipo', 'linhas');
-        if (jaVisivel) {
-          titulo.classList.add('visivel');
-          titulo.querySelectorAll('.revela-linha').forEach((linha) => {
-            linha.style.opacity = '1';
-            linha.style.filter = 'none';
-            linha.style.transform = 'none';
-            linha.style.willChange = 'auto';
-          });
-        }
-      } catch (err) {
-        // Fallback de segurança: nada quebra, texto inteiro visível intacto
-        titulo.innerHTML = htmlOriginal;
-        titulo.classList.add('visivel');
-      }
-    });
-  }
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      prepararTitulosSecaoLinhas();
-    }, 150);
-  }, { passive: true });
-
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => {
-      prepararTitulosSecaoLinhas();
-    });
-  }
-
-  function inicializarReveals() {
-    if (movimentoReduzido) {
-      document.querySelectorAll('[data-revela]').forEach((el) => el.classList.add('visivel'));
-      return;
-    }
-
-    // Prepara títulos de seção com máscara por linha com proteção em try/catch
-    try {
-      prepararTitulosSecaoLinhas();
-    } catch (e) {
-      console.warn('Fallback em títulos:', e);
-    }
-
-    const reveladores = document.querySelectorAll('[data-revela]');
-    if (!reveladores.length) return;
-
-    // Escalonamento entre irmãos de um mesmo grupo (80 a 120ms até 8 elementos; 40ms acima)
+  const reveladores = document.querySelectorAll('[data-revela]');
+  if ('IntersectionObserver' in window && reveladores.length && !movimentoReduzido) {
     document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
-      const filhos = grupo.querySelectorAll(':scope > [data-revela], :scope > * > [data-revela]');
-      const total = filhos.length;
-      const isMobile = window.innerWidth <= 768;
-      const stagger = total > 8 ? 0.040 : (isMobile ? 0.080 : 0.100);
-      filhos.forEach((el, i) => {
-        el.style.setProperty('--atraso', `${(i * stagger).toFixed(3)}s`);
+      grupo.querySelectorAll('[data-revela]').forEach((el, i) => {
+        el.style.setProperty('--atraso', `${Math.min(i * 0.05, 0.2)}s`);
       });
     });
 
-    // Função centralizada e segura para revelar elementos
-    let blurAtivos = 0;
-    const MAX_BLUR_SIMULTANEOS = 12;
+    raiz.classList.add('revelar-ativo');
 
-    function revelarElemento(el, imediato = false) {
-      if (!el || el.classList.contains('visivel')) return;
-      try {
-        el.classList.add('visivel');
-        if (imediato) {
-          el.classList.remove('animando');
-          el.style.setProperty('--atraso', '0s');
-          el.style.opacity = '1';
-          el.style.filter = 'none';
-          el.style.transform = 'none';
-          el.style.willChange = 'auto';
-          if (el.dataset.revelaTipo === 'linhas') {
-            el.querySelectorAll('.revela-linha').forEach((linha) => {
-              linha.style.opacity = '1';
-              linha.style.filter = 'none';
-              linha.style.transform = 'none';
-              linha.style.willChange = 'auto';
-            });
-          }
-          return;
-        }
-
-        const limpar = () => {
-          el.classList.remove('animando');
-          el.style.opacity = '1';
-          el.style.filter = 'none';
-          el.style.transform = 'none';
-          el.style.willChange = 'auto';
-          if (el.dataset.revelaTipo === 'linhas') {
-            el.querySelectorAll('.revela-linha').forEach((linha) => {
-              linha.style.opacity = '1';
-              linha.style.filter = 'none';
-              linha.style.transform = 'none';
-              linha.style.willChange = 'auto';
-            });
-          }
-          blurAtivos = Math.max(0, blurAtivos - 1);
-          el.removeEventListener('transitionend', limpar);
-        };
-
-        if (blurAtivos < MAX_BLUR_SIMULTANEOS) {
-          blurAtivos++;
-          el.classList.add('animando');
-          el.addEventListener('transitionend', limpar, { once: true });
-          setTimeout(limpar, 1400);
-        } else {
-          el.classList.add('sem-blur', 'animando');
-          el.addEventListener('transitionend', limpar, { once: true });
-          setTimeout(limpar, 1400);
-        }
-      } catch (err) {
-        el.classList.add('visivel');
-      }
-    }
-
-    // REDE DE SEGURANÇA 1: Todo elemento cujo topo já passou da viewport é revelado na hora (cobre topo da página e reload no meio)
-    const alturaJanela = window.innerHeight || document.documentElement.clientHeight;
-    reveladores.forEach((el) => {
-      try {
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= alturaJanela * 0.90) {
-          revelarElemento(el, true);
-        }
-      } catch (e) {}
-    });
-
-    // Mapeamento para IntersectionObserver
+    // A máscara fechada (clip-path: inset) tem área visual inicial zero no Chromium;
+    // por isso, observamos o container pai quando for máscara.
     const observados = new Map();
     reveladores.forEach((el) => {
-      if (el.classList.contains('visivel')) return;
       const observado = el.dataset.revela === 'mascara' && el.parentElement ? el.parentElement : el;
-      if (!observados.has(observado)) {
-        observados.set(observado, []);
-      }
+      if (!observados.has(observado)) observados.set(observado, []);
       observados.get(observado).push(el);
     });
 
-    // IntersectionObserver único compartilhado (threshold 0 e rootMargin inferior de -8% para elementos altos e disparos confiáveis)
-    if ('IntersectionObserver' in window) {
-      const observador = new IntersectionObserver((entradas) => {
-        entradas.forEach((entrada) => {
-          if (!entrada.isIntersecting) return;
-          const els = observados.get(entrada.target) || [entrada.target];
-          els.forEach((el) => revelarElemento(el, false));
-          observador.unobserve(entrada.target);
-          observados.delete(entrada.target);
-          if (observados.size === 0) {
-            observador.disconnect();
-          }
-        });
-      }, {
-        threshold: 0,
-        rootMargin: '0px 0px -8% 0px'
-      });
-
-      observados.forEach((_, observado) => observador.observe(observado));
-    } else {
-      // Fallback sem IntersectionObserver
-      reveladores.forEach((el) => revelarElemento(el, true));
-    }
-
-    // REDE DE SEGURANÇA 2: Listener de scroll passivo com requestAnimationFrame para checar qualquer elemento que entre na tela
-    let rafScrollId = null;
-    function checarElementosNoScroll() {
-      if (rafScrollId) return;
-      rafScrollId = requestAnimationFrame(() => {
-        rafScrollId = null;
-        const h = window.innerHeight || document.documentElement.clientHeight;
-        document.querySelectorAll('[data-revela]:not(.visivel)').forEach((el) => {
-          try {
-            const r = el.getBoundingClientRect();
-            if (r.top <= h * 0.92) {
-              revelarElemento(el, false);
-            }
-          } catch (e) {}
-        });
-      });
-    }
-
-    window.addEventListener('scroll', checarElementosNoScroll, { passive: true });
-    window.addEventListener('resize', checarElementosNoScroll, { passive: true });
-
-    // REDE DE SEGURANÇA 3: Suporte a cliques em âncoras para revelar o destino imediatamente
-    document.addEventListener('click', (evento) => {
-      const link = evento.target.closest('a[href^="#"]');
-      if (!link) return;
-      setTimeout(checarElementosNoScroll, 100);
-      setTimeout(checarElementosNoScroll, 400);
-      setTimeout(checarElementosNoScroll, 800);
-    }, { passive: true });
-
-    // Sinaliza que JS está ativo e pronto para revelações somente após a inicialização ter sucesso
-    raiz.classList.add('js-ready', 'revelar-ativo');
-  }
-
-  /* ── 5.1 Parallax Suave nas Imagens das Seções (Desktop apenas) ────────── */
-  function inicializarParallaxImagens() {
-    if (movimentoReduzido || window.innerWidth <= 768) return;
-
-    const alvos = document.querySelectorAll(
-      '.servico__foto img, .profissional__foto img, .local__foto img, .servico-hero__foto img, .perfil-hero__foto img'
-    );
-    if (!alvos.length) return;
-
-    const itens = [];
-    function recalcularDimensoes() {
-      itens.length = 0;
-      alvos.forEach((img) => {
-        const container = img.closest('figure') || img.parentElement;
-        const rect = container.getBoundingClientRect();
-        itens.push({
-          img: img,
-          container: container,
-          top: rect.top + window.scrollY,
-          height: rect.height,
-          ativo: false
-        });
-      });
-    }
-    recalcularDimensoes();
-
-    let animando = false;
-    function atualizarParallax() {
-      animando = false;
-      const scrollY = window.scrollY;
-      const alturaJanela = window.innerHeight;
-      const centroJanela = scrollY + alturaJanela / 2;
-
-      itens.forEach((it) => {
-        if (!it.ativo) return;
-        const centroElemento = it.top + it.height / 2;
-        const dist = centroJanela - centroElemento;
-        const fator = Math.max(-1, Math.min(1, dist / (alturaJanela / 2)));
-        const deslocamentoMax = it.height * 0.06;
-        const translateY = -(fator * deslocamentoMax);
-        it.img.style.setProperty('--parallax-y', `${translateY.toFixed(1)}px`);
-      });
-    }
-
-    function onScroll() {
-      if (!animando) {
-        animando = true;
-        requestAnimationFrame(atualizarParallax);
-      }
-    }
-
-    const observadorParallax = new IntersectionObserver((entradas) => {
-      let mudanca = false;
+    const observador = new IntersectionObserver((entradas) => {
       entradas.forEach((entrada) => {
-        const item = itens.find((it) => it.container === entrada.target);
-        if (item) {
-          item.ativo = entrada.isIntersecting;
-          if (entrada.isIntersecting) mudanca = true;
-        }
+        if (!entrada.isIntersecting) return;
+        (observados.get(entrada.target) || []).forEach((el) => el.classList.add('visivel'));
+        observador.unobserve(entrada.target);
       });
-      if (mudanca) {
-        onScroll();
-      }
-    }, { threshold: 0, rootMargin: '60px 0px 60px 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
 
-    itens.forEach((it) => observadorParallax.observe(it.container));
-    onScroll();
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-      if (window.innerWidth <= 768) {
-        itens.forEach((it) => it.img.style.removeProperty('--parallax-y'));
-        return;
-      }
-      recalcularDimensoes();
-      onScroll();
-    }, { passive: true });
-  }
-
-  /* ── 5.2 Destaque de Etapa Ativa ao Passar pelo Centro da Tela ─────────── */
-  function inicializarDestaqueEtapas() {
-    if (movimentoReduzido) return;
-    const listas = document.querySelectorAll('.servico-lista');
-    if (!listas.length) return;
-
-    const itens = [];
-    listas.forEach((lista) => {
-      const lis = lista.querySelectorAll('li');
-      let ehNumerada = false;
-      lis.forEach((li) => {
-        if (/\b\d+\.\s+/.test(li.textContent)) {
-          ehNumerada = true;
-        }
-      });
-      if (ehNumerada) {
-        lista.classList.add('lista-etapas-ativa');
-        lis.forEach((li) => itens.push(li));
-      }
-    });
-
-    if (!itens.length) return;
-
-    let animando = false;
-    function atualizarDestaque() {
-      animando = false;
-      const topoJanela = window.innerHeight * 0.25;
-      const fundoJanela = window.innerHeight * 0.75;
-
-      itens.forEach((li) => {
-        const rect = li.getBoundingClientRect();
-        const centro = rect.top + rect.height / 2;
-        if (centro >= topoJanela && centro <= fundoJanela) {
-          li.classList.add('etapa-ativa');
-        } else {
-          li.classList.remove('etapa-ativa');
-        }
-      });
-    }
-
-    window.addEventListener('scroll', () => {
-      if (!animando) {
-        animando = true;
-        requestAnimationFrame(atualizarDestaque);
-      }
-    }, { passive: true });
-
-    atualizarDestaque();
-  }
-
-  /* ── 5.3 Aceleração Dinâmica do Marquee no Scroll (Desktop apenas) ─────── */
-  function inicializarAceleracaoMarquee() {
-    if (movimentoReduzido || window.innerWidth <= 768) return;
-    const trilho = document.querySelector('.faixa__trilho');
-    if (!trilho) return;
-
-    let ultimoScrollY = window.scrollY;
-    let ultimoTempo = performance.now();
-    let timerRetorno = null;
-
-    window.addEventListener('scroll', () => {
-      if (window.innerWidth <= 768) return;
-      const agora = performance.now();
-      const dt = agora - ultimoTempo;
-      if (dt > 16) {
-        const dy = Math.abs(window.scrollY - ultimoScrollY);
-        const velocidade = dy / dt; // pixels por milissegundo
-        ultimoScrollY = window.scrollY;
-        ultimoTempo = agora;
-
-        // Limita a aceleração a no máximo 1.6x
-        const fator = Math.min(1.6, 1.0 + velocidade * 0.35);
-        trilho.style.animationPlaybackRate = String(fator.toFixed(2));
-
-        clearTimeout(timerRetorno);
-        timerRetorno = setTimeout(() => {
-          trilho.style.animationPlaybackRate = '1';
-        }, 600);
-      }
-    }, { passive: true });
-  }
-
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => {
-      inicializarReveals();
-      inicializarParallaxImagens();
-      inicializarDestaqueEtapas();
-      inicializarAceleracaoMarquee();
-    }).catch(() => {
-      inicializarReveals();
-      inicializarParallaxImagens();
-      inicializarDestaqueEtapas();
-      inicializarAceleracaoMarquee();
-    });
-  } else {
-    inicializarReveals();
-    inicializarParallaxImagens();
-    inicializarDestaqueEtapas();
-    inicializarAceleracaoMarquee();
-  }
-
-  /* ── 5.1 Pausa do Marquee fora da Viewport ────────────────────────────────────────────── */
-  const faixas = document.querySelectorAll('.faixa');
-  if ('IntersectionObserver' in window && faixas.length && !movimentoReduzido) {
-    const observadorFaixa = new IntersectionObserver((entradas) => {
-      entradas.forEach((entrada) => {
-        if (entrada.isIntersecting) {
-          entrada.target.classList.remove('pausada');
-        } else {
-          entrada.target.classList.add('pausada');
-        }
-      });
-    }, { threshold: 0, rootMargin: '100px 0px' });
-
-    faixas.forEach((faixa) => {
-      observadorFaixa.observe(faixa);
-    });
-
-    document.addEventListener('visibilitychange', () => {
-      faixas.forEach((f) => {
-        if (document.hidden) {
-          f.classList.add('pausada');
-        } else {
-          const r = f.getBoundingClientRect();
-          if (r.bottom >= 0 && r.top <= window.innerHeight) {
-            f.classList.remove('pausada');
-          }
-        }
-      });
-    });
+    observados.forEach((_, observado) => observador.observe(observado));
   }
 
   /* ── 6. Exercício de Respiração Interativo (Respire Comigo) ─────────────────────────── */
