@@ -187,18 +187,33 @@
             <div class="hero__acoes">
               <button
                 type="button"
-                class="botao botao--primario"
+                class="botao botao--primario hero__btn-principal"
                 data-abrir-whatsapp
+                data-servico="psicoterapia"
                 aria-haspopup="dialog"
                 aria-controls="escolha-whatsapp"
               >
-                <span>Conversar pelo WhatsApp</span>
+                <span>Psicoterapia</span>
                 <span class="botao__icone" aria-hidden="true">
                   <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </span>
               </button>
 
-              <a class="botao botao--claro-contorno" href="#psicoterapia">
+              <button
+                type="button"
+                class="botao botao--primario hero__btn-avaliacao"
+                data-abrir-whatsapp
+                data-servico="avaliacao"
+                aria-haspopup="dialog"
+                aria-controls="escolha-whatsapp"
+              >
+                <span>Avaliação Neuropsicológica</span>
+                <span class="botao__icone" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </span>
+              </button>
+
+              <a class="botao botao--claro-contorno hero__link-servicos" href="#psicoterapia">
                 <span>Conheça nossos serviços</span>
               </a>
             </div>
@@ -209,6 +224,37 @@
           </div>
         </div>
       </div>
+
+      <script>
+        (function () {
+          var mensagens = {
+            psicoterapia: 'Olá, vim pelo site e gostaria de saber mais sobre a psicoterapia.',
+            avaliacao: 'Olá, vim pelo site e gostaria de saber mais sobre a avaliação neuropsicológica.'
+          };
+          var modal = document.getElementById('escolha-whatsapp');
+          if (!modal) return;
+          var links = modal.querySelectorAll('.opcao-profissional');
+          var baseUrls = Array.from(links).map(function (a) { return a.href.split('?')[0]; });
+
+          document.querySelectorAll('.hero [data-servico]').forEach(function (botao) {
+            botao.addEventListener('click', function () {
+              var servico = botao.getAttribute('data-servico');
+              var msg = mensagens[servico];
+              links.forEach(function (a, i) {
+                a.href = msg ? baseUrls[i] + '?text=' + encodeURIComponent(msg) : baseUrls[i];
+              });
+            }, true);
+          });
+
+          document.querySelectorAll('[data-abrir-whatsapp]:not(.hero [data-servico])').forEach(function (botao) {
+            botao.addEventListener('click', function () {
+              links.forEach(function (a, i) {
+                a.href = baseUrls[i];
+              });
+            }, true);
+          });
+        })();
+      </script>
     </section>
 
     <!-- ═══════════════════════════════ SEGUNDA DOBRA (SERVIÇOS) ═══════════════════════════════
