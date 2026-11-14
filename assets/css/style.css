@@ -41,6 +41,8 @@
   --raio: 28px;
   --suave: cubic-bezier(.22, 1, .36, 1);
   --suave-2: cubic-bezier(.65, 0, .35, 1);
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-base: 1000ms;
   --topo: 88px;
   --z-topo: 100;
   --z-menu-movel: 95;
@@ -684,13 +686,26 @@ body.menu-aberto .topo {
 }
 
 /* O vídeo ocupa toda a largura e altura da hero com object-fit: cover.
-   Nenhuma animação CSS é aplicada ao vídeo para preservar o movimento original do arquivo. */
+   Entrada editorial com fade e escala de 1.05 para 1 em 1500ms com easing premium. */
 .hero__video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   /* Ponto focal ajustado para manter Thais (x≈64%) e Lucas (x≈86%) visíveis à direita */
   object-position: 80% 28%;
+}
+
+.js-ready:not(.hero-pronta) .hero__video {
+  opacity: 0;
+  transform: scale(1.05);
+}
+
+.js-ready.hero-pronta .hero__video {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity 1500ms var(--ease-premium),
+    transform 1500ms var(--ease-premium);
 }
 
 /* Camada de sobreposição discreta e compatível com a marca:
@@ -874,16 +889,26 @@ body.menu-aberto .topo {
   font-size: 15px;
   font-weight: 500;
   text-align: left;
-  text-decoration: underline;
-  text-decoration-color: rgba(200, 174, 125, 0.65);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
+  text-decoration: none;
+  position: relative;
   background: transparent !important;
   box-shadow: none !important;
   border: none !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
-  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+  transition: color 0.3s ease;
+}
+
+.hero__link-servicos::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: rgba(200, 174, 125, 0.75);
+  transform-origin: left;
+  transform: scaleX(0);
 }
 
 .hero__link-servicos::before {
@@ -893,7 +918,12 @@ body.menu-aberto .topo {
 .hero__link-servicos:hover,
 .hero__link-servicos:focus-visible {
   color: #FFFFFF;
-  text-decoration-color: var(--dourado-areia);
+}
+
+.hero__link-servicos:hover::after,
+.hero__link-servicos:focus-visible::after {
+  background: var(--dourado-areia);
+  height: 1.5px;
 }
 
 /* Nota inferior: 13px, opacidade 0.65, max 2 linhas, ponto alinhado ao centro da 1ª linha, margin-top 40px */
@@ -924,30 +954,143 @@ body.menu-aberto .topo {
   animation: pulso-ponto 3.2s var(--suave-2) infinite;
 }
 
-/* ── Animação Sincronizada da Hero (Suavizada) ───────────────────────────────────────────── */
+/* ── Entrada Editorial em Cascata da Hero ────────────────────────────────────────── */
 
-/* Quando o JS está ativo, o bloco textual parte suavemente da esquerda (-18px, máx 16-24px) */
-.js .hero__bloco-texto,
-.js .hero__bloco-acoes {
+/* 1. Tag superior: fade + 12px e linha dourada crescendo da esquerda para a direita */
+.js-ready:not(.hero-pronta) .hero__apoio {
   opacity: 0;
-  transform: translate3d(-18px, 0, 0);
-  will-change: transform, opacity;
+  transform: translate3d(0, 12px, 0);
 }
 
-.js.hero-pronta .hero__bloco-texto {
+.js-ready.hero-pronta .hero__apoio {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   transition:
-    opacity 0.75s var(--suave),
-    transform 0.85s var(--suave);
+    opacity 600ms var(--ease-premium) 300ms,
+    transform 600ms var(--ease-premium) 300ms;
 }
 
-.js.hero-pronta .hero__bloco-acoes {
+.hero__apoio::before {
+  content: "";
+  width: 36px;
+  height: 1px;
+  flex-shrink: 0;
+  background: var(--dourado-areia);
+  transform-origin: left;
+}
+
+.js-ready:not(.hero-pronta) .hero__apoio::before {
+  transform: scaleX(0);
+}
+
+.js-ready.hero-pronta .hero__apoio::before {
+  transform: scaleX(1);
+  transition: transform 600ms var(--ease-premium) 300ms;
+}
+
+/* 2. Título em linhas: máscara de revelação e foco blur 8px -> 0 */
+.hero__titulo-linhas {
+  display: block;
+}
+
+.hero__linha-mascara {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.hero__linha {
+  display: block;
+  transform: translate3d(0, 105%, 0);
+  opacity: 0;
+  filter: blur(8px);
+  will-change: transform, opacity, filter;
+  transition:
+    transform var(--dur-base) var(--ease-premium) calc(400ms + var(--i, 0) * 110ms),
+    opacity 800ms var(--ease-premium) calc(400ms + var(--i, 0) * 110ms),
+    filter 850ms var(--ease-premium) calc(400ms + var(--i, 0) * 110ms);
+}
+
+.js-ready.hero-pronta:not(.hero-animada) .hero__linha {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  filter: blur(0px);
+}
+
+/* Ao concluir a animação de entrada (após 2.2s), remove filter e will-change para alta performance */
+.js-ready.hero-pronta.hero-animada .hero__linha,
+.hero-animada .hero__linha {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+  filter: none !important;
+  will-change: auto !important;
+}
+
+/* 3. Subtítulo: fade + 16px (150ms após a última linha) */
+.js-ready:not(.hero-pronta) .hero__paragrafo {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+}
+
+.js-ready.hero-pronta .hero__paragrafo {
   opacity: 1;
   transform: translate3d(0, 0, 0);
   transition:
-    opacity 0.75s var(--suave) 0.10s,
-    transform 0.85s var(--suave) 0.10s;
+    opacity 700ms var(--ease-premium) var(--atraso-subtitulo, 880ms),
+    transform 700ms var(--ease-premium) var(--atraso-subtitulo, 880ms);
+}
+
+/* 4. Botões: fade + 14px com 120ms de intervalo entre si */
+.js-ready:not(.hero-pronta) .hero__btn-principal,
+.js-ready:not(.hero-pronta) .hero__btn-avaliacao {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+}
+
+.js-ready.hero-pronta .hero__btn-principal {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 600ms var(--ease-premium) var(--atraso-btn-1, 1000ms),
+    transform 600ms var(--ease-premium) var(--atraso-btn-1, 1000ms);
+}
+
+.js-ready.hero-pronta .hero__btn-avaliacao {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 600ms var(--ease-premium) var(--atraso-btn-2, 1120ms),
+    transform 600ms var(--ease-premium) var(--atraso-btn-2, 1120ms);
+}
+
+/* 5. Link "Conheça nossos serviços": fade e sublinhado dourado crescendo da esquerda para a direita */
+.js-ready:not(.hero-pronta) .hero__link-servicos {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
+}
+
+.js-ready.hero-pronta .hero__link-servicos {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 600ms var(--ease-premium) var(--atraso-link, 1240ms),
+    transform 600ms var(--ease-premium) var(--atraso-link, 1240ms);
+}
+
+.js-ready.hero-pronta .hero__link-servicos::after {
+  transform: scaleX(1);
+  transition: transform 600ms var(--ease-premium) var(--atraso-link, 1240ms);
+}
+
+/* 6. Nota inferior: fade por último */
+.js-ready:not(.hero-pronta) .hero__complementar {
+  opacity: 0;
+}
+
+.js-ready.hero-pronta .hero__complementar {
+  opacity: 0.7;
+  transition: opacity 700ms var(--ease-premium) var(--atraso-nota, 1360ms);
 }
 
 /* ── Modal / Escolha Clara de Contato pelo WhatsApp (Lucas ou Thais) ──────────────────────── */
@@ -2196,6 +2339,19 @@ body.menu-aberto .topo {
   }
 }
 
+@media (max-width: 768px) {
+  :root {
+    --dur-base: 750ms;
+  }
+
+  .hero__linha {
+    filter: none !important;
+    transition:
+      transform var(--dur-base) var(--ease-premium) calc(350ms + var(--i, 0) * 70ms),
+      opacity 600ms var(--ease-premium) calc(350ms + var(--i, 0) * 70ms);
+  }
+}
+
 @media (max-width: 640px) {
   :root {
     --topo: 64px;
@@ -2927,11 +3083,20 @@ body.menu-aberto .topo {
     transition: none !important;
   }
 
-  .js .hero__bloco-texto,
-  .js .hero__bloco-acoes {
-    opacity: 1 !important;
-    transform: none !important;
+  .hero__video,
+  .hero__apoio,
+  .hero__apoio::before,
+  .hero__linha,
+  .hero__paragrafo,
+  .hero__btn-principal,
+  .hero__btn-avaliacao,
+  .hero__link-servicos,
+  .hero__link-servicos::after,
+  .hero__complementar {
     transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
   }
 
   /* Faixa estática: apenas uma ocorrência da frase, centralizada */

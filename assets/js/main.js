@@ -53,20 +53,112 @@
   const consultaMovimentoReduzido = window.matchMedia('(prefers-reduced-motion: reduce)');
   let movimentoReduzido = consultaMovimentoReduzido.matches;
 
-  /* ── 2. Controle de Reprodução e Desempenho do Vídeo da Hero ────────────────────────────── */
+  /* ── 2. Controle de Reprodução e Entrada Editorial da Hero ────────────────────────────── */
 
   const videoHero = document.getElementById('hero-video');
+  const tituloHero = document.getElementById('hero-titulo');
   let heroLiberada = false;
+  let heroJaAnimou = false;
   let videoVisivelNaTela = true;
 
   // Detecção de conexão de dados reduzidos ou rede lenta
   const conexaoRede = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
   const conexaoEconomica = Boolean(conexaoRede && (conexaoRede.saveData || conexaoRede.effectiveType === 'slow-2g' || conexaoRede.effectiveType === '2g'));
 
+  function prepararTituloHero() {
+    if (!tituloHero) return;
+
+    if (!tituloHero.getAttribute('data-texto-original')) {
+      tituloHero.setAttribute('data-texto-original', tituloHero.textContent.trim().replace(/\s+/g, ' '));
+    }
+    const textoCompleto = tituloHero.getAttribute('data-texto-original');
+    const palavras = textoCompleto.split(' ');
+
+    // Cria elementos temporários para aferição do quebra-linhas exato do navegador
+    tituloHero.innerHTML = palavras
+      .map((p) => `<span class="hero__palavra-temp" style="display:inline-block;">${p}&nbsp;</span>`)
+      .join('');
+
+    const spans = tituloHero.querySelectorAll('.hero__palavra-temp');
+    const linhas = [];
+    let linhaAtual = [];
+    let topAtual = null;
+
+    spans.forEach((span) => {
+      const top = Math.round(span.getBoundingClientRect().top);
+      if (topAtual === null || Math.abs(top - topAtual) <= 4) {
+        linhaAtual.push(span.textContent.trim());
+        topAtual = top;
+      } else {
+        linhas.push(linhaAtual.join(' '));
+        linhaAtual = [span.textContent.trim()];
+        topAtual = top;
+      }
+    });
+    if (linhaAtual.length) {
+      linhas.push(linhaAtual.join(' '));
+    }
+
+    // Calcula atrasos dinâmicos em cascata a partir do número de linhas
+    const isMobile = window.innerWidth <= 768;
+    const atrasoLinhaBase = isMobile ? 350 : 400;
+    const atrasoEntreLinhas = isMobile ? 70 : 110;
+    const totalLinhas = Math.max(linhas.length, 1);
+    const atrasoSubtitulo = atrasoLinhaBase + (totalLinhas - 1) * atrasoEntreLinhas + 150;
+    const atrasoBtn1 = atrasoSubtitulo + 120;
+    const atrasoBtn2 = atrasoBtn1 + 120;
+    const atrasoLink = atrasoBtn2 + 120;
+    const atrasoNota = atrasoLink + 120;
+
+    const blocoHero = tituloHero.closest('.hero__conteudo') || tituloHero.parentElement;
+    if (blocoHero) {
+      blocoHero.style.setProperty('--atraso-subtitulo', `${atrasoSubtitulo}ms`);
+      blocoHero.style.setProperty('--atraso-btn-1', `${atrasoBtn1}ms`);
+      blocoHero.style.setProperty('--atraso-btn-2', `${atrasoBtn2}ms`);
+      blocoHero.style.setProperty('--atraso-link', `${atrasoLink}ms`);
+      blocoHero.style.setProperty('--atraso-nota', `${atrasoNota}ms`);
+    }
+
+    // Monta estrutura acessível (sr-only para leitores de tela + linhas com máscara para exibição visual)
+    const estiloLinhaJaAnimada = heroJaAnimou ? 'style="transform:none;opacity:1;filter:none;"' : '';
+    const htmlLinhas = linhas
+      .map((linha, idx) => `
+        <span class="hero__linha-mascara">
+          <span class="hero__linha" style="--i:${idx};" ${estiloLinhaJaAnimada}>${linha}</span>
+        </span>
+      `)
+      .join('');
+
+    tituloHero.innerHTML = `
+      <span class="sr-only">${textoCompleto}</span>
+      <span class="hero__titulo-linhas" aria-hidden="true">${htmlLinhas}</span>
+    `;
+  }
+
+  // Executa cálculo tipográfico após fontes carregadas
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(prepararTituloHero).catch(prepararTituloHero);
+  } else {
+    prepararTituloHero();
+  }
+
+  // Recálculo debounced em resize sem reanimar
+  let temporizadorResizeTitulo = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(temporizadorResizeTitulo);
+    temporizadorResizeTitulo = setTimeout(() => {
+      prepararTituloHero();
+    }, 150);
+  }, { passive: true });
+
   function liberarEntradaHero() {
     if (heroLiberada) return;
     heroLiberada = true;
     raiz.classList.add('hero-pronta');
+    setTimeout(() => {
+      heroJaAnimou = true;
+      raiz.classList.add('hero-animada');
+    }, 2200);
   }
 
   function verificarVisibilidadeVideo() {

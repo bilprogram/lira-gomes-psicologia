@@ -74,12 +74,12 @@
   <script>
     (function () {
       var raiz = document.documentElement;
-      raiz.classList.add('js');
+      raiz.classList.add('js', 'js-ready');
       setTimeout(function () {
         if (!raiz.classList.contains('hero-pronta')) {
-          raiz.classList.add('hero-pronta');
+          raiz.classList.add('hero-pronta', 'hero-animada');
         }
-      }, 1200);
+      }, 3000);
     })();
   </script>
 </head>
