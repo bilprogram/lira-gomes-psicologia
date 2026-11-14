@@ -7,6 +7,10 @@
 (function () {
   'use strict';
 
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'auto';
+  }
+
   /* ── 1. Configuração explícita de rotas e contatos (fácil de ajustar quando novas páginas entrarem) ── */
   const CONFIG_LIRA_GOMES = {
     rotas: {
@@ -574,7 +578,7 @@
         { height: `${resposta.scrollHeight}px`, opacity: 1 },
         { height: '0px', opacity: 0 }
       ],
-      { duration: 380, easing: 'cubic-bezier(.65, 0, .35, 1)' }
+      { duration: 350, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
     );
     anim.onfinish = anim.oncancel = () => {
       det.open = false;
@@ -605,7 +609,7 @@
         { height: '0px', opacity: 0 },
         { height: `${altura}px`, opacity: 1 }
       ],
-      { duration: 460, easing: 'cubic-bezier(.22, 1, .36, 1)' }
+      { duration: 400, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
     );
     anim.onfinish = anim.oncancel = () => {
       delete det.dataset.animando;
@@ -634,7 +638,7 @@
   if ('IntersectionObserver' in window && reveladores.length && !movimentoReduzido) {
     document.querySelectorAll('[data-revela-grupo]').forEach((grupo) => {
       grupo.querySelectorAll('[data-revela]').forEach((el, i) => {
-        el.style.setProperty('--atraso', `${Math.min(i * 0.05, 0.2)}s`);
+        el.style.setProperty('--atraso', `${Math.min(i * 0.08, 0.32)}s`);
       });
     });
 
@@ -654,10 +658,45 @@
         if (!entrada.isIntersecting) return;
         (observados.get(entrada.target) || []).forEach((el) => el.classList.add('visivel'));
         observador.unobserve(entrada.target);
+        observados.delete(entrada.target);
+        if (observados.size === 0) {
+          observador.disconnect();
+        }
       });
     }, { threshold: 0.05, rootMargin: '0px 0px 80px 0px' });
 
     observados.forEach((_, observado) => observador.observe(observado));
+  }
+
+  /* ── 5.1 Pausa do Marquee fora da Viewport ────────────────────────────────────────────── */
+  const faixas = document.querySelectorAll('.faixa');
+  if ('IntersectionObserver' in window && faixas.length && !movimentoReduzido) {
+    const observadorFaixa = new IntersectionObserver((entradas) => {
+      entradas.forEach((entrada) => {
+        if (entrada.isIntersecting) {
+          entrada.target.classList.remove('pausada');
+        } else {
+          entrada.target.classList.add('pausada');
+        }
+      });
+    }, { threshold: 0, rootMargin: '100px 0px' });
+
+    faixas.forEach((faixa) => {
+      observadorFaixa.observe(faixa);
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      faixas.forEach((f) => {
+        if (document.hidden) {
+          f.classList.add('pausada');
+        } else {
+          const r = f.getBoundingClientRect();
+          if (r.bottom >= 0 && r.top <= window.innerHeight) {
+            f.classList.remove('pausada');
+          }
+        }
+      });
+    });
   }
 
   /* ── 6. Exercício de Respiração Interativo (Respire Comigo) ─────────────────────────── */
