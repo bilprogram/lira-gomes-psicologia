@@ -1224,13 +1224,13 @@ svg[viewBox="0 0 24 24"] {
 .equipe {
   position: relative;
   z-index: 1;
-  padding-block: clamp(80px, 10vw, 144px);
+  padding-block: clamp(96px, 12vw, 170px);
   background: var(--areia);
 }
 
 .equipe__cabeca {
-  max-width: 46rem;
-  margin-bottom: clamp(44px, 6vw, 80px);
+  max-width: 48rem;
+  margin-bottom: clamp(36px, 5vw, 64px);
 }
 
 .equipe__titulo {
@@ -1242,8 +1242,10 @@ svg[viewBox="0 0 24 24"] {
 }
 
 .equipe__apoio {
-  max-width: 34em;
+  max-width: 62ch;
   margin: 0;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+  line-height: 1.7;
   color: var(--tinta-2);
 }
 
