@@ -638,7 +638,7 @@ body.menu-aberto .topo,
   min-height: 100vh;
   min-height: 100svh;
   padding-top: calc(var(--topo) + clamp(48px, 8vh, 96px));
-  padding-bottom: clamp(64px, 9vh, 96px);
+  padding-bottom: clamp(48px, 7vh, 96px);
   background-color: var(--verde-profundo);
   color: var(--off-white);
   overflow: clip;
@@ -679,10 +679,10 @@ body.menu-aberto .topo,
     linear-gradient(
       90deg,
       rgba(27, 37, 26, 0.96) 0%,
-      rgba(27, 37, 26, 0.90) 24%,
-      rgba(27, 37, 26, 0.74) 44%,
-      rgba(27, 37, 26, 0.40) 62%,
-      rgba(27, 37, 26, 0.10) 76%,
+      rgba(27, 37, 26, 0.92) 28%,
+      rgba(27, 37, 26, 0.80) 48%,
+      rgba(27, 37, 26, 0.45) 64%,
+      rgba(27, 37, 26, 0.12) 78%,
       rgba(27, 37, 26, 0) 90%
     );
   pointer-events: none;
@@ -707,16 +707,18 @@ body.menu-aberto .topo,
   width: 100%;
 }
 
+/* Coluna de texto restrita a 680px sem invadir a profissional à direita */
 .hero__conteudo {
-  max-width: 590px;
+  width: 100%;
+  max-width: 680px;
 }
 
-/* Texto de apoio pequeno (Eyebrow) */
+/* Texto de apoio pequeno (Eyebrow) - Tag para título: 24px */
 .hero__apoio {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  margin: 0 0 28px;
+  margin: 0 0 24px;
   font-size: clamp(11px, 0.82vw, 12px);
   font-weight: 600;
   letter-spacing: 0.22em;
@@ -732,40 +734,48 @@ body.menu-aberto .topo,
   background: var(--dourado-areia);
 }
 
-/* H1 Único da Hero */
+/* H1 Único da Hero: Grande, elegante, até 3 linhas no desktop */
 .hero__titulo {
-  margin: 0 0 28px;
+  max-width: 760px;
+  margin: 0 0 24px;
   color: var(--off-white);
-  font-size: clamp(2.35rem, 3.8vw, 3.85rem);
+  font-family: "Fraunces", "Lora", Georgia, serif;
+  font-size: clamp(2.6rem, 5vw, 5.2rem);
   font-weight: 400;
-  line-height: 1.10;
-  letter-spacing: -0.015em;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
   text-wrap: balance;
 }
 
-/* Parágrafo principal (Subtítulo) */
+/* Parágrafo principal (Subtítulo) - Subtítulo para botões: 40px */
 .hero__paragrafo {
-  max-width: 440px;
+  max-width: 580px;
   margin: 0 0 40px;
-  color: rgba(245, 243, 237, 0.82);
-  font-size: clamp(17px, 1.2vw, 18px);
-  line-height: 1.7;
+  color: rgba(245, 243, 237, 0.85);
+  font-size: clamp(17px, 1.25vw, 19px);
+  line-height: 1.6;
 }
 
-/* CTAs da Hero */
+/* CTAs da Hero: container flex com gap de 14 a 16px e flex-wrap */
 .hero__acoes {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 14px 18px;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin: 0;
 }
 
-/* Botões da Hero: mais finos (altura de 50 a 54px) */
+/* Botões de serviço: largura automática, altura 52px, padding horizontal 28 a 32px */
 .hero__acoes .botao {
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 52px;
-  padding: 6px 20px;
-  font-size: 14.5px;
+  height: 52px;
+  padding: 0 30px;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .hero__acoes .botao .botao__icone {
@@ -773,13 +783,28 @@ body.menu-aberto .topo,
   height: 36px;
 }
 
-/* Hierarquia refinada entre os botões de serviço */
+/* Botão Psicoterapia: preenchido claro */
+.hero__btn-principal {
+  background: var(--off-white) !important;
+  color: var(--floresta-3, #1B251A) !important;
+  border: 1px solid var(--off-white) !important;
+  box-shadow: 0 8px 24px -10px rgba(14, 22, 14, 0.35) !important;
+}
+
+.hero__btn-principal:hover {
+  background: #FFFFFF !important;
+  color: var(--floresta-3, #1B251A) !important;
+  border-color: #FFFFFF !important;
+  box-shadow: 0 12px 32px -10px rgba(14, 22, 14, 0.45) !important;
+  transform: translateY(-2px);
+}
+
+/* Botão Avaliação Neuropsicológica: contorno dourado */
 .hero__btn-avaliacao {
-  --fundo: rgba(38, 51, 36, 0.58);
-  --cor: var(--off-white);
-  --fundo-ativo: var(--floresta-2);
-  border: 1px solid rgba(200, 174, 125, 0.42);
-  box-shadow: 0 12px 28px -14px rgba(14, 22, 14, 0.45);
+  background: rgba(27, 37, 26, 0.45) !important;
+  color: var(--off-white) !important;
+  border: 1px solid rgba(200, 174, 125, 0.75) !important;
+  box-shadow: 0 8px 24px -12px rgba(14, 22, 14, 0.4) !important;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -789,15 +814,30 @@ body.menu-aberto .topo,
   color: var(--dourado-areia);
 }
 
-/* Botão secundário como link de texto com sublinhado dourado discreto */
+.hero__btn-avaliacao:hover {
+  background: rgba(200, 174, 125, 0.15) !important;
+  border-color: var(--dourado-areia) !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+}
+
+/* Link "Conheça nossos serviços": alinhado à esquerda na linha inicial do título, margin-top 28px */
 .hero__link-servicos {
+  flex-basis: 100%;
+  width: auto;
+  max-width: max-content;
   display: inline-flex;
   align-items: center;
-  min-height: 52px;
-  padding: 0 4px;
+  justify-content: flex-start;
+  align-self: flex-start;
+  min-height: auto;
+  height: auto;
+  margin: 28px 0 0 0;
+  padding: 0;
   color: var(--off-white);
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 500;
+  text-align: left;
   text-decoration: underline;
   text-decoration-color: rgba(200, 174, 125, 0.65);
   text-underline-offset: 6px;
@@ -806,7 +846,7 @@ body.menu-aberto .topo,
   border: none !important;
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
-  transition: color 0.3s, text-decoration-color 0.3s;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
 }
 
 .hero__link-servicos::before {
@@ -819,24 +859,26 @@ body.menu-aberto .topo,
   text-decoration-color: var(--dourado-areia);
 }
 
-/* Texto complementar (Nota inferior): uma única linha pequena, sem linha divisória */
+/* Nota inferior: 13 a 14px, opacidade ~0.7, max 2 linhas, ponto alinhado, margin-top 40px */
 .hero__complementar {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  align-items: baseline;
   gap: 10px;
-  margin: 0;
+  max-width: 680px;
+  margin: 40px 0 0 0;
   padding-top: 0;
   border-top: none;
-  color: rgba(245, 243, 237, 0.78);
-  font-size: clamp(12px, 0.95vw, 13px);
+  color: rgba(245, 243, 237, 0.70);
+  font-size: 13.5px;
   line-height: 1.5;
 }
 
 .hero__complementar::before {
   content: "";
   position: relative;
-  width: 7px;
-  height: 7px;
+  top: -1px;
+  width: 6px;
+  height: 6px;
   flex-shrink: 0;
   border-radius: 50%;
   background: var(--dourado-areia);
@@ -2101,6 +2143,65 @@ body.menu-aberto .topo,
         var(--floresta-3) 100%
       );
   }
+
+  .hero__apoio {
+    margin-bottom: 16px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  .hero__apoio::before {
+    width: 20px;
+  }
+
+  .hero__titulo {
+    margin-bottom: 20px;
+    font-size: clamp(2.4rem, 7.8vw, 2.85rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__paragrafo {
+    margin-bottom: 28px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .hero__acoes {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 0;
+  }
+
+  .hero__acoes .botao {
+    width: 100%;
+    min-height: 52px;
+  }
+
+  .hero__link-servicos {
+    justify-content: flex-start;
+    align-self: flex-start;
+    text-align: left;
+    margin-top: 20px;
+  }
+
+  .hero__complementar {
+    padding-top: 0;
+    margin-top: 28px;
+    border-top: none;
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .js .hero__bloco-texto,
+  .js .hero__bloco-acoes {
+    transform: none;
+  }
+
+  .opcao-profissional {
+    padding: 15px 16px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -2112,64 +2213,6 @@ body.menu-aberto .topo,
   .menu-movel {
     -webkit-backdrop-filter: blur(12px) saturate(130%);
     backdrop-filter: blur(12px) saturate(130%);
-  }
-}
-
-  .hero__apoio {
-    margin-bottom: 14px;
-    font-size: 11px;
-    letter-spacing: 0.16em;
-  }
-
-  .hero__apoio::before {
-    width: 18px;
-  }
-
-  .hero__titulo {
-    margin-bottom: 16px;
-    font-size: clamp(1.75rem, 6.8vw, 2.2rem);
-    line-height: 1.10;
-    letter-spacing: -0.015em;
-  }
-
-  .hero__paragrafo {
-    margin-bottom: 22px;
-    font-size: 16px;
-    line-height: 1.6;
-  }
-
-  .hero__acoes {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin-bottom: 18px;
-  }
-
-  .hero__acoes .botao {
-    width: 100%;
-    min-height: 52px;
-  }
-
-  .hero__link-servicos {
-    justify-content: center;
-    min-height: 44px;
-    padding: 6px 0;
-  }
-
-  .hero__complementar {
-    padding-top: 4px;
-    border-top: none;
-    font-size: 12px;
-    line-height: 1.45;
-  }
-
-  .js .hero__bloco-texto,
-  .js .hero__bloco-acoes {
-    transform: none;
-  }
-
-  .opcao-profissional {
-    padding: 15px 16px;
   }
 }
 
