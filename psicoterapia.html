@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,SOFT,wght@0,9..144,50..60,300..700;1,9..144,50..60,300..700&family=Instrument+Sans:wght@400;500;600;700&display=swap">
 
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611141605">
 </head>
 <body>
   <!-- Acessibilidade: atalho para pular direto ao conteúdo principal -->
@@ -117,14 +117,14 @@
   <main id="conteudo" class="pagina-servico">
     <div class="container">
       <!-- Navegação de Retorno -->
-      <a class="servico-voltar" href="index.html#servicos">
+      <a class="servico-voltar" href="index.html#servicos" data-revela>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         <span>Voltar para a página inicial</span>
       </a>
 
       <!-- Seção Hero do Serviço -->
-      <section class="servico-hero" aria-labelledby="servico-titulo">
-        <figure class="servico-hero__foto">
+      <section class="servico-hero" aria-labelledby="servico-titulo" data-revela-grupo>
+        <figure class="servico-hero__foto" data-revela="mascara">
           <img
             src="assets/marca/img/otimizadas/card1.webp"
             alt="Sala de atendimento acolhedora com poltrona cinza, mesa lateral e grande janela bem iluminada"
@@ -135,19 +135,19 @@
         </figure>
 
         <div class="servico-hero__conteudo">
-          <p class="olho">Psicoterapia para Adultos</p>
-          <h1 class="servico-hero__nome" id="servico-titulo">Um espaço para acolher e compreender o que você sente.</h1>
-          <p class="servico-hero__sub">Atendimento presencial e online.</p>
+          <p class="olho" data-revela>Psicoterapia para Adultos</p>
+          <h1 class="servico-hero__nome" id="servico-titulo" data-revela>Um espaço para acolher e compreender o que você sente.</h1>
+          <p class="servico-hero__sub" data-revela>Atendimento presencial e online.</p>
 
-          <p class="servico-hero__bio">
+          <p class="servico-hero__bio" data-revela>
             A psicoterapia é um espaço de escuta e acolhimento que convida a olhar com atenção para os próprios sentimentos, escolhas, relações e experiências. É uma oportunidade de ampliar a compreensão sobre si mesmo, reconhecer padrões e atribuir novos sentidos às situações vividas.
           </p>
 
-          <p class="servico-hero__bio">
+          <p class="servico-hero__bio" data-revela>
             Cada processo é construído a partir da história, das necessidades e do momento de vida de cada pessoa, respeitando sua singularidade e seu próprio tempo. Não se trata de encontrar respostas prontas, mas de construir, por meio do diálogo e da reflexão, novas possibilidades de compreensão e relação consigo mesmo e com o mundo.
           </p>
 
-          <p class="servico-hero__bio">
+          <p class="servico-hero__bio" data-revela>
             Lucas e Thaís atuam a partir da abordagem humanista, valorizando a escuta, o acolhimento e a construção de um vínculo terapêutico pautado na confiança e no respeito, buscando favorecer um espaço seguro para que cada pessoa possa explorar suas experiências, desenvolver maior consciência sobre si e encontrar caminhos próprios diante das questões vivenciadas.
           </p>
 
@@ -158,6 +158,7 @@
             data-servico="psicoterapia"
             aria-haspopup="dialog"
             aria-controls="escolha-whatsapp"
+            data-revela
           >
             <span>Conversar sobre psicoterapia</span>
             <span class="botao__icone" aria-hidden="true">
@@ -168,9 +169,9 @@
       </section>
 
       <!-- Cartões Detalhados de Informações Confirmadas -->
-      <section class="servico-detalhes" aria-label="Detalhes sobre a psicoterapia para adultos">
+      <section class="servico-detalhes" aria-label="Detalhes sobre a psicoterapia para adultos" data-revela-grupo>
         <!-- Card 1: Temas que podem ser trabalhados -->
-        <article class="servico-card">
+        <article class="servico-card" data-revela>
           <div class="servico-card__topo">
             <span class="servico-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
@@ -191,7 +192,7 @@
         </article>
 
         <!-- Card 2: Modalidades de Atendimento -->
-        <article class="servico-card servico-card--destaque">
+        <article class="servico-card servico-card--destaque" data-revela>
           <div class="servico-card__topo">
             <span class="servico-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
@@ -214,7 +215,7 @@
         </article>
 
         <!-- Card 3: Profissionais e Abordagens -->
-        <article class="servico-card">
+        <article class="servico-card" data-revela>
           <div class="servico-card__topo">
             <span class="servico-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -239,7 +240,7 @@
         </article>
 
         <!-- Card 4: Informações de Atendimento e Reembolso -->
-        <article class="servico-card">
+        <article class="servico-card" data-revela>
           <div class="servico-card__topo">
             <span class="servico-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
@@ -264,7 +265,7 @@
       </section>
 
       <!-- Seção Transparente: Conheça também a Avaliação Neuropsicológica -->
-      <aside class="servico-outro" aria-label="Outro serviço da clínica">
+      <aside class="servico-outro" aria-label="Outro serviço da clínica" data-revela>
         <div class="servico-outro__info">
           <h3>Conheça também a Avaliação Neuropsicológica</h3>
           <p>Investigação presencial do funcionamento cognitivo, emocional e comportamental de adolescentes e adultos na Vila Andrade.</p>
@@ -353,6 +354,6 @@
     </div>
   </dialog>
 
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/main.js?v=202611141605" defer></script>
 </body>
 </html>

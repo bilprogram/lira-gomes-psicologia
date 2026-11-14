@@ -32,7 +32,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,SOFT,wght@0,9..144,50..60,300..700;1,9..144,50..60,300..700&family=Instrument+Sans:wght@400;500;600;700&display=swap">
 
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=202611141605">
 </head>
 <body>
   <!-- Acessibilidade: atalho para pular direto ao conteúdo principal -->
@@ -117,14 +117,14 @@
   <main id="conteudo" class="pagina-perfil">
     <div class="container">
       <!-- Navegação de Retorno -->
-      <a class="perfil-voltar" href="index.html#profissionais">
+      <a class="perfil-voltar" href="index.html#profissionais" data-revela>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
         <span>Voltar para a apresentação da equipe</span>
       </a>
 
       <!-- Seção Hero do Perfil -->
-      <section class="perfil-hero" aria-labelledby="perfil-nome">
-        <figure class="perfil-hero__foto">
+      <section class="perfil-hero" aria-labelledby="perfil-nome" data-revela-grupo>
+        <figure class="perfil-hero__foto" data-revela="mascara">
           <img
             src="assets/marca/profissionais/lucas-roberto-recorte.webp"
             alt="Fotografia de Lucas Roberto Pereira Gomes, psicólogo, sorrindo de braços cruzados"
@@ -135,19 +135,19 @@
         </figure>
 
         <div class="perfil-hero__conteudo">
-          <p class="olho">Psicologia Clínica</p>
-          <h1 class="perfil-hero__nome" id="perfil-nome">Lucas Roberto Pereira Gomes</h1>
-          <p class="perfil-hero__crp">Psicólogo • CRP 06/205736</p>
+          <p class="olho" data-revela>Psicologia Clínica</p>
+          <h1 class="perfil-hero__nome" id="perfil-nome" data-revela>Lucas Roberto Pereira Gomes</h1>
+          <p class="perfil-hero__crp" data-revela>Psicólogo • CRP 06/205736</p>
 
-          <p class="perfil-hero__bio">
+          <p class="perfil-hero__bio" data-revela>
             Meu trabalho como psicólogo parte do acolhimento e da compreensão da experiência de cada pessoa. Busco entender como ela sente, interpreta o que vive e constrói sua maneira de enxergar a si mesma e o mundo. Acredito que o sofrimento não está apenas no que vivemos, mas também na forma como nos relacionamos com aquilo que sentimos.
           </p>
 
-          <p class="perfil-hero__bio">
+          <p class="perfil-hero__bio" data-revela>
             Por meio da escuta, de perguntas e de reflexões, acompanho o reconhecimento de padrões, a percepção de pontos cegos e a exploração de novas perspectivas. Quando necessário, também realizo intervenções mais diretas, respeitando a história, o momento e o vínculo terapêutico.
           </p>
 
-          <p class="perfil-hero__bio">
+          <p class="perfil-hero__bio" data-revela>
             Mais do que oferecer respostas prontas, busco construir com cada pessoa recursos para enfrentar seus desafios e fazer escolhas conscientes. Meu objetivo é favorecer o desenvolvimento da autonomia e ampliar a percepção de que é possível lidar com situações que antes pareciam impossíveis.
           </p>
 
@@ -156,6 +156,7 @@
             href="https://wa.me/5511984677810"
             target="_blank"
             rel="noopener noreferrer"
+            data-revela
           >
             <span>Falar com Lucas pelo WhatsApp</span>
             <span class="botao__icone" aria-hidden="true">
@@ -166,9 +167,9 @@
       </section>
 
       <!-- Cartões Detalhados de Informações Confirmadas -->
-      <section class="perfil-detalhes" aria-label="Detalhes profissionais de Lucas">
+      <section class="perfil-detalhes" aria-label="Detalhes profissionais de Lucas" data-revela-grupo>
         <!-- Card 1: Abordagem -->
-        <article class="perfil-card">
+        <article class="perfil-card" data-revela>
           <div class="perfil-card__topo">
             <span class="perfil-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
@@ -186,7 +187,7 @@
         </article>
 
         <!-- Card 2: Atuação Informada & Serviços -->
-        <article class="perfil-card perfil-card--destaque">
+        <article class="perfil-card perfil-card--destaque" data-revela>
           <div class="perfil-card__topo">
             <span class="perfil-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -207,7 +208,7 @@
         </article>
 
         <!-- Card 3: Formação Acadêmica -->
-        <article class="perfil-card">
+        <article class="perfil-card" data-revela>
           <div class="perfil-card__topo">
             <span class="perfil-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
@@ -231,7 +232,7 @@
         </article>
 
         <!-- Card 4: Modalidades e Agendamento -->
-        <article class="perfil-card">
+        <article class="perfil-card" data-revela>
           <div class="perfil-card__topo">
             <span class="perfil-card__icone" aria-hidden="true">
               <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
@@ -345,6 +346,6 @@
     </div>
   </dialog>
 
-  <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/main.js?v=202611141605" defer></script>
 </body>
 </html>
