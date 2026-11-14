@@ -192,10 +192,25 @@
   const botaoFecharWhatsapp = document.querySelector('[data-fechar-whatsapp]');
   let ultimoElementoFocado = null;
 
+  const MENSAGENS_WHATSAPP = {
+    psicoterapia: 'Olá, vim pelo site e gostaria de saber mais sobre a psicoterapia.',
+    avaliacao: 'Olá, vim pelo site e gostaria de saber mais sobre a avaliação neuropsicológica.'
+  };
+
   function abrirEscolhaWhatsapp(evento) {
     if (!modalWhatsapp) return;
     if (evento) evento.preventDefault();
     ultimoElementoFocado = document.activeElement;
+
+    const gatilho = evento && evento.currentTarget ? evento.currentTarget : null;
+    const servico = gatilho ? gatilho.getAttribute('data-servico') : null;
+    const mensagem = servico && MENSAGENS_WHATSAPP[servico] ? MENSAGENS_WHATSAPP[servico] : null;
+
+    const linksProfissionais = modalWhatsapp.querySelectorAll('.opcao-profissional');
+    linksProfissionais.forEach((link) => {
+      const baseUrl = link.href.split('?')[0];
+      link.href = mensagem ? `${baseUrl}?text=${encodeURIComponent(mensagem)}` : baseUrl;
+    });
 
     if (corpo.classList.contains('menu-aberto')) {
       alternarMenu(false);

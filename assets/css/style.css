@@ -2458,6 +2458,24 @@ svg[viewBox="0 0 24 24"] {
   border-radius: 4px;
 }
 
+.rodape__escolha-servico {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(235, 237, 230, 0.12);
+}
+
+.rodape__escolha-sub {
+  margin: 0 0 10px;
+  font-size: 0.86rem;
+  color: var(--areia-2);
+}
+
+.rodape__botoes-servico {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 .rodape__profissional {
   display: flex;
   flex-direction: column;
