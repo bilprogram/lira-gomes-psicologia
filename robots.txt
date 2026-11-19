@@ -1,9 +1,10 @@
 # robots.txt — Lira Gomes Psicologia e Neuropsicologia
-# https://github.com/bilprogram/lira-gomes-psicologia
+# https://www.liragomespsicologia.com.br/
 
 User-agent: *
 Allow: /
 
-# Sitemap canônico — TODO: domínio
-Sitemap: https://[TODO: domínio]/sitemap.xml
+# Sitemap canônico
+Sitemap: https://www.liragomespsicologia.com.br/sitemap.xml
+
 

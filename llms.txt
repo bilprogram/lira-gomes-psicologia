@@ -7,6 +7,7 @@ Nosso compromisso é oferecer um serviço ético e acolhedor, considerando sua h
 ## Informações Institucionais
 
 - **Nome Oficial:** Lira Gomes Psicologia e Neuropsicologia
+- **Site Oficial:** https://www.liragomespsicologia.com.br/
 - **Endereço do Consultório:** R. Dep. João Sussumu Hirata, 940, conjunto 14, sala 1, Vila Andrade, São Paulo – SP, CEP 05715-010.
 - **Estrutura e Acesso:** O espaço físico não possui acessibilidade para cadeira de rodas. Nesses casos, entre em contato para conversarmos sobre a possibilidade de atendimento online.
 - **Região de Atuação Presencial:** Vila Andrade, Morumbi, Panamby, Jardim Sul, Vila Sônia, Butantã e bairros vizinhos.
@@ -31,8 +32,8 @@ Nosso compromisso é oferecer um serviço ético e acolhedor, considerando sua h
 
 ## Páginas Públicas do Site
 
-- [Início](index.html): Apresentação institucional, serviços, profissionais, exercício de respiração guiado, localização e dúvidas frequentes.
-- [Psicoterapia para Adultos](psicoterapia.html): Detalhamento do atendimento psicoterápico presencial e online, temas abordados, modalidades e reembolso.
-- [Avaliação Neuropsicológica](avaliacao-neuropsicologica.html): Investigação cognitiva, emocional e comportamental presencial, etapas do processo e aspectos investigados.
-- [Perfil de Lucas Roberto Pereira Gomes](lucas.html): Trajetória profissional, abordagem humanista, atuação clínica e contatos.
-- [Perfil de Thais Lira Silva Gomes](thais.html): Trajetória profissional, atuação em neuropsicologia clínica, abordagem terapêutica e contatos.
+- [Início](https://www.liragomespsicologia.com.br/): Apresentação institucional, serviços, profissionais, exercício de respiração guiado, localização e dúvidas frequentes.
+- [Psicoterapia para Adultos](https://www.liragomespsicologia.com.br/psicoterapia.html): Detalhamento do atendimento psicoterápico presencial e online, temas abordados, modalidades e reembolso.
+- [Avaliação Neuropsicológica](https://www.liragomespsicologia.com.br/avaliacao-neuropsicologica.html): Investigação cognitiva, emocional e comportamental presencial, etapas do processo e aspectos investigados.
+- [Perfil de Lucas Roberto Pereira Gomes](https://www.liragomespsicologia.com.br/lucas.html): Trajetória profissional, abordagem humanista, atuação clínica e contatos.
+- [Perfil de Thais Lira Silva Gomes](https://www.liragomespsicologia.com.br/thais.html): Trajetória profissional, atuação em neuropsicologia clínica, abordagem terapêutica e contatos.

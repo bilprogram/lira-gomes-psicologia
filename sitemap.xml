@@ -1,38 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  sitemap.xml — Lira Gomes Psicologia e Neuropsicologia
-  NOTA DE DEPENDÊNCIA: Substituir "[TODO: domínio]" pelo domínio canônico de produção quando confirmado.
-  Contém estritamente as páginas públicas existentes e funcionais no projeto.
--->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://[TODO: domínio]/</loc>
-    <lastmod>2026-11-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://www.liragomespsicologia.com.br/</loc>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
-    <loc>https://[TODO: domínio]/psicoterapia.html</loc>
-    <lastmod>2026-11-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://www.liragomespsicologia.com.br/psicoterapia.html</loc>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
-    <loc>https://[TODO: domínio]/avaliacao-neuropsicologica.html</loc>
-    <lastmod>2026-11-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://www.liragomespsicologia.com.br/avaliacao-neuropsicologica.html</loc>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
-    <loc>https://[TODO: domínio]/lucas.html</loc>
-    <lastmod>2026-11-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://www.liragomespsicologia.com.br/lucas.html</loc>
+    <lastmod>2026-11-18</lastmod>
   </url>
   <url>
-    <loc>https://[TODO: domínio]/thais.html</loc>
-    <lastmod>2026-11-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <loc>https://www.liragomespsicologia.com.br/thais.html</loc>
+    <lastmod>2026-11-18</lastmod>
   </url>
 </urlset>
